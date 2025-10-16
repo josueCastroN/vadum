@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Panel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <!-- Header reutilizable -->
+  <header class="header">
+    <nav class="nav">
+      <a class="nav__logo" href="./index.html">
+        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+        <span class="nav__titulo">Sistema de Incentivos</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" id="nav-fisica" href="./captura_fisica.html">Física</a>
+        <a class="nav__link" id="nav-mensual" href="./evaluacion_mensual.html">Mensual</a>
+        <a class="nav__link" id="nav-encuesta" href="./encuesta.html">Encuesta</a>
+        <a class="nav__link" id="nav-incentivo" href="./incentivo.html">Incentivo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+    <div class="fila fila--2">
+      <section class="tarjeta">
+        <h2 class="titulo">Bienvenido</h2>
+        <p>Usa el menú superior para capturar <b>Física</b>, la evaluación <b>Mensual</b>, la <b>Encuesta</b> del cliente y consultar el <b>Incentivo</b>.</p>
+        <div class="chip">Tema oscuro • Paleta VADUM</div>
+      </section>
+      <section class="tarjeta">
+        <h2 class="titulo">Atajos</h2>
+        <div class="fila fila--2">
+          <a class="btn" href="../api/index.php?ruta=salud" target="_blank">Probar API /salud</a>
+          <a class="btn btn--borde" href="./captura_fisica.html">Captura Física</a>
+          <a class="btn btn--borde" href="./evaluacion_mensual.html">Evaluación Mensual</a>
+          <a class="btn btn--borde" href="./encuesta.html">Encuesta</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos · </footer>
+  <script src="./assets/js/ui.js"></script>
+<script src="./assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Iniciar sesión</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <header class="header">
+  <nav class="nav">
+    <a class="nav__logo" href="./index.html">
+      <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+      <span class="nav__titulo">Sistema de Incentivos</span>
+    </a>
+    <!-- Links con visibilidad por rol -->
+    <div class="nav__links">
+      <a class="nav__link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
+      <a class="nav__link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
+      <a class="nav__link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
+      <a class="nav__link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
+      <!-- Usuario actual + botón salir -->
+      <span class="chip" id="usuarioActual">sin sesión</span>
+      <button class="btn btn--borde" id="btnSalir">Salir</button>
+    </div>
+  </nav>
+</header>
+
+  <main class="contenedor">
+    <section class="tarjeta" style="max-width:420px;margin:0 auto;">
+      <h1 class="titulo">Iniciar sesión</h1>
+      <label class="label">Usuario</label>
+      <input class="input" id="usuario" placeholder="ej. admin">
+      <label class="label">Contraseña</label>
+      <input class="input" id="password" type="password" placeholder="ej. 123456">
+      <div style="margin-top:12px;"><button class="btn" id="btn">Entrar</button></div>
+      <div class="chip" style="margin-top:12px;">Cuentas demo: admin / sup1 / vig1 / cli1 (clave 123456)</div>
+    </section>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos</footer>
+  <script>
+    document.getElementById('btn').onclick = async ()=>{
+      const usuario = document.getElementById('usuario').value.trim();
+      const password = document.getElementById('password').value;
+      const r = await fetch('../api/index.php?ruta=auth/login', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({usuario, password})
+      }).then(r=>r.json());
+      if(!r.ok){ alert(r.error||'Error'); return; }
+      location.href = './index.html';
+    };
+  </script>
+  <script src="./assets/js/ui.js"></script>
+<script src="./assets/js/auth.js"></script>
+</body>
+</html>

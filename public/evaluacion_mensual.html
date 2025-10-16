@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Evaluación Mensual</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav">
+      <a class="nav__logo" href="./index.html">
+        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+        <span class="nav__titulo">Sistema de Incentivos</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" id="nav-fisica" href="./captura_fisica.html">Física</a>
+        <a class="nav__link nav__link--activo" id="nav-mensual" href="./evaluacion_mensual.html">Mensual</a>
+        <a class="nav__link" id="nav-encuesta" href="./encuesta.html">Encuesta</a>
+        <a class="nav__link" id="nav-incentivo" href="./incentivo.html">Incentivo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1 class="titulo">Evaluación Mensual</h1>
+      <div class="fila fila--3">
+        <div><label class="label">No.Emp</label><input class="input" id="no_emp" value="950001"></div>
+        <div><label class="label">Mes (día 1)</label><input class="input" id="mes" type="date" value="2025-09-01"></div>
+        <div><label class="label">Supervisor ID</label><input class="input" id="sup" value="sup-001"></div>
+      </div>
+      <div class="fila fila--4" style="margin-top:12px; grid-template-columns: repeat(4,1fr);">
+        <div><label class="label">Puntualidad (1-5)</label><input class="input" id="p" type="number" min="1" max="5" value="5"></div>
+        <div><label class="label">Disciplina (1-5)</label><input class="input" id="d" type="number" min="1" max="5" value="4"></div>
+        <div><label class="label">Imagen (1-5)</label><input class="input" id="i" type="number" min="1" max="5" value="4"></div>
+        <div><label class="label">Desempeño (1-5)</label><input class="input" id="x" type="number" min="1" max="5" value="5"></div>
+      </div>
+      <div style="margin-top:12px;"><button class="btn" id="guardar">Guardar evaluación</button></div>
+    </section>
+
+    <section class="tarjeta" style="margin-top:16px;">
+      <h2 class="subtitulo">Firmas</h2>
+      <div class="fila fila--2">
+        <div>
+          <p class="label">Firma empleado</p>
+          <canvas id="firmaEmp" width="320" height="120" style="background:#fff; border:1px dashed #777; border-radius:8px;"></canvas><br>
+          <button class="btn" id="guardarEmp">Guardar firma empleado</button>
+        </div>
+        <div>
+          <p class="label">Firma evaluador</p>
+          <canvas id="firmaEval" width="320" height="120" style="background:#fff; border:1px dashed #777; border-radius:8px;"></canvas><br>
+          <button class="btn" id="guardarEval">Guardar firma evaluador</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos ·</footer>
+  <script src="./assets/js/ui.js"></script>
+<script src="./assets/js/auth.js"></script>
+  <script>
+    async function post(url, data){
+      const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      return r.json();
+    }
+    const dibujar = (canvas)=>{
+      const ctx = canvas.getContext('2d'); let pintando=false;
+      canvas.addEventListener('mousedown',()=>pintando=true);
+      canvas.addEventListener('mouseup',()=>pintando=false);
+      canvas.addEventListener('mousemove',(e)=>{
+        if(!pintando) return; const r=canvas.getBoundingClientRect();
+        ctx.fillStyle='#000'; ctx.beginPath();
+        ctx.arc(e.clientX-r.left,e.clientY-r.top,1.2,0,Math.PI*2); ctx.fill();
+      });
+    };
+    dibujar(document.getElementById('firmaEmp'));
+    dibujar(document.getElementById('firmaEval'));
+
+    document.getElementById('guardar').onclick = async ()=>{
+      const datos = {
+        no_emp: document.getElementById('no_emp').value.trim(),
+        mes:    document.getElementById('mes').value,
+        puntualidad:+document.getElementById('p').value,
+        disciplina:+document.getElementById('d').value,
+        imagen:+document.getElementById('i').value,
+        desempeno:+document.getElementById('x').value,
+        supervisor_id: document.getElementById('sup').value.trim()
+      };
+      const r = await post('../api/index.php?ruta=mensual/guardar', datos);
+      mostrarToast(`Guardado • Promedio ${r.prom_1_5} → ${r.cal_0_100}`);
+    };
+
+    document.getElementById('guardarEmp').onclick = async ()=>{
+      const no_emp = document.getElementById('no_emp').value.trim();
+      const mes    = document.getElementById('mes').value;
+      const dataURL = document.getElementById('firmaEmp').toDataURL('image/png');
+      const r = await post('../api/index.php?ruta=firmas/guardar', { tipo:'mensual_empleado', no_emp, mes, firma_base64: dataURL });
+      mostrarToast('Firma empleado guardada');
+    };
+    document.getElementById('guardarEval').onclick = async ()=>{
+      const no_emp = document.getElementById('no_emp').value.trim();
+      const mes    = document.getElementById('mes').value;
+      const dataURL = document.getElementById('firmaEval').toDataURL('image/png');
+      const r = await post('../api/index.php?ruta=firmas/guardar', { tipo:'mensual_evaluador', no_emp, mes, firma_base64: dataURL });
+      mostrarToast('Firma evaluador guardada');
+    };
+  </script>
+</body>
+</html>

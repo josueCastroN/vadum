@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Encuesta</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a class="nav__logo" href="./index.html">
+        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+        <span class="nav__titulo">Sistema de Incentivos</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" href="./captura_fisica.html">Física</a>
+        <a class="nav__link" href="./evaluacion_mensual.html">Mensual</a>
+        <a class="nav__link nav__link--activo" href="./encuesta.html">Encuesta</a>
+        <a class="nav__link" href="./incentivo.html">Incentivo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1 class="titulo">Encuesta de Satisfacción</h1>
+      <div class="fila fila--2">
+        <div>
+          <label class="label">Edificio (punto_id)</label>
+          <input class="input" id="edif" type="number" value="1">
+        </div>
+        <div>
+          <label class="label">Empleado (No.Emp o Nombre)</label>
+          <div style="display:flex; gap:8px;">
+            <input class="input" id="buscar" placeholder="950001 o Juan Pérez">
+            <button class="btn" id="btnBuscar">Buscar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fila fila--2" style="margin-top:12px;">
+        <div>
+          <label class="label">Selecciona guardia</label>
+          <select class="select" id="guardia"></select>
+        </div>
+        <div>
+          <label class="label">Foto</label>
+          <div id="foto"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tarjeta" style="margin-top:16px;">
+      <h2 class="subtitulo">Calificaciones (1–5)</h2>
+      <div class="fila fila--4" style="grid-template-columns: repeat(4,1fr);">
+        <div><label class="label">Servicio</label><input class="input" id="s" type="number" min="1" max="5" value="5"></div>
+        <div><label class="label">Actitud</label><input class="input" id="a" type="number" min="1" max="5" value="5"></div>
+        <div><label class="label">Respuesta</label><input class="input" id="r" type="number" min="1" max="5" value="4"></div>
+        <div><label class="label">Confiabilidad</label><input class="input" id="c" type="number" min="1" max="5" value="5"></div>
+      </div>
+      <label class="label" style="margin-top:12px;">Comentarios</label>
+      <input class="input" id="com" placeholder="Escribe un comentario (opcional)">
+      <div style="margin-top:12px;"><button class="btn" id="guardar">Enviar encuesta</button></div>
+    </section>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos · </footer>
+  <script src="./assets/js/ui.js"></script>
+<script src="./assets/js/auth.js"></script>
+  <script>
+  (async ()=>{
+  const m = await fetch('../api/index.php?ruta=auth/me').then(r=>r.json());
+  if (m.logeado && m.usuario.rol==='cliente' && m.usuario.punto_id){
+    const inputEdif = document.getElementById('edif');
+    inputEdif.value = m.usuario.punto_id;
+    inputEdif.disabled = true; // preseleccionado
+    // Cargar guardias del punto
+    const rs = await fetch(`../api/index.php?ruta=empleados/por_punto&punto_id=${m.usuario.punto_id}`).then(r=>r.json());
+    const sel = document.getElementById('guardia');
+    sel.innerHTML = '';
+    (rs.resultados||[]).forEach(emp=>{
+      const o=document.createElement('option');
+      o.value=emp.no_emp; o.textContent=emp.no_emp+' - '+emp.nombre; o.dataset.foto=emp.foto_url||'';
+      sel.appendChild(o);
+    });
+    sel.onchange = ()=>{
+      const foto = sel.options[sel.selectedIndex]?.dataset.foto;
+      document.getElementById('foto').innerHTML = foto ? `<img src="${foto}" style="max-width:160px;border:1px solid #eaeaea;border-radius:12px;">` : '<div class="chip">Sin foto</div>';
+    };
+    sel.dispatchEvent(new Event('change'));
+  }
+})();
+</script>
+</body>
+</html>

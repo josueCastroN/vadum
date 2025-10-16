@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Incentivo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a class="nav__logo" href="./index.html">
+        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+        <span class="nav__titulo">Sistema de Incentivos</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" href="./captura_fisica.html">Física</a>
+        <a class="nav__link" href="./evaluacion_mensual.html">Mensual</a>
+        <a class="nav__link" href="./encuesta.html">Encuesta</a>
+        <a class="nav__link nav__link--activo" href="./incentivo.html">Incentivo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1 class="titulo">Cálculo de Incentivo</h1>
+      <div class="fila fila--2">
+        <div>
+          <label class="label">No.Emp</label>
+          <input class="input" id="no_emp" value="950001">
+        </div>
+        <div>
+          <label class="label">Mes (día 1)</label>
+          <input class="input" id="mes" type="date" value="2025-09-01">
+        </div>
+      </div>
+      <div style="margin-top:12px;"><button class="btn" id="btn">Calcular</button></div>
+    </section>
+
+    <section class="tarjeta" style="margin-top:16px;">
+      <h2 class="subtitulo">Resultado</h2>
+      <pre id="salida" style="background:#0e0e0e; border:1px solid #333; border-radius: 10px; padding:12px; white-space:pre-wrap;"></pre>
+    </section>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos · </footer>
+  <script src="./assets/js/ui.js"></script>
+<script src="./assets/js/auth.js"></script>
+  <script>
+    document.getElementById('btn').onclick = async ()=>{
+      const no_emp = document.getElementById('no_emp').value.trim();
+      const mes    = document.getElementById('mes').value;
+      const r = await fetch(`../api/index.php?ruta=incentivo/calcular&no_emp=${encodeURIComponent(no_emp)}&mes=${encodeURIComponent(mes)}`).then(r=>r.json());
+      document.getElementById('salida').textContent = JSON.stringify(r, null, 2);
+      mostrarToast('Cálculo listo');
+    };
+  </script>
+</body>
+</html>
