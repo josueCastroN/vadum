@@ -1,6 +1,6 @@
 /* ================================
    VADUM · Estilos base (tema claro)
-   Paleta: blanco, grises, negro, amarillo (#ffc400)
+   Paleta: blanco, grises, negro (sin amarillo)
    ================================ */
 
 :root{
@@ -12,14 +12,11 @@
   --gris-300:#dcdcdc;
   --gris-400:#bdbdbd;
   --gris-500:#9a9a9a;
-  --gris-600:#7a7a7a;
+  --gris-600:#7a9a9a; /* nota: puedes cambiar si quieres */
   --gris-700:#555;
   --gris-800:#333;
   --negro:#111;
-
-  /* Marca */
-  --amarillo:#ffc400;
-  --amarillo-oscuro:#e0ad00;
+  --negro-2:#2E2E2E; /* activo navegación y submenús */
 
   /* UI */
   --borde:#e8e8e8;
@@ -40,32 +37,76 @@ body{
 }
 
 /* ================================
-   Header y navegación
+   Header doble (superior/inferior)
    ================================ */
-.header{
-  position:sticky; top:0; z-index:20;
+
+/* Barra superior (logo, nombre, perfil/login) */
+.header-superior {
   background: var(--blanco);
-  border-bottom:1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
   box-shadow: var(--sombrita);
 }
-.nav{
+.nav-sup {
   max-width:1100px; margin:0 auto; padding:12px 16px;
   display:flex; align-items:center; gap:16px;
 }
-.nav__logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav__logo img{height:36px;display:block}
-.nav__titulo{color:var(--negro);font-weight:800;letter-spacing:.3px}
+.nav-sup__logo { display:flex; align-items:center; gap:10px; text-decoration:none }
+.nav-sup__logo img { height:36px; display:block }
+.nav-sup__titulo { color:var(--negro); font-weight:800; letter-spacing:.3px }
+.nav-sup__espaciador { flex:1 }
 
-.nav__links{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap}
-.nav__link{
-  color:var(--negro); text-decoration:none; padding:8px 12px;
-  border-radius: var(--radio-md);
-  border:1px solid transparent;
+/* Menú de perfil */
+.perfil { position: relative; }
+.perfil__btn {
+  display:inline-flex;align-items:center;gap:8px;
+  background: var(--gris-100); border:1px solid var(--borde);
+  border-radius: var(--radio-md); padding:8px 12px; cursor:pointer;
 }
-.nav__link:hover{background:var(--gris-100); border-color:var(--borde)}
-.nav__link--activo{background:var(--amarillo); color:var(--negro); font-weight:800}
+.perfil__btn:hover { background: var(--gris-200); }
+.perfil__avatar { background: var(--negro); color:#fff; border-radius: 50%; padding: 4px; }
+.perfil__dropdown {
+  position:absolute; right:0; top:110%; min-width:220px; background:var(--blanco);
+  border:1px solid var(--borde); border-radius:var(--radio-lg); box-shadow:var(--sombrita); display:none;
+}
+.perfil__dropdown.activo { display:block; }
+.perfil__info { padding:10px 12px; border-bottom:1px solid var(--borde); }
+.perfil__nombre { font-weight:800; }
+.perfil__rol { color:var(--gris-700); font-size:12px; }
+.perfil__item {
+  display:block; width:100%; text-align:left; background:transparent; border:none;
+  color:var(--negro); padding:10px 12px; cursor:pointer; text-decoration:none;
+}
+.perfil__item:hover { background:var(--gris-100); }
+.perfil__salir { color:#b00020 }
 
-/* Contenedor */
+/* Barra inferior (botones de navegación) */
+.header-inferior {
+  background: var(--gris-50);
+  border-bottom: 1px solid var(--borde);
+}
+.nav-inf {
+  max-width:1100px; margin:0 auto; padding:10px 16px;
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.nav-btn{
+  background:#fff;
+  color: var(--negro);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-md);
+  padding: 8px 12px;
+  text-decoration: none;
+  font-weight: 700;
+}
+.nav-btn:hover{ background: var(--gris-100); }
+.nav-btn--activo{
+  background: var(--negro-2) !important;
+  color: #fff !important;
+  border-color: var(--negro-2) !important;
+}
+
+/* ================================
+   Contenedor principal
+   ================================ */
 .contenedor{max-width:1100px; margin:24px auto; padding:0 16px}
 
 /* ================================
@@ -96,23 +137,24 @@ body{
   padding:10px 12px; outline:none;
 }
 .input:focus,.select:focus,.textarea:focus{
-  border-color:var(--amarillo);
-  box-shadow:0 0 0 3px rgba(255,196,0,.18);
+  border-color: var(--negro);
+  box-shadow:0 0 0 3px rgba(0,0,0,.12);
 }
 
 /* ================================
-   Botones
+   Botones (negros)
    ================================ */
 .btn{
-  background:var(--amarillo); color:var(--negro);
-  border:none; border-radius:var(--radio-md);
+  background:var(--negro); color:#fff;
+  border:1px solid var(--negro);
+  border-radius:var(--radio-md);
   padding:10px 14px; cursor:pointer; font-weight:800;
   transition: transform .06s ease, filter .2s ease;
 }
-.btn:hover{filter:brightness(1.02)}
+.btn:hover{filter:brightness(1.05)}
 .btn:active{transform:translateY(1px) scale(.995)}
-.btn--borde{background:transparent;color:var(--negro);border:1px solid var(--borde)}
-.btn--fantasma{background:transparent;color:var(--amarillo);border:1px dashed var(--amarillo-oscuro)}
+.btn--borde{background:#fff;color:var(--negro);border:1px solid var(--negro)}
+.btn--fantasma{background:transparent;color:var(--negro);border:1px dashed var(--negro)}
 
 /* ================================
    Tabla
@@ -127,13 +169,8 @@ body{
 .tabla tr:nth-child(even){background:var(--gris-50)}
 
 /* ================================
-   Toast / Chips
+   Chips y Toast (base)
    ================================ */
-.toast{
-  position:fixed; right:16px; bottom:16px; z-index:50;
-  background:var(--negro); color:#fff; border-radius:var(--radio-md);
-  padding:10px 14px; box-shadow: var(--sombrita);
-}
 .chip{
   display:inline-flex; align-items:center; gap:6px;
   padding:6px 10px; border-radius:999px; border:1px solid var(--borde);
@@ -144,4 +181,90 @@ body{
 .footer{
   margin-top:32px; padding:20px 16px; text-align:center;
   color:var(--gris-700); border-top:1px solid var(--borde); background:var(--blanco);
+}
+
+/* ===============================
+   Toasts y Modales
+   =============================== */
+
+/* Contenedor de toasts */
+#toast-contenedor{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+.toast{
+  background: var(--negro);
+  color: #fff;
+  border-radius: var(--radio-md);
+  padding: 10px 14px;
+  box-shadow: var(--sombrita);
+  transform: translateY(6px);
+  opacity: 0;
+  transition: all .25s ease;
+}
+.toast--show{ transform: translateY(0); opacity: 1; }
+.toast--ok{ background: var(--negro-2); }
+.toast--error{ background: #b00020; }
+
+/* Capa modal */
+#modal-capa{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.25);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+#modal-capa.activo{ display:flex; }
+
+/* Caja modal */
+.modal{
+  width: 100%; max-width: 520px;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombrita);
+  display:flex; flex-direction: column;
+}
+.modal__cabeza{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 12px 16px; border-bottom: 1px solid var(--borde);
+}
+.modal__titulo{ margin:0; color: var(--negro); }
+.modal__cerrar{
+  background: transparent; border: none; font-size: 22px; cursor: pointer; color: var(--negro);
+}
+.modal__cuerpo{ padding: 16px; }
+.modal__pie{
+  padding: 12px 16px; border-top: 1px solid var(--borde);
+  display:flex; gap:8px; justify-content:flex-end;
+}
+.modal__form .label{ margin-top: 8px; }
+
+/* ================================
+   Submenú interno Empleados
+   ================================ */
+.subnav{
+  display:flex; gap:8px; flex-wrap:wrap; margin: 8px 0 12px 0;
+}
+.subnav__btn{
+  background:#fff;
+  color: var(--negro);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-md);
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.subnav__btn:hover{ background: var(--gris-100); }
+.subnav__btn--activo{
+  background: var(--negro-2);
+  color: #fff;
+  border-color: var(--negro-2);
 }

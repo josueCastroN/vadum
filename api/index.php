@@ -15,6 +15,23 @@ $protecciones = [
   'empleados/buscar'   => ['supervisor','admin'],
   'empleados/por_punto'=> ['supervisor','admin','cliente'],
   'incentivo/calcular' => ['admin','supervisor','vigilante'],
+  'empleados/lista'           => ['admin','supervisor'],
+  'empleados/alta'            => ['admin','supervisor'],
+  'empleados/baja'            => ['admin','supervisor'],
+  'empleados/reactivar'       => ['admin','supervisor'],   // NUEVA
+  'empleados/resumen_bajas'   => ['admin','supervisor'],
+  'empleados/exportar_activos_csv' => ['admin','supervisor'],  // NUEVA
+  'empleados/exportar_bajas_csv'   => ['admin','supervisor'],  // NUEVA
+  'empleados/exportar_bajas_html'  => ['admin','supervisor'],  // NUEVA
+  // Catálogos
+  'puntos/lista'      => ['admin'],
+  'puntos/crear'      => ['admin'],
+  'puntos/renombrar'  => ['admin'],
+  'puntos/eliminar'   => ['admin'],
+  'regiones/lista'    => ['admin'],
+  'regiones/crear'    => ['admin'],
+  'regiones/renombrar'=> ['admin'],
+  'regiones/eliminar' => ['admin'],
 ];
 
 if (isset($protecciones[$ruta])) { requerir_roles($protecciones[$ruta]); }
@@ -47,6 +64,15 @@ switch (true) {
 
   case $ruta === 'incentivo/calcular' && $metodo === 'GET':
     require __DIR__ . '/controladores/incentivo.php'; break;
+
+  case str_starts_with($ruta,'empleados/') :
+    require __DIR__ . '/controladores/empleados.php'; break;
+    case str_starts_with($ruta,'puntos/'):
+  require __DIR__ . '/controladores/puntos.php'; break;
+  case str_starts_with($ruta,'regiones/'):
+    require __DIR__ . '/controladores/regiones.php'; break;
+
+
 
   default:
     enviar_json(['ok'=>false,'error'=>'Ruta no encontrada','ruta'=>$ruta], 404);

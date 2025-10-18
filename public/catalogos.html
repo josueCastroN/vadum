@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Catálogos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <!-- Header superior -->
+  <header class="header-superior">
+    <nav class="nav-sup">
+      <a class="nav-sup__logo" href="./index.html">
+        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+        <span class="nav-sup__titulo">Sistema Automatizado de Incentivos · VADUM</span>
+      </a>
+      <div class="nav-sup__espaciador"></div>
+      <div class="perfil" id="perfilMenu">
+        <button class="perfil__btn" id="btnPerfil"><span id="usuarioActual">…</span><span class="perfil__avatar">👤</span></button>
+        <div class="perfil__dropdown" id="perfilDropdown">
+          <div class="perfil__info">
+            <div class="perfil__nombre" id="perfilNombre">Usuario</div>
+            <div class="perfil__rol" id="perfilRol">Rol</div>
+          </div>
+          <a class="perfil__item" href="#" id="irPerfil">Mi perfil</a>
+          <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Barra inferior -->
+  <div class="header-inferior">
+    <nav class="nav-inf">
+      <a class="nav-btn" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
+      <a class="nav-btn" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
+      <a class="nav-btn" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
+      <a class="nav-btn" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
+      <a class="nav-btn" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
+      <a class="nav-btn" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
+      <a class="nav-btn nav-btn--activo" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">Catálogos</a>
+    </nav>
+  </div>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1 class="titulo">Catálogos</h1>
+      <div class="subnav">
+        <button class="subnav__btn subnav__btn--activo" id="tabPuntos">Puntos de trabajo</button>
+        <button class="subnav__btn" id="tabRegiones">Regiones</button>
+      </div>
+
+      <!-- PUNTOS -->
+      <div id="vistaPuntos">
+        <div class="tarjeta" style="margin-bottom:12px;">
+          <h2 class="subtitulo">Agregar punto</h2>
+          <div class="fila fila--3">
+            <div><label class="label">Nombre del punto</label><input class="input" id="p_nombre" placeholder="Corporativo 1"></div>
+            <div><label class="label">Región</label><input class="input" id="p_region" placeholder="Noroeste"></div>
+            <div style="display:flex;align-items:flex-end;"><button class="btn" id="p_btnCrear">Crear punto</button></div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <h2 class="subtitulo">Listado de puntos</h2>
+          <div class="fila fila--3">
+            <div><label class="label">Buscar</label><input class="input" id="p_buscar" placeholder="Texto"></div>
+            <div><label class="label">Región</label><input class="input" id="p_fregion" placeholder="Noroeste"></div>
+            <div style="display:flex;align-items:flex-end;"><button class="btn" id="p_btnBuscar">Buscar</button></div>
+          </div>
+          <div style="margin-top:10px; overflow:auto;">
+            <table class="tabla" id="p_tabla">
+              <thead><tr><th>ID</th><th>Nombre</th><th>Región</th><th>Acciones</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGIONES -->
+      <div id="vistaRegiones" style="display:none;">
+        <div class="tarjeta" style="margin-bottom:12px;">
+          <h2 class="subtitulo">Agregar región</h2>
+          <div class="fila fila--3">
+            <div><label class="label">Nombre de región</label><input class="input" id="r_nombre" placeholder="Noroeste"></div>
+            <div style="display:flex;align-items:flex-end;"><button class="btn" id="r_btnCrear">Crear región</button></div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <h2 class="subtitulo">Listado de regiones</h2>
+          <div class="fila fila--2">
+            <div><label class="label">Buscar</label><input class="input" id="r_buscar" placeholder="Texto"></div>
+            <div style="display:flex;align-items:flex-end;"><button class="btn" id="r_btnBuscar">Buscar</button></div>
+          </div>
+          <div style="margin-top:10px; overflow:auto;">
+            <table class="tabla" id="r_tabla">
+              <thead><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos</footer>
+
+  <script src="./assets/js/ui.js"></script>
+  <script src="./assets/js/auth.js"></script>
+  <script>
+    // ----- Toggle vistas -----
+    const tabP = document.getElementById('tabPuntos');
+    const tabR = document.getElementById('tabRegiones');
+    const vP = document.getElementById('vistaPuntos');
+    const vR = document.getElementById('vistaRegiones');
+    tabP.onclick = ()=>{ tabP.classList.add('subnav__btn--activo'); tabR.classList.remove('subnav__btn--activo'); vP.style.display=''; vR.style.display='none'; };
+    tabR.onclick = ()=>{ tabR.classList.add('subnav__btn--activo'); tabP.classList.remove('subnav__btn--activo'); vR.style.display=''; vP.style.display='none'; };
+
+    // ----- Helpers -----
+    async function getJSON(u){ return fetch(u,{credentials:'include'}).then(r=>r.json()); }
+    async function postJSON(u,d){
+      const r = await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(d)});
+      return r.json();
+    }
+
+    // ===== PUNTOS =====
+    async function cargarPuntos(){
+      const b = document.getElementById('p_buscar').value.trim();
+      const fr = document.getElementById('p_fregion').value.trim();
+      let url = '../api/index.php?ruta=puntos/lista';
+      const q=[]; if (b) q.push('buscar='+encodeURIComponent(b)); if (fr) q.push('region='+encodeURIComponent(fr));
+      if (q.length) url += '&' + q.join('&');
+      const r = await getJSON(url);
+      const tb = document.querySelector('#p_tabla tbody');
+      tb.innerHTML = '';
+      (r.puntos||[]).forEach(p=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.id}</td>
+          <td>${p.nombre}</td>
+          <td>${p.region}</td>
+          <td>
+            <button class="btn btn--borde" data-ed="${p.id}" data-n="${p.nombre}" data-reg="${p.region}">Renombrar</button>
+            <button class="btn" data-del="${p.id}">Eliminar</button>
+          </td>`;
+        tb.appendChild(tr);
+      });
+      // Renombrar
+      tb.querySelectorAll('button[data-ed]').forEach(b=>{
+        b.onclick = async ()=>{
+          const id = +b.getAttribute('data-ed');
+          const old = b.getAttribute('data-n');
+          const oldr = b.getAttribute('data-reg');
+          const res = await mostrarFormulario({
+            titulo: 'Actualizar punto',
+            campos: [
+              { id:'nuevo_nombre', label:'Nuevo nombre', valor:old, requerido:true },
+              { id:'nueva_region', label:'Región', valor:oldr, requerido:true }
+            ],
+            textoAceptar: 'Guardar'
+          });
+          if (!res.ok) return;
+          const rr = await postJSON('../api/index.php?ruta=puntos/renombrar',{ id, nuevo_nombre:res.datos.nuevo_nombre, nueva_region:res.datos.nueva_region });
+          if (rr.ok) showToast('Punto actualizado','ok'); else showToast(rr.error||'No se pudo actualizar','error');
+          cargarPuntos();
+        };
+      });
+      // Eliminar
+      tb.querySelectorAll('button[data-del]').forEach(b=>{
+        b.onclick = async ()=>{
+          const id = +b.getAttribute('data-del');
+          const ok = await mostrarConfirmar({ titulo:'Eliminar punto', mensaje:'¿Seguro que deseas eliminar este punto?', textoAceptar:'Eliminar' });
+          if (!ok) return;
+          const rr = await postJSON('../api/index.php?ruta=puntos/eliminar',{ id });
+          if (rr.ok) showToast('Punto eliminado','ok'); else showToast(rr.error||'No se pudo eliminar','error');
+          cargarPuntos();
+        };
+      });
+    }
+    document.getElementById('p_btnBuscar').onclick = cargarPuntos;
+    document.getElementById('p_btnCrear').onclick = async ()=>{
+      const nombre = document.getElementById('p_nombre').value.trim();
+      const region = document.getElementById('p_region').value.trim();
+      if (!nombre || !region){ showToast('Completa nombre y región','error'); return; }
+      const r = await postJSON('../api/index.php?ruta=puntos/crear',{ nombre, region });
+      if (r.ok){ showToast('Punto creado','ok'); document.getElementById('p_nombre').value=''; } else { showToast(r.error||'No se pudo crear','error'); }
+      cargarPuntos();
+    };
+
+    // ===== REGIONES =====
+    async function cargarRegiones(){
+      const b = document.getElementById('r_buscar').value.trim();
+      let url = '../api/index.php?ruta=regiones/lista';
+      if (b) url += '&buscar='+encodeURIComponent(b);
+      const r = await getJSON(url);
+      const tb = document.querySelector('#r_tabla tbody');
+      tb.innerHTML = '';
+      (r.regiones||[]).forEach(x=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${x.id}</td>
+          <td>${x.nombre}</td>
+          <td>
+            <button class="btn btn--borde" data-red="${x.id}" data-n="${x.nombre}">Renombrar</button>
+            <button class="btn" data-rdel="${x.id}">Eliminar</button>
+          </td>`;
+        tb.appendChild(tr);
+      });
+      // Renombrar
+      tb.querySelectorAll('button[data-red]').forEach(b=>{
+        b.onclick = async ()=>{
+          const id = +b.getAttribute('data-red');
+          const old = b.getAttribute('data-n');
+          const res = await mostrarFormulario({
+            titulo:'Renombrar región',
+            campos:[{id:'nuevo_nombre',label:'Nuevo nombre',valor:old,requerido:true}],
+            textoAceptar:'Guardar'
+          });
+          if (!res.ok) return;
+          const rr = await postJSON('../api/index.php?ruta=regiones/renombrar',{ id, nuevo_nombre:res.datos.nuevo_nombre });
+          if (rr.ok) showToast('Región actualizada','ok'); else showToast(rr.error||'No se pudo actualizar','error');
+          cargarRegiones();
+        };
+      });
+      // Eliminar
+      tb.querySelectorAll('button[data-rdel]').forEach(b=>{
+        b.onclick = async ()=>{
+          const id = +b.getAttribute('data-rdel');
+          const ok = await mostrarConfirmar({ titulo:'Eliminar región', mensaje:'¿Seguro que deseas eliminar esta región?', textoAceptar:'Eliminar' });
+          if (!ok) return;
+          const rr = await postJSON('../api/index.php?ruta=regiones/eliminar',{ id });
+          if (rr.ok) showToast('Región eliminada','ok'); else showToast(rr.error||'No se pudo eliminar','error');
+          cargarRegiones();
+        };
+      });
+    }
+    document.getElementById('r_btnBuscar').onclick = cargarRegiones;
+    document.getElementById('r_btnCrear').onclick = async ()=>{
+      const nombre = document.getElementById('r_nombre').value.trim();
+      if (!nombre){ showToast('Escribe un nombre de región','error'); return; }
+      const r = await postJSON('../api/index.php?ruta=regiones/crear',{ nombre });
+      if (r.ok){ showToast('Región creada','ok'); document.getElementById('r_nombre').value=''; } else { showToast(r.error||'No se pudo crear','error'); }
+      cargarRegiones();
+    };
+
+    // Cargar al abrir
+    document.addEventListener('DOMContentLoaded', ()=>{ cargarPuntos(); cargarRegiones(); });
+  </script>
+
+  <!-- Capas UI (por si ui.js no las crea a tiempo) -->
+  <div id="modal-capa"></div>
+  <div id="toast-contenedor"></div>
+</body>
+</html>

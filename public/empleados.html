@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Empleados</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Estilos globales (negro/gris/blanco) -->
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <!-- ===========================
+       ENCABEZADO SUPERIOR
+       =========================== -->
+  <header class="header-superior">
+    <nav class="nav-sup">
+      <a class="nav-sup__logo" href="./index.html">
+        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+        <span class="nav-sup__titulo">Sistema Automatizado de Incentivos · VADUM</span>
+      </a>
+      <div class="nav-sup__espaciador"></div>
+
+      <!-- Menú de perfil / login -->
+      <div class="perfil" id="perfilMenu">
+        <button class="perfil__btn" id="btnPerfil">
+          <span id="usuarioActual">Sesión</span>
+          <span class="perfil__avatar">👤</span>
+        </button>
+        <div class="perfil__dropdown" id="perfilDropdown">
+          <div class="perfil__info">
+            <div class="perfil__nombre" id="perfilNombre">Usuario</div>
+            <div class="perfil__rol" id="perfilRol">Rol</div>
+          </div>
+          <a class="perfil__item" href="./catalogos.html">Catálogos</a>
+          <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===========================
+       BARRA INFERIOR DE NAVEGACIÓN
+       =========================== -->
+  <div class="header-inferior" id="barraNavegacion">
+    <nav class="nav-inf">
+      <a class="nav-btn" href="./index.html"            data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
+      <a class="nav-btn nav-btn--activo" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
+      <a class="nav-btn" href="./captura_fisica.html"   data-roles="admin,supervisor">Física</a>
+      <a class="nav-btn" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
+      <a class="nav-btn" href="./encuesta.html"         data-roles="admin,cliente,supervisor">Encuesta</a>
+      <a class="nav-btn" href="./incentivo.html"        data-roles="admin,supervisor,vigilante">Incentivo</a>
+      <a class="nav-btn" href="./catalogos.html"        data-roles="admin,supervisor">Catálogos</a>
+    </nav>
+  </div>
+
+  <!-- ===========================
+       CONTENIDO
+       =========================== -->
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1 class="titulo">Empleados</h1>
+
+      <!-- Submenú interno (Altas/Bajas) -->
+      <div class="subnav">
+        <button class="subnav__btn subnav__btn--activo" id="tabAltas">Altas</button>
+        <button class="subnav__btn" id="tabBajas">Bajas</button>
+      </div>
+
+      <!-- ========= VISTA ALTAS ========= -->
+      <div id="vistaAltas">
+        <!-- Formulario de alta/edición -->
+        <div class="tarjeta" style="margin-bottom:16px;">
+          <h2 class="subtitulo">Alta / Edición</h2>
+
+          <div class="fila fila--3">
+            <div>
+              <label class="label" for="a_no_emp">No.Emp</label>
+              <input class="input" id="a_no_emp" placeholder="950001">
+            </div>
+            <div>
+              <label class="label" for="a_nombres">Nombres</label>
+              <input class="input" id="a_nombres" placeholder="Nombre(s)">
+            </div>
+            <div>
+              <label class="label" for="a_apellidos">Apellidos</label>
+              <input class="input" id="a_apellidos" placeholder="Apellidos">
+            </div>
+          </div>
+
+          <div class="fila fila--3" style="margin-top:12px;">
+            <div>
+              <label class="label" for="a_puesto">Puesto</label>
+              <input class="input" id="a_puesto" value="Vigilante">
+            </div>
+            <div>
+              <label class="label" for="a_region">Región</label>
+              <input class="input" id="a_region" list="lista_regiones" placeholder="Noroeste">
+              <datalist id="lista_regiones"></datalist>
+            </div>
+            <div>
+              <label class="label" for="a_punto_id">Punto (por nombre)</label>
+              <select class="input" id="a_punto_id"></select>
+            </div>
+          </div>
+
+          <div class="fila fila--3" style="margin-top:12px;">
+            <div>
+              <label class="label" for="a_foto_url">Foto URL</label>
+              <input class="input" id="a_foto_url" placeholder="http://...">
+            </div>
+            <div>
+              <label class="label" for="a_fecha_nacimiento">Fecha de nacimiento</label>
+              <input class="input" id="a_fecha_nacimiento" type="date">
+            </div>
+            <div>
+              <label class="label" for="a_fecha_alta">Fecha de alta</label>
+              <input class="input" id="a_fecha_alta" type="date">
+            </div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" id="a_btnGuardar" type="button">Guardar</button>
+            <button class="btn btn--borde" id="a_btnLimpiar" type="button">Limpiar</button>
+          </div>
+        </div>
+
+        <!-- Tabla de activos + filtros -->
+        <div class="tarjeta">
+          <h2 class="subtitulo">Activos</h2>
+          <div class="fila fila--3">
+            <div>
+              <label class="label" for="a_buscar">Buscar (No.Emp o nombre)</label>
+              <input class="input" id="a_buscar" placeholder="950001 o Juan Pérez">
+            </div>
+            <div>
+              <label class="label" for="a_region_f">Región</label>
+              <input class="input" id="a_region_f" placeholder="Noroeste">
+            </div>
+            <div>
+              <label class="label" for="a_punto_f">Punto</label>
+              <select class="input" id="a_punto_f">
+                <option value="">Todos</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" id="a_btnBuscar" type="button">Buscar</button>
+          </div>
+
+          <div style="margin-top:10px; overflow:auto;">
+            <table class="tabla" id="a_tabla">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Fecha de nacimiento</th>
+                  <th>Fecha de alta</th>
+                  <th>Punto</th>
+                  <th>Región</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody><!-- filas dinámicas --></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========= VISTA BAJAS ========= -->
+      <div id="vistaBajas" style="display:none;">
+        <div class="tarjeta">
+          <h2 class="subtitulo">En Baja (Reactivar)</h2>
+          <div style="margin-top:10px; overflow:auto;">
+            <table class="tabla" id="b_tabla_baja">
+              <thead>
+                <tr>
+                  <th>No.Emp</th>
+                  <th>Nombre</th>
+                  <th>Puesto</th>
+                  <th>Región</th>
+                  <th>Punto</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody><!-- filas dinámicas --></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="tarjeta" style="margin-top:16px;">
+          <h2 class="subtitulo">Historial de Bajas</h2>
+          <div class="fila fila--3">
+            <div>
+              <label class="label" for="b_desde">Desde</label>
+              <input class="input" id="b_desde" type="date">
+            </div>
+            <div>
+              <label class="label" for="b_hasta">Hasta</label>
+              <input class="input" id="b_hasta" type="date">
+            </div>
+            <div>
+              <label class="label" for="b_buscar">Buscar</label>
+              <input class="input" id="b_buscar" placeholder="No.Emp o Nombre">
+            </div>
+          </div>
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" id="b_btnBuscar" type="button">Consultar</button>
+          </div>
+          <div style="margin-top:10px; overflow:auto;">
+            <table class="tabla" id="b_tabla_hist">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>No.Emp</th>
+                  <th>Nombre</th>
+                  <th>Fecha baja</th>
+                  <th>Motivo</th>
+                  <th>Usuario</th>
+                </tr>
+              </thead>
+              <tbody><!-- filas dinámicas --></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">© VADUM · Automatización de Incentivos</footer>
+
+  <!-- ===========================
+       SCRIPTS
+       =========================== -->
+  <script src="./assets/js/ui.js"></script>
+  <script src="./assets/js/auth.js"></script>
+  <script>
+    /* ===========================================================
+       Empleados · Lógica de pantalla (comentarios simples)
+       =========================================================== */
+
+    // ----- Conmutación de pestañas (Altas / Bajas) -----
+    const tabAltas   = document.getElementById('tabAltas');
+    const tabBajas   = document.getElementById('tabBajas');
+    const vistaAltas = document.getElementById('vistaAltas');
+    const vistaBajas = document.getElementById('vistaBajas');
+
+    tabAltas.onclick = ()=>{
+      tabAltas.classList.add('subnav__btn--activo');
+      tabBajas.classList.remove('subnav__btn--activo');
+      vistaAltas.style.display = '';
+      vistaBajas.style.display = 'none';
+    };
+    tabBajas.onclick = ()=>{
+      tabBajas.classList.add('subnav__btn--activo');
+      tabAltas.classList.remove('subnav__btn--activo');
+      vistaAltas.style.display = 'none';
+      vistaBajas.style.display = '';
+    };
+
+    // ----- Helpers de red -----
+    async function getJSON(url){
+      const r = await fetch(url, { credentials:'include' });
+      return r.json();
+    }
+    async function postJSON(url, data){
+      const r = await fetch(url, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        credentials:'include',
+        body: JSON.stringify(data)
+      });
+      return r.json();
+    }
+
+    // ===== Catálogos para selects =====
+    async function cargarSelectPuntos(selectId){
+      try{
+        const r = await getJSON('../api/index.php?ruta=puntos/lista');
+        const s = document.getElementById(selectId);
+        s.innerHTML = '<option value="">Seleccione…</option>';
+        (r.puntos||[]).forEach(p=>{
+          const o = document.createElement('option');
+          o.value = p.id; o.textContent = `${p.nombre} (${p.region})`;
+          s.appendChild(o);
+        });
+      }catch(e){ console.error(e); showToast('No se pudieron cargar los puntos','error'); }
+    }
+    async function cargarDatalistRegiones(datalistId){
+      try{
+        const r = await getJSON('../api/index.php?ruta=regiones/lista');
+        const d = document.getElementById(datalistId);
+        d.innerHTML = '';
+        (r.regiones||[]).forEach(x=>{
+          const o = document.createElement('option'); o.value = x.nombre; d.appendChild(o);
+        });
+      }catch(e){ console.error(e); }
+    }
+
+    // ===== Alta / Edición =====
+    document.getElementById('a_btnGuardar').onclick = async ()=>{
+      const payload = {
+        no_emp:            document.getElementById('a_no_emp').value.trim(),
+        nombres:           document.getElementById('a_nombres').value.trim(),
+        apellidos:         document.getElementById('a_apellidos').value.trim(),
+        puesto:            document.getElementById('a_puesto').value.trim(),
+        region:            document.getElementById('a_region').value.trim(),
+        punto_id:         +document.getElementById('a_punto_id').value,
+        foto_url:          document.getElementById('a_foto_url').value.trim() || null,
+        fecha_nacimiento:  document.getElementById('a_fecha_nacimiento').value || null,
+        fecha_alta:        document.getElementById('a_fecha_alta').value || null
+      };
+      if (!payload.no_emp || !payload.nombres || !payload.apellidos || !payload.region || !payload.punto_id){
+        showToast('Completa No.Emp, Nombres, Apellidos, Región y Punto.','error'); return;
+      }
+      const r = await postJSON('../api/index.php?ruta=empleados/alta', payload);
+      if (r && r.ok){ showToast('Empleado guardado','ok'); limpiarForm(); cargarActivos(); }
+      else { showToast((r && r.error) || 'Error al guardar','error'); }
+    };
+
+    document.getElementById('a_btnLimpiar').onclick = limpiarForm;
+    function limpiarForm(){
+      ['a_no_emp','a_nombres','a_apellidos','a_puesto','a_region','a_foto_url','a_fecha_nacimiento','a_fecha_alta']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      const sel = document.getElementById('a_punto_id'); if (sel) sel.selectedIndex = 0;
+      document.getElementById('a_no_emp').disabled = false;
+    }
+
+    // ===== Listado “Activos” (Buscar / Editar / Baja) =====
+    document.getElementById('a_btnBuscar').onclick = cargarActivos;
+
+    async function cargarActivos(){
+      const buscar = (document.getElementById('a_buscar')?.value || '').trim();
+      const region = (document.getElementById('a_region_f')?.value || '').trim();
+      const punto  = (document.getElementById('a_punto_f')?.value || '').trim();
+
+      let url = '../api/index.php?ruta=empleados/lista&estado=ACTIVO';
+      if (buscar) url += '&buscar=' + encodeURIComponent(buscar);
+      if (region) url += '&region=' + encodeURIComponent(region);
+      if (punto)  url += '&punto_id=' + encodeURIComponent(punto);
+
+      const tb = document.querySelector('#a_tabla tbody');
+      tb.innerHTML = `<tr><td colspan="6">Cargando…</td></tr>`;
+
+      try{
+        const resp = await fetch(url, { credentials:'include' });
+        const r = await resp.json().catch(()=>null);
+        console.log('[ALTAS] GET', url, '→', r);
+
+        if (!resp.ok){ tb.innerHTML = `<tr><td colspan="6">Error (${resp.status}).</td></tr>`; showToast('Error al consultar','error'); return; }
+        if (!r || r.ok === false){ const msg=(r&&r.error)||'Respuesta inválida'; tb.innerHTML = `<tr><td colspan="6">${msg}</td></tr>`; showToast(msg,'error'); return; }
+
+        const lista = Array.isArray(r.empleados) ? r.empleados : [];
+        if (lista.length === 0){ tb.innerHTML = `<tr><td colspan="6">Sin resultados.</td></tr>`; return; }
+
+        tb.innerHTML = '';
+        lista.forEach(e=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${e.nombre ?? ''}</td>
+            <td>${e.fecha_nacimiento ?? ''}</td>
+            <td>${e.fecha_alta ?? ''}</td>
+            <td>${e.punto_nombre ?? ''}</td>
+            <td>${e.region ?? ''}</td>
+            <td>
+              <button class="btn btn--borde" type="button" data-edit="${e.no_emp}">Editar</button>
+              <button class="btn" type="button" data-baja="${e.no_emp}">Baja</button>
+            </td>`;
+          tb.appendChild(tr);
+        });
+
+        // Editar → cargar datos al formulario
+        tb.querySelectorAll('button[data-edit]').forEach(btn=>{
+          btn.onclick = ()=>{
+            const no = btn.getAttribute('data-edit');
+            const row = (lista||[]).find(x=>x.no_emp===no);
+            if (!row) return;
+
+            // Datos base
+            document.getElementById('a_no_emp').value = no;
+            document.getElementById('a_no_emp').disabled = true;
+            // Si tu backend devuelve nombres/apellidos por separado, rellénalos aquí;
+            // en esta lista llega "nombre" combinado, por eso los dejo vacíos para edición rápida.
+            document.getElementById('a_nombres').value  = '';
+            document.getElementById('a_apellidos').value = '';
+
+            document.getElementById('a_puesto').value  = row.puesto || 'Vigilante';
+            document.getElementById('a_region').value  = row.region || '';
+            document.getElementById('a_fecha_nacimiento').value = row.fecha_nacimiento || '';
+            document.getElementById('a_fecha_alta').value       = row.fecha_alta || '';
+
+            // Punto por id
+            const sel = document.getElementById('a_punto_id');
+            [...sel.options].forEach(o=>{ if (+o.value === +row.punto_id) sel.value = o.value; });
+
+            showToast('Formulario cargado para edición','ok');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+        });
+
+        // Baja → modal
+        tb.querySelectorAll('button[data-baja]').forEach(btn=>{
+          btn.onclick = async ()=>{
+            const no = btn.getAttribute('data-baja');
+            const res = await mostrarFormulario({
+              titulo: 'Dar de baja empleado',
+              descripcion: `No.Emp: <b>${no}</b>`,
+              campos: [
+                { id:'motivo', label:'Motivo (opcional)', tipo:'text', placeholder:'Ej. Renuncia' },
+                { id:'fecha_baja', label:'Fecha de baja', tipo:'date', valor:(new Date()).toISOString().slice(0,10) }
+              ],
+              textoAceptar: 'Aplicar baja'
+            });
+            if (!res.ok) return;
+
+            const rr = await postJSON('../api/index.php?ruta=empleados/baja', {
+              no_emp: no,
+              motivo: res.datos.motivo || null,
+              fecha_baja: res.datos.fecha_baja || null
+            });
+            if (rr.ok){ showToast('Baja aplicada','ok'); cargarActivos(); cargarEnBaja(); cargarHistorial(); }
+            else { showToast(rr.error||'No se pudo aplicar la baja','error'); }
+          };
+        });
+
+      }catch(err){
+        console.error('Error consultando activos:', err);
+        tb.innerHTML = `<tr><td colspan="6">No se pudo obtener la información.</td></tr>`;
+        showToast('No se pudo obtener la información','error');
+      }
+    }
+
+    // ===== En Baja / Reactivar / Historial =====
+    async function cargarEnBaja(){
+      try{
+        const r = await getJSON('../api/index.php?ruta=empleados/lista&estado=BAJA');
+        const tb = document.querySelector('#b_tabla_baja tbody');
+        tb.innerHTML = '';
+        (r.empleados||[]).forEach(e=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${e.no_emp ?? ''}</td>
+            <td>${e.nombre ?? ''}</td>
+            <td>${e.puesto ?? ''}</td>
+            <td>${e.region ?? ''}</td>
+            <td>${e.punto_nombre ?? ''}</td>
+            <td><button class="btn" type="button" data-react="${e.no_emp}">Reactivar</button></td>`;
+          tb.appendChild(tr);
+        });
+
+        tb.querySelectorAll('button[data-react]').forEach(btn=>{
+          btn.onclick = async ()=>{
+            const no = btn.getAttribute('data-react');
+            const ok = await mostrarConfirmar({ titulo:'Reactivar empleado', mensaje:`¿Reactivar al empleado <b>${no}</b>?`, textoAceptar:'Reactivar' });
+            if (!ok) return;
+            const rr = await postJSON('../api/index.php?ruta=empleados/reactivar', { no_emp:no });
+            if (rr.ok){ showToast('Empleado reactivado','ok'); cargarActivos(); cargarEnBaja(); }
+            else { showToast(rr.error||'No se pudo reactivar','error'); }
+          };
+        });
+      }catch(e){ console.error(e); showToast('No se pudo cargar la lista de bajas','error'); }
+    }
+
+    function setFechasMes(){
+      const d = new Date(); const y=d.getFullYear(); const m=('0'+(d.getMonth()+1)).slice(-2);
+      document.getElementById('b_desde').value = `${y}-${m}-01`;
+      const ult = new Date(y, d.getMonth()+1, 0).getDate();
+      document.getElementById('b_hasta').value = `${y}-${m}-${('0'+ult).slice(-2)}`;
+    }
+    document.getElementById('b_btnBuscar').onclick = cargarHistorial;
+
+    async function cargarHistorial(){
+      const desde = document.getElementById('b_desde').value;
+      const hasta = document.getElementById('b_hasta').value;
+      const buscar = document.getElementById('b_buscar').value.trim();
+      let url = `../api/index.php?ruta=empleados/resumen_bajas&desde=${desde}&hasta=${hasta}`;
+      if (buscar) url += '&buscar=' + encodeURIComponent(buscar);
+
+      try{
+        const r = await getJSON(url);
+        const tb = document.querySelector('#b_tabla_hist tbody');
+        tb.innerHTML = '';
+        (r.bajas||[]).forEach(b=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${b.id}</td>
+            <td>${b.no_emp}</td>
+            <td>${b.nombre || ''}</td>
+            <td>${b.fecha_baja}</td>
+            <td>${b.motivo || ''}</td>
+            <td>${b.usuario_baja}</td>`;
+          tb.appendChild(tr);
+        });
+      }catch(e){ console.error(e); showToast('No se pudo cargar el historial','error'); }
+    }
+
+    // ===== Inicialización =====
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      await cargarSelectPuntos('a_punto_id');
+      await cargarSelectPuntos('a_punto_f');
+      await cargarDatalistRegiones('lista_regiones');
+
+      setFechasMes();
+      cargarActivos();
+      cargarEnBaja();
+      cargarHistorial();
+    });
+  </script>
+
+  <!-- Capas de UI por si ui.js aún no las crea -->
+  <div id="modal-capa"></div>
+  <div id="toast-contenedor"></div>
+</body>
+</html>

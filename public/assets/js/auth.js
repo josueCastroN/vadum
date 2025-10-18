@@ -1,56 +1,71 @@
 /* =========================================
-   VADUM · Manejo simple de sesión en el frontend
-   - Verifica si hay usuario logeado
-   - Controla visibilidad de links por rol
-   - Implementa botón "Salir"
+   VADUM · Sesión, perfil y visibilidad por rol
    ========================================= */
 
 window.USUARIO = null;
 
-/* Llama /auth/me para conocer sesión actual */
+/* Carga sesión y aplica UI */
 async function cargarSesion() {
   try {
-    const r = await fetch('../api/index.php?ruta=auth/me', { credentials: 'include' });
+    const r = await fetch('../api/index.php?ruta=auth/me', { credentials:'include' });
     const j = await r.json();
-    if (j.ok && j.logeado) {
-      window.USUARIO = j.usuario; // {usuario, rol, empleado_no_emp, punto_id}
-      aplicarVisibilidadPorRol();
-      pintarUsuarioEnHeader();
-    } else {
-      // si no está logeado y no estamos en login, redirigimos
-      if (!location.pathname.endsWith('/login.html')) {
-        location.href = './login.html';
-      }
+
+    const esLogin = location.pathname.endsWith('/login.html');
+    if (!j.ok || !j.logeado) {
+      if (!esLogin) location.href = './login.html';
+      return;
     }
-  } catch (e) {
-    console.error(e);
-  }
+    // Si estoy en login y ya estoy logeado, lleve al inicio
+    if (esLogin) { location.href = './index.html'; return; }
+
+    window.USUARIO = j.usuario;
+    aplicarRolesEnNavegacion();
+    poblarPerfil();
+    activarMenuPerfil();
+
+  } catch (e) { console.error(e); }
 }
 
-/* Muestra/oculta elementos con data-roles="admin,supervisor"... */
-function aplicarVisibilidadPorRol() {
-  if (!window.USUARIO) return;
-  const rol = window.USUARIO.rol;
-  document.querySelectorAll('[data-roles]').forEach(el => {
-    const roles = el.getAttribute('data-roles').split(',').map(s => s.trim());
+/* Muestra/oculta botones por rol usando data-roles */
+function aplicarRolesEnNavegacion() {
+  const rol = window.USUARIO?.rol;
+  document.querySelectorAll('[data-roles]').forEach(el=>{
+    const roles = el.getAttribute('data-roles').split(',').map(s=>s.trim());
     el.style.display = roles.includes(rol) ? '' : 'none';
   });
 }
 
-/* Muestra el usuario y agrega acción al botón Salir si existe */
-function pintarUsuarioEnHeader() {
+/* Perfil visible */
+function poblarPerfil() {
+  const u = window.USUARIO;
   const span = document.getElementById('usuarioActual');
-  if (span && window.USUARIO) {
-    span.textContent = `${window.USUARIO.usuario} · ${window.USUARIO.rol}`;
-  }
+  const nom  = document.getElementById('perfilNombre');
+  const rol  = document.getElementById('perfilRol');
+  if (span) span.textContent = u.usuario;
+  if (nom)  nom.textContent  = u.usuario;
+  if (rol)  rol.textContent  = `Rol: ${u.rol}`;
+}
+
+/* Toggle del menú y acciones */
+function activarMenuPerfil() {
+  const btn = document.getElementById('btnPerfil');
+  const dd  = document.getElementById('perfilDropdown');
   const salir = document.getElementById('btnSalir');
+  const irPerfil = document.getElementById('irPerfil');
+
+  if (btn && dd) {
+    btn.addEventListener('click', (e)=>{ e.stopPropagation(); dd.classList.toggle('activo'); });
+    document.addEventListener('click', ()=> dd.classList.remove('activo'));
+  }
   if (salir) {
-    salir.onclick = async () => {
+    salir.onclick = async ()=>{
       await fetch('../api/index.php?ruta=auth/logout', { method:'POST', credentials:'include' });
       location.href = './login.html';
     };
   }
+  if (irPerfil) {
+    irPerfil.onclick = (e)=>{ e.preventDefault(); alert(`Usuario: ${window.USUARIO.usuario}\nRol: ${window.USUARIO.rol}`); };
+  }
 }
 
-/* Arranca chequeo de sesión en carga */
 document.addEventListener('DOMContentLoaded', cargarSesion);

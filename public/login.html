@@ -13,18 +13,33 @@
       <img src="./assets/img/VADUM-negro.png" alt="VADUM">
       <span class="nav__titulo">Sistema de Incentivos</span>
     </a>
-    <!-- Links con visibilidad por rol -->
+
+    <!-- Links visibles por rol -->
     <div class="nav__links">
       <a class="nav__link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
       <a class="nav__link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
       <a class="nav__link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
       <a class="nav__link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
-      <!-- Usuario actual + botón salir -->
-      <span class="chip" id="usuarioActual">sin sesión</span>
-      <button class="btn btn--borde" id="btnSalir">Salir</button>
+
+      <!-- Menú de perfil -->
+      <div class="perfil" id="perfilMenu">
+        <button class="perfil__btn" id="btnPerfil">
+          <span id="usuarioActual">…</span>
+          <span class="perfil__avatar">👤</span>
+        </button>
+        <div class="perfil__dropdown" id="perfilDropdown">
+          <div class="perfil__info">
+            <div class="perfil__nombre" id="perfilNombre">Usuario</div>
+            <div class="perfil__rol" id="perfilRol">Rol</div>
+          </div>
+          <a class="perfil__item" href="#" id="irPerfil">Mi perfil</a>
+          <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
+        </div>
+      </div>
     </div>
   </nav>
 </header>
+
 
   <main class="contenedor">
     <section class="tarjeta" style="max-width:420px;margin:0 auto;">

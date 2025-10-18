@@ -7,21 +7,61 @@
   <link rel="stylesheet" href="./assets/css/estilos.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <nav class="nav">
-      <a class="nav__logo" href="./index.html">
-        <img src="./assets/img/VADUM-negro.png" alt="VADUM">
-        <span class="nav__titulo">Sistema de Incentivos</span>
-      </a>
-      <div class="nav__links">
-        <a class="nav__link nav__link--activo" id="nav-fisica" href="./captura_fisica.html">Física</a>
-        <a class="nav__link" id="nav-mensual" href="./evaluacion_mensual.html">Mensual</a>
-        <a class="nav__link" id="nav-encuesta" href="./encuesta.html">Encuesta</a>
-        <a class="nav__link" id="nav-incentivo" href="./incentivo.html">Incentivo</a>
+  <!-- ====== Header Superior (logo, nombre, perfil/login) ====== -->
+<header class="header-superior">
+  <nav class="nav-sup">
+    <a class="nav-sup__logo" href="./index.html">
+      <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+      <span class="nav-sup__titulo">Sistema Automatizado de Incentivos · VADUM</span>
+    </a>
+    <div class="nav-sup__espaciador"></div>
+
+    <!-- Menú de perfil -->
+    <div class="perfil" id="perfilMenu">
+      <button class="perfil__btn" id="btnPerfil">
+        <span id="usuarioActual">…</span>
+        <span class="perfil__avatar">👤</span>
+      </button>
+      <div class="perfil__dropdown" id="perfilDropdown">
+        <div class="perfil__info">
+          <div class="perfil__nombre" id="perfilNombre">Usuario</div>
+          <div class="perfil__rol" id="perfilRol">Rol</div>
+        </div>
+        <a class="perfil__item" href="#" id="irPerfil">Mi perfil</a>
+        <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
       </div>
-    </nav>
-  </header>
+    </div>
+  </nav>
+</header>
+
+<!-- ====== Header Inferior (botones de navegación) ====== -->
+<div class="header-inferior" id="barraNavegacion">
+  <nav class="nav-inf">
+    <!-- Muestra/oculta por rol con data-roles -->
+    <a class="nav-btn" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
+    <a class="nav-btn" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
+    <a class="nav-btn" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
+    <a class="nav-btn" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
+    <a class="nav-btn" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
+    <a class="nav-btn" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
+  </nav>
+</div>
+
+<script>
+// Marca activo según archivo
+const mapaActivos = {
+  'index.html':'nav-inicio',
+  'empleados.html':'nav-empleados',
+  'captura_fisica.html':'nav-fisica',
+  'evaluacion_mensual.html':'nav-mensual',
+  'encuesta.html':'nav-encuesta',
+  'incentivo.html':'nav-incentivo'
+};
+const actual = location.pathname.split('/').pop();
+const idAct = mapaActivos[actual];
+if (idAct) document.getElementById(idAct)?.classList.add('nav-btn--activo');
+</script>
+
 
   <main class="contenedor">
     <section class="tarjeta">
@@ -74,7 +114,7 @@
 
   <footer class="footer">© VADUM · Automatización de Incentivos ·</footer>
   <script src="./assets/js/ui.js"></script>
-<script src="./assets/js/auth.js"></script>
+  <script src="./assets/js/auth.js"></script>
   <script>
     // ========= Lógica  =========
     const tbody = document.getElementById('tb');
