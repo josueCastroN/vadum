@@ -1,215 +1,221 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>VADUM · Captura Física</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="./assets/css/estilos.css">
+    <meta charset="utf-8">
+    <title>VADUM · Captura Física</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-  <!-- ====== Header Superior (logo, nombre, perfil/login) ====== -->
-<header class="header-superior">
-  <nav class="nav-sup">
-    <a class="nav-sup__logo" href="./index.html">
-      <img src="./assets/img/VADUM-negro.png" alt="VADUM">
-      <span class="nav-sup__titulo">Sistema Automatizado de Incentivos · VADUM</span>
-    </a>
-    <div class="nav-sup__espaciador"></div>
+    <div class="app-shell">
+        <header class="app-header">
+            <nav class="nav-sup app-header__inner d-flex justify-content-between align-items-center p-2">
+                <a class="nav-sup__logo text-decoration-none d-flex align-items-center" href="./index.html">
+                    <img src="./assets/img/VADUM-negro.png" alt="VADUM" style="height:30px;" class="me-2">
+                    <span class="nav-sup__titulo h6 m-0 text-dark">Sistema Automatizado de Incentivos · VADUM</span>
+                </a>
+                
+                <div class="dropdown" id="perfilMenu">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center" 
+                            type="button" id="btnPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="usuarioActual" class="me-2">…</span>
+                        <span class="perfil__avatar rounded-circle bg-warning text-dark px-2">👤</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" id="perfilDropdown" aria-labelledby="btnPerfil">
+                        <li class="dropdown-item-text">
+                            <div class="perfil__info">
+                                <div class="perfil__nombre fw-bold" id="perfilNombre">Usuario</div>
+                                <div class="perfil__rol text-muted small" id="perfilRol">Rol</div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="irPerfil">Mi perfil</a></li>
+                        <li><button class="dropdown-item text-danger" id="btnSalir">Cerrar sesión</button></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
 
-    <!-- Menú de perfil -->
-    <div class="perfil" id="perfilMenu">
-      <button class="perfil__btn" id="btnPerfil">
-        <span id="usuarioActual">…</span>
-        <span class="perfil__avatar">👤</span>
-      </button>
-      <div class="perfil__dropdown" id="perfilDropdown">
-        <div class="perfil__info">
-          <div class="perfil__nombre" id="perfilNombre">Usuario</div>
-          <div class="perfil__rol" id="perfilRol">Rol</div>
+        <div class="app-body">
+            <aside class="app-sidebar" aria-label="Menú principal">
+                <nav class="sidebar-nav">
+                    <a class="sidebar-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
+                    <a class="sidebar-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
+                    <a class="sidebar-link sidebar-link--activo" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
+                    <a class="sidebar-link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
+                    <a class="sidebar-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
+                    <a class="sidebar-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
+                    <a class="sidebar-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">Catálogos</a>
+                </nav>
+            </aside>
+
+            <main class="app-content p-3 p-md-4">
+                <section class="card p-4">
+                    <h1 class="h4 fw-bold mb-4">Captura de Evaluación Física (Checklist)</h1>
+                    
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <h2 class="h5 fw-semibold mb-3">Información de la Captura</h2>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <label class="form-label" for="no_emp">No. Empleado</label>
+                                    <input class="form-control" id="no_emp" placeholder="950001" value="950001">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label" for="punto_id">Punto ID</label>
+                                    <input class="form-control" id="punto_id" placeholder="PUNTO-01" value="PUNTO-01">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="supervisor_id">Evaluador (Supervisor ID)</label>
+                                    <input class="form-control" id="supervisor_id" placeholder="SUP-001" value="SUP-001">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="observaciones">Observaciones</label>
+                                    <textarea class="form-control" id="observaciones" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <h2 class="h5 fw-semibold mb-3">Evidencia Fotográfica</h2>
+                            
+                            <div class="mb-3">
+                                <label for="fotoInput" class="form-label">Tomar / Seleccionar Foto</label>
+                                <input class="form-control" type="file" id="fotoInput" accept="image/*" capture="camera" required>
+                                <div class="form-text">La imagen será usada como evidencia de la condición física.</div>
+                            </div>
+                            
+                            <div class="border rounded p-2 text-center bg-light">
+                                <img id="fotoPreview" src="./assets/img/placeholder-foto.png" alt="Previsualización de Foto" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+
+                    <h2 class="h5 fw-bold mb-3">Métrica de Evaluación (Puntaje de 0 a 10)</h2>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label" for="item1">Uniforme (1-10)</label>
+                            <input class="form-control" id="item1" type="number" min="1" max="10" value="10">
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label" for="item2">Peinado / Rasurado (1-10)</label>
+                            <input class="form-control" id="item2" type="number" min="1" max="10" value="9">
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label" for="item3">Limpieza de Caseta/Punto (1-10)</label>
+                            <input class="form-control" id="item3" type="number" min="1" max="10" value="8">
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label" for="item4">Posición / Atención (1-10)</label>
+                            <input class="form-control" id="item4" type="number" min="1" max="10" value="10">
+                        </div>
+                    </div>
+
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary btn-lg" id="guardar">
+                            <i class="fas fa-save me-2"></i> Guardar Captura
+                        </button>
+                    </div>
+
+                </section>
+            </main>
         </div>
-        <a class="perfil__item" href="#" id="irPerfil">Mi perfil</a>
-        <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
-      </div>
+
+        <footer class="footer text-center p-3 border-top">© VADUM · Automatización de Incentivos</footer>
     </div>
-  </nav>
-</header>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/ui.js"></script>
+    <script src="./assets/js/auth.js"></script>
+    <script>
+    const mostrarToast = window.VADUM_UI?.mostrarToast || console.log;
 
-<!-- ====== Header Inferior (botones de navegación) ====== -->
-<div class="header-inferior" id="barraNavegacion">
-  <nav class="nav-inf">
-    <!-- Muestra/oculta por rol con data-roles -->
-    <a class="nav-btn" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
-    <a class="nav-btn" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
-    <a class="nav-btn" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
-    <a class="nav-btn" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
-    <a class="nav-btn" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
-    <a class="nav-btn" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
-  </nav>
-</div>
-
-<script>
-// Marca activo según archivo
-const mapaActivos = {
-  'index.html':'nav-inicio',
-  'empleados.html':'nav-empleados',
-  'captura_fisica.html':'nav-fisica',
-  'evaluacion_mensual.html':'nav-mensual',
-  'encuesta.html':'nav-encuesta',
-  'incentivo.html':'nav-incentivo'
-};
-const actual = location.pathname.split('/').pop();
-const idAct = mapaActivos[actual];
-if (idAct) document.getElementById(idAct)?.classList.add('nav-btn--activo');
-</script>
-
-
-  <main class="contenedor">
-    <section class="tarjeta">
-      <h1 class="titulo">Captura Física (Grupal)</h1>
-      <div class="fila fila--3">
-        <div>
-          <label class="label">Fecha</label>
-          <input class="input" id="fecha" type="date">
-        </div>
-        <div>
-          <label class="label">Trimestre</label>
-          <input class="input" id="tri" type="number" min="1" max="4" value="3">
-        </div>
-        <div>
-          <label class="label">Sede</label>
-          <input class="input" id="sede" placeholder="Campo / Gimnasio">
-        </div>
-      </div>
-      <div style="margin-top:12px; display:flex; gap:10px;">
-        <button class="btn" id="btnSesion">Crear sesión</button>
-        <span id="infoSesion" class="chip">Sin sesión</span>
-      </div>
-    </section>
-
-    <section class="tarjeta" style="margin-top:16px;">
-      <h2 class="subtitulo">Tabla de capturas</h2>
-      <table class="tabla" id="tabla">
-        <thead>
-          <tr>
-            <th>No.Emp</th><th>Edad</th><th>12min (m)</th><th>100m (s)</th>
-            <th>Abd</th><th>Lag</th><th>Bar</th><th>Bur</th><th>Guardar</th>
-          </tr>
-        </thead>
-        <tbody id="tb"></tbody>
-      </table>
-      <div style="margin-top:12px;">
-        <button class="btn btn--fantasma" id="agregarFila">+ Agregar fila</button>
-      </div>
-    </section>
-
-    <section class="tarjeta" style="margin-top:16px;">
-      <h2 class="subtitulo">Firma del empleado (opcional)</h2>
-      <canvas id="lienzo" width="320" height="120" style="background:#fff; border:1px dashed #777; border-radius: 8px;"></canvas>
-      <div style="margin-top:10px; display:flex; gap:10px;">
-        <button class="btn" id="btnFirma">Guardar Firma</button>
-        <button class="btn btn--borde" id="btnCerrar">Cerrar sesión</button>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">© VADUM · Automatización de Incentivos ·</footer>
-  <script src="./assets/js/ui.js"></script>
-  <script src="./assets/js/auth.js"></script>
-  <script>
-    // ========= Lógica  =========
-    const tbody = document.getElementById('tb');
-    const infoSesion = document.getElementById('infoSesion');
-    const inputFecha = document.getElementById('fecha');
-    inputFecha.value = new Date().toISOString().slice(0,10);
-
-    let sesionId = null;
-
-    function nuevaFila(noEmp='', edad=0, m12=0, s100=0, ab=0, lg=0, br=0, bu=0) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input class="input" value="${noEmp}"></td>
-        <td><input class="input" type="number" value="${edad}"></td>
-        <td><input class="input" type="number" value="${m12}"></td>
-        <td><input class="input" type="number" step="0.01" value="${s100}"></td>
-        <td><input class="input" type="number" value="${ab}"></td>
-        <td><input class="input" type="number" value="${lg}"></td>
-        <td><input class="input" type="number" value="${br}"></td>
-        <td><input class="input" type="number" value="${bu}"></td>
-        <td><button class="btn guardar">Guardar</button></td>
-      `;
-      tbody.appendChild(tr);
-
-      tr.querySelector('.guardar').onclick = async () => {
-        if (!sesionId) return mostrarToast('Primero crea la sesión');
-        const c = tr.querySelectorAll('input');
-        const payload = {
-          sesion_id: sesionId,
-          no_emp:  c[0].value.trim(),
-          edad:    +c[1].value,
-          v_12min_m:+c[2].value,
-          v_100m_s:+c[3].value,
-          v_abdom: +c[4].value,
-          v_lagart:+c[5].value,
-          v_barras:+c[6].value,
-          v_burpees:+c[7].value,
-        };
-        const r = await fetch('../api/index.php?ruta=fisicas/registro', {
-          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
-        }).then(r=>r.json());
-        mostrarToast('Calificación física: ' + r.cal_fisica);
-      };
+    // Función auxiliar para enviar datos por POST (misma que en evaluación_mensual.html)
+    async function postData(url, data){
+        const r = await fetch(url, { 
+            method:'POST', 
+            headers:{'Content-Type':'application/json'}, 
+            credentials:'include',
+            body: JSON.stringify(data) 
+        });
+        if (!r.ok) throw new Error(`Error ${r.status} al postear datos: ${r.statusText}`);
+        return r.json();
     }
-    document.getElementById('agregarFila').onclick = () => nuevaFila();
-
-    document.getElementById('btnSesion').onclick = async () => {
-      const r = await fetch('../api/index.php?ruta=fisicas/sesion', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          fecha: inputFecha.value,
-          trimestre: +document.getElementById('tri').value || 1,
-          evaluador_id:'sup-001',
-          sede: document.getElementById('sede').value || 'Campo'
-        })
-      }).then(r=>r.json());
-      sesionId = r.sesion_id;
-      infoSesion.textContent = 'Sesión: ' + sesionId;
-      mostrarToast('Sesión creada');
-    };
-
-    // Firma
-    const canvas = document.getElementById('lienzo');
-    const ctx = canvas.getContext('2d');
-    let pintando = false;
-    canvas.addEventListener('mousedown', ()=> pintando = true);
-    canvas.addEventListener('mouseup', ()=> pintando = false);
-    canvas.addEventListener('mousemove', (e)=>{
-      if(!pintando) return;
-      const r = canvas.getBoundingClientRect();
-      ctx.fillStyle = '#000';
-      ctx.beginPath();
-      ctx.arc(e.clientX - r.left, e.clientY - r.top, 1.2, 0, Math.PI*2);
-      ctx.fill();
+    
+    // --- Lógica de Previsualización de Foto ---
+    document.getElementById('fotoInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('fotoPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
     });
 
-    document.getElementById('btnFirma').onclick = async ()=>{
-      if (!sesionId) return mostrarToast('Crea una sesión primero');
-      const dataURL = canvas.toDataURL('image/png');
-      const r = await fetch('../api/index.php?ruta=firmas/guardar', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ tipo:'fisica_empleado', sesion_id: sesionId, no_emp:'950001', firma_base64: dataURL })
-      }).then(r=>r.json());
-      mostrarToast('Firma guardada');
-      console.log('URL firma:', r.url);
-    };
+    // --- Lógica de Guardado (incluyendo la foto como Base64) ---
+    document.getElementById('guardar').onclick = async () => {
+        const fotoInput = document.getElementById('fotoInput');
+        const file = fotoInput.files[0];
+        
+        if (!file) {
+            mostrarToast('Debe tomar o seleccionar una foto de evidencia.','error');
+            return;
+        }
 
-    document.getElementById('btnCerrar').onclick = async ()=>{
-      if (!sesionId) return mostrarToast('No hay sesión');
-      await fetch('../api/index.php?ruta=fisicas/cerrar', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ sesion_id: sesionId })
-      });
-      mostrarToast('Sesión cerrada');
+        const datos = {
+            no_emp: document.getElementById('no_emp').value.trim(),
+            punto_id: document.getElementById('punto_id').value.trim(),
+            supervisor_id: document.getElementById('supervisor_id').value.trim(),
+            observaciones: document.getElementById('observaciones').value.trim(),
+            uniforme: +document.getElementById('item1').value,
+            peinado: +document.getElementById('item2').value,
+            limpieza: +document.getElementById('item3').value,
+            posicion: +document.getElementById('item4').value,
+            foto_base64: '' // Se llenará con la lectura del archivo
+        };
+
+        if (!datos.no_emp || !datos.punto_id || !datos.supervisor_id) {
+            mostrarToast('Rellena los campos obligatorios (No. Empleado, Punto ID, Evaluador ID).','error');
+            return;
+        }
+
+        // Función para leer el archivo como Base64
+        const readFileAsBase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        };
+
+        try {
+            mostrarToast('Convirtiendo imagen y enviando datos...', 'info');
+            
+            // Convertir la imagen a Base64
+            datos.foto_base64 = await readFileAsBase64(file);
+            
+            // Enviar los datos
+            const r = await postData('../api/index.php?ruta=fisica/guardar', datos);
+            
+            mostrarToast(`Captura Guardada. Promedio: ${r.promedio_0_10} / 10`,'ok');
+            
+            // Opcional: Limpiar el formulario después de guardar
+            // document.getElementById('observaciones').value = '';
+            // document.getElementById('fotoInput').value = ''; 
+            // document.getElementById('fotoPreview').src = './assets/img/placeholder-foto.png';
+
+        } catch (e) {
+            console.error(e);
+            mostrarToast('Error al guardar la captura. Verifica la conexión con la API.','error');
+        }
     };
-  </script>
+    </script>
 </body>
 </html>

@@ -8,7 +8,7 @@ $pdo = obtener_conexion();
 if ($_GET['ruta']==='auth/login') {
   $e = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
   $usr = trim($e['usuario'] ?? '');
-  $pwd = trim($e['password'] ?? '');
+  $pwd = trim($e['contrasena'] ?? '');
   if ($usr==='' || $pwd==='') enviar_json(['ok'=>false,'error'=>'Faltan usuario/contraseña'],400);
 
   $st = $pdo->prepare("SELECT * FROM usuarios WHERE usuario=? AND activo=1 LIMIT 1");

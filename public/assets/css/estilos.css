@@ -1,270 +1,227 @@
-/* ================================
-   VADUM · Estilos base (tema claro)
-   Paleta: blanco, grises, negro (sin amarillo)
-   ================================ */
+/* ========================================= */
+/* ESTILOS GLOBALES Y ESTRUCTURA LATERAL */
+/* ========================================= */
 
-:root{
-  /* Colores base */
-  --blanco: #ffffff;
-  --gris-50:#fafafa;
-  --gris-100:#f3f3f3;
-  --gris-200:#e9e9e9;
-  --gris-300:#dcdcdc;
-  --gris-400:#bdbdbd;
-  --gris-500:#9a9a9a;
-  --gris-600:#7a9a9a; /* nota: puedes cambiar si quieres */
-  --gris-700:#555;
-  --gris-800:#333;
-  --negro:#111;
-  --negro-2:#2E2E2E; /* activo navegación y submenús */
-
-  /* UI */
-  --borde:#e8e8e8;
-  --sombrita:0 8px 20px rgba(0,0,0,.08);
-  --radio-md:10px;
-  --radio-lg:14px;
-
-  --fuente: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Noto Sans, Arial, sans-serif;
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa; 
+    overflow-x: hidden; /* Evita el scroll horizontal */
 }
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  font-family:var(--fuente);
-  background: radial-gradient(900px 600px at 20% -10%, var(--gris-50) 0%, var(--blanco) 60%, var(--blanco) 100%);
-  color: var(--negro);
-  line-height:1.45;
+.contenedor-app {
+    min-height: 100vh;
+    width: 100%;
+}
+.material-icons-outlined {
+    /* Propiedades esenciales para que el navegador sepa cómo dibujar el ícono */
+    font-family: 'Material Icons Outlined';
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -moz-font-feature-settings: 'liga';
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.5rem; /* Tamaño general para íconos */
+}
+/* ========================================= */
+/* SIDEBAR (MENÚ LATERAL - PC) */
+/* ========================================= */
+
+.sidebar {
+    width: 250px; /* Ancho fijo del menú lateral */
+    min-width: 250px;
+    height: 100vh; /* Ocupa toda la altura */
+    position: sticky; /* Se mantiene fijo mientras el contenido scrollea */
+    top: 0;
+    z-index: 1000;
+    background-color: #212529 !important; /* Fondo oscuro */
+    color: #f8f9fa;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto; /* Permite scroll si hay muchos elementos */
 }
 
-/* ================================
-   Header doble (superior/inferior)
-   ================================ */
-
-/* Barra superior (logo, nombre, perfil/login) */
-.header-superior {
-  background: var(--blanco);
-  border-bottom: 1px solid var(--borde);
-  box-shadow: var(--sombrita);
-}
-.nav-sup {
-  max-width:1100px; margin:0 auto; padding:12px 16px;
-  display:flex; align-items:center; gap:16px;
-}
-.nav-sup__logo { display:flex; align-items:center; gap:10px; text-decoration:none }
-.nav-sup__logo img { height:36px; display:block }
-.nav-sup__titulo { color:var(--negro); font-weight:800; letter-spacing:.3px }
-.nav-sup__espaciador { flex:1 }
-
-/* Menú de perfil */
-.perfil { position: relative; }
-.perfil__btn {
-  display:inline-flex;align-items:center;gap:8px;
-  background: var(--gris-100); border:1px solid var(--borde);
-  border-radius: var(--radio-md); padding:8px 12px; cursor:pointer;
-}
-.perfil__btn:hover { background: var(--gris-200); }
-.perfil__avatar { background: var(--negro); color:#fff; border-radius: 50%; padding: 4px; }
-.perfil__dropdown {
-  position:absolute; right:0; top:110%; min-width:220px; background:var(--blanco);
-  border:1px solid var(--borde); border-radius:var(--radio-lg); box-shadow:var(--sombrita); display:none;
-}
-.perfil__dropdown.activo { display:block; }
-.perfil__info { padding:10px 12px; border-bottom:1px solid var(--borde); }
-.perfil__nombre { font-weight:800; }
-.perfil__rol { color:var(--gris-700); font-size:12px; }
-.perfil__item {
-  display:block; width:100%; text-align:left; background:transparent; border:none;
-  color:var(--negro); padding:10px 12px; cursor:pointer; text-decoration:none;
-}
-.perfil__item:hover { background:var(--gris-100); }
-.perfil__salir { color:#b00020 }
-
-/* Barra inferior (botones de navegación) */
-.header-inferior {
-  background: var(--gris-50);
-  border-bottom: 1px solid var(--borde);
-}
-.nav-inf {
-  max-width:1100px; margin:0 auto; padding:10px 16px;
-  display:flex; gap:8px; flex-wrap:wrap;
-}
-.nav-btn{
-  background:#fff;
-  color: var(--negro);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio-md);
-  padding: 8px 12px;
-  text-decoration: none;
-  font-weight: 700;
-}
-.nav-btn:hover{ background: var(--gris-100); }
-.nav-btn--activo{
-  background: var(--negro-2) !important;
-  color: #fff !important;
-  border-color: var(--negro-2) !important;
+.sidebar-logo {
+    height: 60px; /* Tamaño del logo en el sidebar */
+    margin-bottom: 1rem;
 }
 
-/* ================================
-   Contenedor principal
-   ================================ */
-.contenedor{max-width:1100px; margin:24px auto; padding:0 16px}
-
-/* ================================
-   Tarjetas y tipografía
-   ================================ */
-.tarjeta{
-  background: var(--blanco);
-  border:1px solid var(--borde);
-  border-radius: var(--radio-lg);
-  padding:16px;
-  box-shadow: var(--sombrita);
-}
-.titulo{color:var(--negro); margin:0 0 10px 0}
-.subtitulo{color:var(--gris-800); margin:0 0 8px 0; font-size:18px}
-
-.fila{display:grid; gap:12px}
-.fila--2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.fila--3{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media (max-width:820px){ .fila--2,.fila--3{grid-template-columns:1fr} }
-
-/* ================================
-   Formularios
-   ================================ */
-.label{display:block;margin:10px 0 6px;color:var(--gris-700);font-size:14px}
-.input,.select,.textarea{
-  width:100%; background:var(--gris-50); color:var(--negro);
-  border:1px solid var(--borde); border-radius:var(--radio-md);
-  padding:10px 12px; outline:none;
-}
-.input:focus,.select:focus,.textarea:focus{
-  border-color: var(--negro);
-  box-shadow:0 0 0 3px rgba(0,0,0,.12);
+.nav-links-sidebar {
+    gap: 0.25rem;
 }
 
-/* ================================
-   Botones (negros)
-   ================================ */
-.btn{
-  background:var(--negro); color:#fff;
-  border:1px solid var(--negro);
-  border-radius:var(--radio-md);
-  padding:10px 14px; cursor:pointer; font-weight:800;
-  transition: transform .06s ease, filter .2s ease;
-}
-.btn:hover{filter:brightness(1.05)}
-.btn:active{transform:translateY(1px) scale(.995)}
-.btn--borde{background:#fff;color:var(--negro);border:1px solid var(--negro)}
-.btn--fantasma{background:transparent;color:var(--negro);border:1px dashed var(--negro)}
-
-/* ================================
-   Tabla
-   ================================ */
-.tabla{
-  width:100%; border-collapse:collapse; overflow:hidden;
-  border-radius:var(--radio-lg); border:1px solid var(--borde);
-  background: var(--blanco);
-}
-.tabla th,.tabla td{padding:10px; border-bottom:1px solid var(--borde)}
-.tabla th{background: var(--gris-100); color: var(--negro); text-align:left}
-.tabla tr:nth-child(even){background:var(--gris-50)}
-
-/* ================================
-   Chips y Toast (base)
-   ================================ */
-.chip{
-  display:inline-flex; align-items:center; gap:6px;
-  padding:6px 10px; border-radius:999px; border:1px solid var(--borde);
-  background:var(--gris-50); color:var(--gris-800); font-size:12px;
+/* Estilos de los enlaces del sidebar */
+.sidebar .menu-link {
+    color: rgba(255, 255, 255, 0.75); /* Gris claro para los inactivos */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    border-radius: 0.3rem;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s, color 0.2s;
 }
 
-/* Pie */
-.footer{
-  margin-top:32px; padding:20px 16px; text-align:center;
-  color:var(--gris-700); border-top:1px solid var(--borde); background:var(--blanco);
+.sidebar .menu-link i {
+    /* PROPIEDADES ESENCIALES PARA MATERIAL ICONS */
+    font-family: 'Material Icons Outlined'; 
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    
+    /* PREFIJOS DE COMPATIBILIDAD AÑADIDOS */
+    -webkit-font-feature-settings: 'liga'; /* Webkit/Blink (Chrome, Safari, Edge) */
+    -moz-font-feature-settings: 'liga';    /* Mozilla (Firefox) */
+    font-feature-settings: 'liga';         /* Estándar W3C */
+
+    -webkit-font-smoothing: antialiased;    /* Para mejorar la nitidez en Webkit */
+    
+    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.75); /* Color gris claro para los inactivos */
+    transition: color 0.2s;
 }
 
-/* ===============================
-   Toasts y Modales
-   =============================== */
+.sidebar .menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.sidebar .menu-link:hover i {
+    color: #fff;
+}
 
-/* Contenedor de toasts */
-#toast-contenedor{
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
+/* Estilo para el enlace ACTIVO en el sidebar */
+.sidebar .menu-link.activo {
+    background-color: #ffe08a !important; /* Fondo amarillo claro */
+    color: #212529 !important; /* Texto negro */
+    font-weight: bold;
 }
-.toast{
-  background: var(--negro);
-  color: #fff;
-  border-radius: var(--radio-md);
-  padding: 10px 14px;
-  box-shadow: var(--sombrita);
-  transform: translateY(6px);
-  opacity: 0;
-  transition: all .25s ease;
+.sidebar .menu-link.activo i {
+    color: #212529 !important; /* Icono negro */
 }
-.toast--show{ transform: translateY(0); opacity: 1; }
-.toast--ok{ background: var(--negro-2); }
-.toast--error{ background: #b00020; }
 
-/* Capa modal */
-#modal-capa{
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.25);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  z-index: 1000;
-}
-#modal-capa.activo{ display:flex; }
+/* ========================================= */
+/* CONTENIDO PRINCIPAL Y TOP NAVBAR */
+/* ========================================= */
 
-/* Caja modal */
-.modal{
-  width: 100%; max-width: 520px;
-  background: #fff;
-  border: 1px solid var(--borde);
-  border-radius: var(--radio-lg);
-  box-shadow: var(--sombrita);
-  display:flex; flex-direction: column;
+.main-content-wrapper {
+    /* El contenido principal ocupará el resto del espacio */
+    overflow-y: auto; 
+    height: 100vh;
 }
-.modal__cabeza{
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 12px 16px; border-bottom: 1px solid var(--borde);
-}
-.modal__titulo{ margin:0; color: var(--negro); }
-.modal__cerrar{
-  background: transparent; border: none; font-size: 22px; cursor: pointer; color: var(--negro);
-}
-.modal__cuerpo{ padding: 16px; }
-.modal__pie{
-  padding: 12px 16px; border-top: 1px solid var(--borde);
-  display:flex; gap:8px; justify-content:flex-end;
-}
-.modal__form .label{ margin-top: 8px; }
 
-/* ================================
-   Submenú interno Empleados
-   ================================ */
-.subnav{
-  display:flex; gap:8px; flex-wrap:wrap; margin: 8px 0 12px 0;
+.top-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding: 0.75rem 1.5rem;
+    z-index: 1020; /* Fijo encima del contenido */
 }
-.subnav__btn{
-  background:#fff;
-  color: var(--negro);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio-md);
-  padding: 8px 12px;
-  cursor: pointer;
-  font-weight: 700;
+
+.top-navbar .fw-bold.fs-5 {
+    color: #000000 !important; /* Asegura que el título sea negro */
 }
-.subnav__btn:hover{ background: var(--gris-100); }
-.subnav__btn--activo{
-  background: var(--negro-2);
-  color: #fff;
-  border-color: var(--negro-2);
+
+/* Control de buscador y botones en la barra superior */
+.top-navbar .input-group-text { background-color: #e9ecef; }
+.top-navbar-logo { height: 25px; vertical-align: middle; }
+
+
+main {
+    flex-grow: 1;
+    background-color: #f2f4f6; 
+    margin: 0; /* Eliminar el margen extra ya que el sidebar es fijo */
+}
+
+.footer {
+    background-color: #ffffff;
+    border-top: 1px solid #e0e0e0;
+    color: #6c757d;
+}
+
+/* ========================================= */
+/* DASHBOARD CARDS (Métricas) */
+/* ========================================= */
+
+.card-metricas {
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-metricas:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.list-unstyled li:last-child {
+    border-bottom: none !important;
+}
+
+.badge {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* ========================================= */
+/* MENÚ LATERAL MÓVIL (OFFCANVAS) */
+/* ========================================= */
+
+.offcanvas-header {
+    background-color: #ffe08a !important; 
+    border-bottom: 1px solid #dee2e6;
+}
+.offcanvas-title {
+    color: #212529 !important; 
+}
+.offcanvas-body {
+    background-color: #343a40 !important; 
+}
+
+.offcanvas-body .menu-link {
+    color: rgba(255, 255, 255, 0.75); 
+    padding: 0.75rem 1rem;
+}
+
+.offcanvas-body .menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.offcanvas-body .menu-link.activo {
+    background-color: #fff !important; 
+    color: #212529 !important; 
+}
+.offcanvas-body .menu-link.activo i {
+    color: #212529 !important; 
+}
+
+/* Asegurar que el logo del offcanvas se vea bien */
+.offcanvas-header .header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .menu-link img {
+    height: 1.25rem; /* 20px */
+    width: 1.25rem;
+    margin-right: 10px;
 }

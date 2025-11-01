@@ -1,72 +1,103 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>VADUM · Iniciar sesión</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="./assets/css/estilos.css">
+    <meta charset="utf-8">
+    <title>VADUM · Iniciar Sesión</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/estilos.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <style>
+        /* Estilos específicos para el login (puedes mover esto a estilos.css) */
+        body {
+            background-color: #f8f9fa; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px; /* Ancho máximo para el formulario */
+        }
+        .encabezado-login {
+            background-color: #ffc107; /* Amarillo de VADUM (Warning de Bootstrap) */
+            color: #212529;
+            padding: 20px;
+            border-top-left-radius: .375rem;
+            border-top-right-radius: .375rem;
+            text-align: center;
+        }
+        .encabezado-login img {
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        .card-login {
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+    </style>
 </head>
 <body>
-  <header class="header">
-  <nav class="nav">
-    <a class="nav__logo" href="./index.html">
-      <img src="./assets/img/VADUM-negro.png" alt="VADUM">
-      <span class="nav__titulo">Sistema de Incentivos</span>
-    </a>
 
-    <!-- Links visibles por rol -->
-    <div class="nav__links">
-      <a class="nav__link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
-      <a class="nav__link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
-      <a class="nav__link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
-      <a class="nav__link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
+    <div class="login-container">
+        <div class="card card-login">
+            <div class="encabezado-login">
+                <img src="./assets/img/VADUM-negro.png" alt="Logo VADUM">
+                <h1 class="h5 fw-bold mb-0">Sistema Automatizado de Incentivos</h1>
+            </div>
 
-      <!-- Menú de perfil -->
-      <div class="perfil" id="perfilMenu">
-        <button class="perfil__btn" id="btnPerfil">
-          <span id="usuarioActual">…</span>
-          <span class="perfil__avatar">👤</span>
-        </button>
-        <div class="perfil__dropdown" id="perfilDropdown">
-          <div class="perfil__info">
-            <div class="perfil__nombre" id="perfilNombre">Usuario</div>
-            <div class="perfil__rol" id="perfilRol">Rol</div>
-          </div>
-          <a class="perfil__item" href="#" id="irPerfil">Mi perfil</a>
-          <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
+            <div class="card-body p-4">
+                <p class="text-center text-muted mb-4">Ingresa tus credenciales para acceder.</p>
+                
+                <div id="alertaMensaje" class="alert d-none" role="alert"></div>
+
+                <form id="formLogin" novalidate>
+                    <div class="mb-3">
+                        <label for="campoUsuario" class="form-label">Usuario / No. Empleado</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="material-icons-outlined">account_circle</i></span>
+                            <input type="text" class="form-control" id="campoUsuario" placeholder="jperez o 950001" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu usuario.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="campoContrasena" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="material-icons-outlined">password</i></span> 
+                            
+                            <input type="password" class="form-control" id="campoContrasena" placeholder="••••••••" required>
+                            
+                            <button class="btn btn-outline-secondary" type="button" id="btnTogglePass">
+                                <i class="material-icons-outlined" id="eyeIcon">visibility_off</i>
+                            </button>
+                            <div class="invalid-feedback">Por favor, ingresa tu contraseña.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 d-flex justify-content-between">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="checkRecordar">
+                            <label class="form-check-label" for="checkRecordar">
+                                Recordarme
+                            </label>
+                        </div>
+                        <a href="#" class="text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning fw-bold w-100 py-2" id="btnEntrar">
+                        <i class="material-icons-outlined me-2">login</i> Entrar
+                    </button>
+                </form>
+            </div>
         </div>
-      </div>
+        <p class="text-center text-muted small mt-3">VADUM © 2024</p>
     </div>
-  </nav>
-</header>
 
-
-  <main class="contenedor">
-    <section class="tarjeta" style="max-width:420px;margin:0 auto;">
-      <h1 class="titulo">Iniciar sesión</h1>
-      <label class="label">Usuario</label>
-      <input class="input" id="usuario" placeholder="ej. admin">
-      <label class="label">Contraseña</label>
-      <input class="input" id="password" type="password" placeholder="ej. 123456">
-      <div style="margin-top:12px;"><button class="btn" id="btn">Entrar</button></div>
-      <div class="chip" style="margin-top:12px;">Cuentas demo: admin / sup1 / vig1 / cli1 (clave 123456)</div>
-    </section>
-  </main>
-
-  <footer class="footer">© VADUM · Automatización de Incentivos</footer>
-  <script>
-    document.getElementById('btn').onclick = async ()=>{
-      const usuario = document.getElementById('usuario').value.trim();
-      const password = document.getElementById('password').value;
-      const r = await fetch('../api/index.php?ruta=auth/login', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({usuario, password})
-      }).then(r=>r.json());
-      if(!r.ok){ alert(r.error||'Error'); return; }
-      location.href = './index.html';
-    };
-  </script>
-  <script src="./assets/js/ui.js"></script>
-<script src="./assets/js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/auth.js"></script> 
 </body>
 </html>
