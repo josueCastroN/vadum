@@ -1,0 +1,237 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>VADUM - Cursos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/estilos.css">
+  </head>
+  <body>
+    <div class="contenedor-app d-flex">
+      <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
+        <div class="header-logo text-center mb-4">
+          <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
+        </div>
+        <div class="d-flex flex-column nav-links-sidebar">
+          <a class="menu-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="material-icons-outlined">home</i> <span>Inicio</span></a>
+          <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor"><i class="material-icons-outlined">badge</i> <span>Empleados</span></a>
+          <a class="menu-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="material-icons-outlined">insights</i> <span>Física</span></a>
+          <a class="menu-link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="material-icons-outlined">rule</i> <span>Mensual</span></a>
+          <a class="menu-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor"><i class="material-icons-outlined">question_answer</i> <span>Encuesta</span></a>
+          <a class="menu-link activo" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor"><i class="material-icons-outlined">school</i> <span>Cursos</span></a>
+          <a class="menu-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante"><i class="material-icons-outlined">payments</i> <span>Incentivo</span></a>
+          <a class="menu-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor"><i class="material-icons-outlined">settings</i> <span>Catálogos</span></a>
+        </div>
+      </nav>
+
+      <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
+        <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
+          <div class="d-flex align-items-center">
+            <button class="btn btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas"><i class="fas fa-bars"></i></button>
+            <span class="fw-bold fs-5 text-dark">Cursos</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="dropdown me-2">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                <li><a class="dropdown-item" href="#">Configuración</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionDropdown">Cerrar Sesión</a></li>
+              </ul>
+            </div>
+            <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionDropdown"><i class="fas fa-sign-out-alt"></i></button>
+          </div>
+        </div>
+
+        <main class="flex-grow-1 p-3 p-md-4">
+          <ul class="nav nav-tabs mb-3">
+            <li class="nav-item"><button class="nav-link active" id="tab-cap">Captura</button></li>
+            <li class="nav-item"><button class="nav-link" id="tab-his">Historial</button></li>
+          </ul>
+
+          <div id="secCap">
+            <div class="card p-3 p-md-4 shadow-sm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Punto</label>
+                  <select class="form-select" id="selPunto"></select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Guardia (Vigilante)</label>
+                  <select class="form-select" id="selGuardia"></select>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-md-6">
+                  <label class="form-label">Curso</label>
+                  <input class="form-control" id="cursoNombre" value="Curso de Vigilante" disabled>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Fecha</label>
+                  <input class="form-control" id="cursoFecha" type="date">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Calificaciòn (0-100)</label>
+                  <input class="form-control" id="cursoCal" type="number" min="0" max="100" value="80">
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-success" id="btnGuardarCurso">Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="secHis" class="d-none">
+            <div class="card p-3 p-md-4 shadow-sm">
+              <h6 class="mb-3">Historial de cursos</h6>
+              <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                  <label class="form-label">Punto</label>
+                  <select class="form-select" id="histPunto"></select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Guardia</label>
+                  <select class="form-select" id="histGuardia"></select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Desde / Hasta</label>
+                  <div class="d-flex gap-2">
+                    <input class="form-control" id="histDesde" type="month">
+                    <input class="form-control" id="histHasta" type="month">
+                  </div>
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-primary" id="btnBuscarHist">Buscar</button>
+                </div>
+              </div>
+              <div class="table-responsive mt-3">
+                <table class="table table-sm table-striped align-middle" id="tablaHist">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>No.Emp</th>
+                      <th>Nombre</th>
+                      <th>Curso</th>
+                      <th>CalificaciÃ³n</th>
+                      <th>Aprobado</th>
+                      <th>Punto</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/ui.js"></script>
+    <script src="./assets/js/auth.js"></script>
+    <script>
+    (async ()=>{
+      const toast = (m)=> (window.VADUM_UI?.mostrarToast? VADUM_UI.mostrarToast(m): alert(m));
+      async function apiGet(ruta, params={}){
+        const qs = new URLSearchParams(params).toString();
+        const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}${qs?`&${qs}`:''}`, {credentials:'include'});
+        const t = await r.text(); const clean = t.replace(/^\uFEFF|^\u200B|^\ufeff/, '');
+        const j = clean? JSON.parse(clean):{}; if(!r.ok||j.ok===false) throw new Error(j.error||`Error ${r.status}`); return j;
+      }
+      async function apiPost(ruta, body={}){
+        const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}`, {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const t = await r.text(); const clean = t.replace(/^\uFEFF|^\u200B|^\ufeff/, '');
+        const j = clean? JSON.parse(clean):{}; if(!r.ok||j.ok===false) throw new Error(j.error||`Error ${r.status}`); return j;
+      }
+
+      // Captura: puntos y guardias
+      const selPunto = document.getElementById('selPunto');
+      const selGuardia = document.getElementById('selGuardia');
+      const fecha = document.getElementById('cursoFecha'); fecha.value = new Date().toISOString().slice(0,10);
+
+      try{
+        const { puntos } = await apiGet('puntos/lista');
+        selPunto.innerHTML = '<option value="">Seleccione punto...</option>' + puntos.map(p=>`<option value="${p.id}">${p.nombre} (${p.region})</option>`).join('');
+      }catch(e){ console.warn(e); }
+
+      selPunto.addEventListener('change', async ()=>{
+        const pid = selPunto.value; selGuardia.innerHTML=''; if (!pid) return;
+        try{
+          const { resultados } = await apiGet('empleados/por_punto', { punto_id: pid });
+          selGuardia.innerHTML = resultados.map(emp=>`<option value="${emp.no_emp}">${emp.no_emp} - ${emp.nombre}</option>`).join('');
+        }catch(e){ console.warn(e); selGuardia.innerHTML=''; }
+      });
+
+      document.getElementById('btnGuardarCurso').addEventListener('click', async ()=>{
+        const no_emp = selGuardia.value||''; const curso='Curso de Vigilante';
+        const cal = Number(document.getElementById('cursoCal').value||0);
+        const f = document.getElementById('cursoFecha').value||new Date().toISOString().slice(0,10);
+        if (!no_emp) { toast('Selecciona guardia'); return; }
+        try{
+          await apiPost('cursos/guardar', { no_emp, curso, calificacion: cal, fecha: f });
+          toast('Curso guardado');
+        }catch(e){ toast(e.message||'Error guardando curso'); }
+      });
+
+      // Tabs
+      const tabCap = document.getElementById('tab-cap');
+      const tabHis = document.getElementById('tab-his');
+      const secCap = document.getElementById('secCap');
+      const secHis = document.getElementById('secHis');
+      tabCap.addEventListener('click', ()=>{ tabCap.classList.add('active'); tabHis.classList.remove('active'); secCap.classList.remove('d-none'); secHis.classList.add('d-none'); });
+      tabHis.addEventListener('click', ()=>{ tabHis.classList.add('active'); tabCap.classList.remove('active'); secHis.classList.remove('d-none'); secCap.classList.add('d-none'); });
+
+      // Historial
+      const histPunto = document.getElementById('histPunto');
+      const histGuardia = document.getElementById('histGuardia');
+      const histDesde = document.getElementById('histDesde');
+      const histHasta = document.getElementById('histHasta');
+      (function setDefaultRange(){ const hoy = new Date(); const m3 = new Date(hoy.getFullYear(), hoy.getMonth()-2, 1); histDesde.value = m3.toISOString().slice(0,7); histHasta.value = hoy.toISOString().slice(0,7); })();
+
+      try{
+        const { puntos } = await apiGet('puntos/lista');
+        histPunto.innerHTML = '<option value="">Todos</option>' + puntos.map(p=>`<option value="${p.id}">${p.nombre} (${p.region})</option>`).join('');
+      }catch(e){ console.warn(e); }
+      histPunto.addEventListener('change', async ()=>{
+        const pid = histPunto.value; histGuardia.innerHTML = '<option value="">Todos</option>';
+        if (!pid) return;
+        try{
+          const { resultados } = await apiGet('empleados/por_punto', { punto_id: pid });
+          histGuardia.innerHTML = '<option value="">Todos</option>' + resultados.map(emp=>`<option value="${emp.no_emp}">${emp.no_emp} - ${emp.nombre}</option>`).join('');
+        }catch(e){ console.warn(e); }
+      });
+
+      document.getElementById('btnBuscarHist').addEventListener('click', async ()=>{
+        const params = { punto_id: histPunto.value||'', no_emp: histGuardia.value||'', desde: histDesde.value||'', hasta: histHasta.value||'' };
+        try{
+          const { historial } = await apiGet('cursos/historial', params);
+          const tbody = document.querySelector('#tablaHist tbody');
+          tbody.innerHTML = (historial||[]).map(r=>{
+            return `<tr>
+              <td>${r.fecha_fin||''}</td>
+              <td>${r.no_emp||''}</td>
+              <td>${r.nombre||''}</td>
+              <td>${r.curso||''}</td>
+              <td>${Number(r.calificacion_final||0).toFixed(2)}</td>
+              <td>${(Number(r.aprobado||0) ? 'SÃ­' : 'No')}</td>
+              <td>${(r.punto||'') + (r.region? ' ('+r.region+')':'')}</td>
+            </tr>`;
+          }).join('');
+        }catch(e){ console.error(e); }
+      });
+    })();
+    </script>
+  </body>
+  </html>
+
+
+
+
+
+

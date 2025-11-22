@@ -75,6 +75,157 @@ if ($_GET['ruta'] === 'empleados/lista') {
     enviar_json(['ok'=>true, 'empleados'=>$st->fetchAll()]);
 }
 
+/* ========== SUGERENCIAS (AUTOCOMPLETE) ========== */
+// GET /empleados/sugerencias?buscar=texto&estado=ACTIVO
+if ($_GET['ruta'] === 'empleados/sugerencias') {
+    // Permiso: igual que listado (visible para cualquier rol con sesión)
+    $buscar = trim($_GET['buscar'] ?? '');
+    $estado = strtoupper(trim($_GET['estado'] ?? 'ACTIVO'));
+
+    if ($buscar === '') {
+        enviar_json(['ok' => true, 'empleados' => []]);
+    }
+
+    $sql = "SELECT e.no_emp,
+                   CONCAT(e.nombres,' ',e.apellidos) AS nombre
+            FROM empleados e
+            WHERE (e.no_emp LIKE :busca
+                   OR e.nombres LIKE :busca
+                   OR e.apellidos LIKE :busca)";
+    $params = [':busca' => '%' . $buscar . '%'];
+
+    if ($estado !== '' && $estado !== 'TODOS' && $estado !== 'ALL') {
+        $sql .= " AND e.estatus = :estado";
+        $params[':estado'] = $estado;
+    }
+
+    $sql .= " ORDER BY nombre ASC LIMIT 15";
+
+    $st = $pdo->prepare($sql);
+    $st->execute($params);
+
+    enviar_json(['ok' => true, 'empleados' => $st->fetchAll()]);
+}
+
+/* ========== SUGERENCIAS SOLO VIGILANTES (AUTOCOMPLETE) ========== */
+// GET /empleados/vigilantes?buscar=texto&estado=ACTIVO[&punto_id=]
+if ($_GET['ruta'] === 'empleados/vigilantes') {
+    $buscar = trim($_GET['buscar'] ?? '');
+    $estado = strtoupper(trim($_GET['estado'] ?? 'ACTIVO'));
+    $punto  = isset($_GET['punto_id']) ? (int)$_GET['punto_id'] : 0;
+
+    $sql = "SELECT e.no_emp,
+                   CONCAT(e.nombres,' ',e.apellidos) AS nombre,
+                   e.puesto
+            FROM empleados e
+            WHERE LOWER(e.puesto) LIKE '%vigil%'"; // solo vigilantes
+    $params = [];
+
+    if ($estado !== '' && $estado !== 'TODOS' && $estado !== 'ALL') {
+        $sql .= " AND e.estatus = :estado";
+        $params[':estado'] = $estado;
+    }
+    if ($punto) {
+        $sql .= " AND e.punto_id = :punto";
+        $params[':punto'] = $punto;
+    }
+    if ($buscar !== '') {
+        $sql .= " AND (e.no_emp LIKE :busca OR e.nombres LIKE :busca OR e.apellidos LIKE :busca)";
+        $params[':busca'] = '%' . $buscar . '%';
+    }
+
+    $sql .= " ORDER BY nombre ASC LIMIT 200";
+
+    $st = $pdo->prepare($sql);
+    $st->execute($params);
+
+    enviar_json(['ok' => true, 'empleados' => $st->fetchAll()]);
+}
+
+/* ========== LISTA POR PUNTO (para clientes/encuesta) ========== */
+// GET /empleados/por_punto?punto_id=ID&buscar=
+if ($_GET['ruta'] === 'empleados/por_punto') {
+    $punto = isset($_GET['punto_id']) ? (int)$_GET['punto_id'] : 0;
+    $buscar = trim($_GET['buscar'] ?? '');
+    if (!$punto) enviar_json(['ok'=>false,'error'=>'Falta punto_id'],400);
+
+    $sql = "SELECT e.no_emp,
+                   CONCAT(e.nombres,' ',e.apellidos) AS nombre,
+                   e.puesto,
+                   e.foto_url
+            FROM empleados e
+            WHERE e.estatus='ACTIVO'
+              AND e.punto_id = :p
+              AND LOWER(e.puesto) LIKE '%vigil%'";  // solo vigilantes
+    $p = [':p'=>$punto];
+    if ($buscar !== '') {
+        $sql .= " AND (e.no_emp LIKE CONCAT('%',:b,'%') OR e.nombres LIKE CONCAT('%',:b,'%') OR e.apellidos LIKE CONCAT('%',:b,'%'))";
+        $p[':b'] = $buscar;
+    }
+    $sql .= " ORDER BY nombre ASC LIMIT 500";
+    $st = $pdo->prepare($sql);
+    $st->execute($p);
+    enviar_json(['ok'=>true,'resultados'=>$st->fetchAll()]);
+}
+
+/* ========== LISTA DE EVALUADORES (SUPERVISORES / JEFES / GERENTES) ========== */
+if ($_GET['ruta'] === 'empleados/evaluadores') {
+    $sql = "SELECT e.no_emp,
+                   CONCAT(e.nombres,' ',e.apellidos) AS nombre,
+                   e.puesto,
+                   e.region
+            FROM empleados e
+            WHERE e.estatus = 'ACTIVO'
+              AND (
+                    LOWER(e.puesto) LIKE '%supervisor%'
+                 OR LOWER(e.puesto) LIKE '%jefe%'
+                 OR LOWER(e.puesto) LIKE '%gerente%'
+                 OR LOWER(e.puesto) LIKE '%seguridad%'
+              )
+            ORDER BY e.puesto ASC, nombre ASC
+            LIMIT 200";
+    $st = $pdo->query($sql);
+    enviar_json(['ok'=>true,'evaluadores'=>$st->fetchAll()]);
+}
+/* ========== LISTA DE PUESTOS (ACTIVOS) ========== */
+if ($_GET['ruta'] === 'empleados/puestos') {
+    $sql = "SELECT DISTINCT puesto
+            FROM empleados
+            WHERE puesto IS NOT NULL AND puesto <> ''
+            ORDER BY puesto ASC
+            LIMIT 200";
+    $puestos = $pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+    enviar_json(['ok'=>true,'puestos'=>$puestos]);
+}
+
+/* ========== DETALLE DE EMPLEADO ========== */
+if ($_GET['ruta'] === 'empleados/detalle') {
+    $no_emp = trim($_GET['no_emp'] ?? '');
+    if ($no_emp === '') {
+        enviar_json(['ok'=>false,'error'=>'Falta no_emp'],400);
+    }
+
+    $sql = "SELECT e.no_emp,
+                   e.nombres,
+                   e.apellidos,
+                   e.puesto,
+                   e.region,
+                   e.punto_id,
+                   e.foto_url,
+                   e.fecha_nacimiento,
+                   e.fecha_alta,
+                   e.estatus
+            FROM empleados e
+            WHERE e.no_emp = :no_emp
+            LIMIT 1";
+    $st = $pdo->prepare($sql);
+    $st->execute([':no_emp'=>$no_emp]);
+    $empleado = $st->fetch();
+    if (!$empleado) {
+        enviar_json(['ok'=>false,'error'=>'Empleado no encontrado'],404);
+    }
+    enviar_json(['ok'=>true,'empleado'=>$empleado]);
+}
 /* ========== ALTA/ACTUALIZA ========== */
 // POST /empleados/alta {no_emp,...}
 if ($_GET['ruta'] === 'empleados/alta') {
@@ -298,3 +449,5 @@ if ($_GET['ruta'] === 'regiones/lista') {
     $st = $pdo->query("SELECT DISTINCT region AS nombre FROM empleados WHERE region IS NOT NULL AND region != '' ORDER BY region");
     enviar_json(['ok'=>true, 'regiones'=>$st->fetchAll()]);
 }
+
+

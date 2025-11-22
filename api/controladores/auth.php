@@ -32,8 +32,15 @@ if ($_GET['ruta']==='auth/me') {
   enviar_json(['ok'=>true,'logeado'=>true,'usuario'=>$u]);
 }
 
+// === PRUEBA TEMPORAL DE SESIÓN ===
+if (isset($_SESSION['usuario'])) {
+    // Si ves este mensaje en el log del servidor, la sesión SE ESTÁ guardando.
+    error_log("SESIÓN GUARDADA CORRECTAMENTE para usuario: " . $_SESSION['usuario']['usuario']); 
+}
+
 // /api/index.php?ruta=auth/logout (POST)
 if ($_GET['ruta']==='auth/logout') {
   cerrar_sesion();
   enviar_json(['ok'=>true]);
 }
+

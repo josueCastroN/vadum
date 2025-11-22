@@ -6,8 +6,16 @@ require_once __DIR__ . '/../02_bd.php';
 require_once __DIR__ . '/../seguridad.php';
 $pdo = obtener_conexion();
 
+function asegurar_tabla_regiones(PDO $pdo): void {
+  $pdo->exec("CREATE TABLE IF NOT EXISTS regiones (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(120) NOT NULL UNIQUE
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+}
+
 /* LISTA: GET /regiones/lista?buscar= */
 if ($_GET['ruta'] === 'regiones/lista') {
+  asegurar_tabla_regiones($pdo);
   $buscar = trim($_GET['buscar'] ?? '');
   $sql = "SELECT id, nombre FROM regiones";
   $p = [];
@@ -19,6 +27,7 @@ if ($_GET['ruta'] === 'regiones/lista') {
 
 /* CREAR: POST /regiones/crear {nombre} */
 if ($_GET['ruta'] === 'regiones/crear') {
+  asegurar_tabla_regiones($pdo);
   $j = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
   $nombre = trim($j['nombre'] ?? '');
   if ($nombre==='') enviar_json(['ok'=>false,'error'=>'Falta nombre'],400);
@@ -33,6 +42,7 @@ if ($_GET['ruta'] === 'regiones/crear') {
 
 /* RENOMBRAR: POST /regiones/renombrar {id, nuevo_nombre} */
 if ($_GET['ruta'] === 'regiones/renombrar') {
+  asegurar_tabla_regiones($pdo);
   $j = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
   $id = (int)($j['id'] ?? 0);
   $nuevo = trim($j['nuevo_nombre'] ?? '');

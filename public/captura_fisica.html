@@ -1,221 +1,908 @@
+﻿
 <!doctype html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>VADUM · Captura Física</title>
+    <title>VADUM - Captura Física</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./assets/css/estilos.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/estilos.css">
+
+    <style>
+        .tabla-captura input[type="number"] {
+            min-width: 90px;
+        }
+        .tabla-captura .columna-activa {
+            background-color: rgba(255,193,7,.18);
+        }
+        .tabla-captura tbody td {
+            vertical-align: middle;
+        }
+        .tabla-captura .calificacion-cell {
+            min-width: 130px;
+        }
+        .tabla-captura tbody tr:hover {
+            background-color: rgba(13,110,253,.08);
+        }
+        .estado-sesion-badge {
+            min-width: 110px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-shell">
-        <header class="app-header">
-            <nav class="nav-sup app-header__inner d-flex justify-content-between align-items-center p-2">
-                <a class="nav-sup__logo text-decoration-none d-flex align-items-center" href="./index.html">
-                    <img src="./assets/img/VADUM-negro.png" alt="VADUM" style="height:30px;" class="me-2">
-                    <span class="nav-sup__titulo h6 m-0 text-dark">Sistema Automatizado de Incentivos · VADUM</span>
+
+    <div class="contenedor-app d-flex">
+
+        <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
+            <div class="header-logo text-center mb-4">
+                <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
+            </div>
+
+            <div class="d-flex flex-column nav-links-sidebar" id="menuLateral">
+                <a class="menu-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">
+                    <i class="material-icons-outlined">home</i> <span>Inicio</span>
                 </a>
-                
-                <div class="dropdown" id="perfilMenu">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center" 
-                            type="button" id="btnPerfil" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="usuarioActual" class="me-2">…</span>
-                        <span class="perfil__avatar rounded-circle bg-warning text-dark px-2">👤</span>
+                <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">badge</i> <span>Empleados</span>
+                </a>
+                <a class="menu-link activo" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">insights</i> <span>Física</span>
+                </a>
+                <a class="menu-link" id="nav-supervisores" href="./evaluacion_mensual.html" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">rule</i> <span>Evaluación</span>
+                </a>
+                <a class="menu-link" id="nav-clientes" href="encuesta.html" data-roles="admin,supervisor,cliente">
+                    <i class="material-icons-outlined">question_answer</i> <span>Encuesta</span>
+                </a>
+                <a class="menu-link" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">auto_stories</i> <span>Cursos</span>
+                </a>
+                <a class="menu-link" id="nav-faltas" href="#" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">event_busy</i> <span>Faltas</span>
+                </a>
+                <a class="menu-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">
+                    <i class="material-icons-outlined">payments</i> <span>Incentivo</span>
+                </a>
+                <a class="menu-link" id="nav-actas" href="#" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">description</i> <span>Actas</span>
+                </a>
+                <a class="menu-link" id="nav-autorizaciones" href="#" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">verified_user</i> <span>Autorizaciones</span>
+                </a>
+                <a class="menu-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">
+                    <i class="material-icons-outlined">settings</i> <span>Catalogos</span>
+                </a>
+            </div>
+        </nav>
+        <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
+
+            <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary d-md-none me-2" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas">
+                        <i class="fas fa-bars"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" id="perfilDropdown" aria-labelledby="btnPerfil">
-                        <li class="dropdown-item-text">
-                            <div class="perfil__info">
-                                <div class="perfil__nombre fw-bold" id="perfilNombre">Usuario</div>
-                                <div class="perfil__rol text-muted small" id="perfilRol">Rol</div>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" id="irPerfil">Mi perfil</a></li>
-                        <li><button class="dropdown-item text-danger" id="btnSalir">Cerrar sesión</button></li>
-                    </ul>
+                    <span class="fw-bold fs-5 text-dark">Captura Física VADUM</span>
                 </div>
-            </nav>
-        </header>
 
-        <div class="app-body">
-            <aside class="app-sidebar" aria-label="Menú principal">
-                <nav class="sidebar-nav">
-                    <a class="sidebar-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
-                    <a class="sidebar-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
-                    <a class="sidebar-link sidebar-link--activo" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
-                    <a class="sidebar-link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
-                    <a class="sidebar-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
-                    <a class="sidebar-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
-                    <a class="sidebar-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">Catálogos</a>
-                </nav>
-            </aside>
-
-            <main class="app-content p-3 p-md-4">
-                <section class="card p-4">
-                    <h1 class="h4 fw-bold mb-4">Captura de Evaluación Física (Checklist)</h1>
-                    
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <h2 class="h5 fw-semibold mb-3">Información de la Captura</h2>
-                            <div class="row g-3">
-                                <div class="col-sm-6">
-                                    <label class="form-label" for="no_emp">No. Empleado</label>
-                                    <input class="form-control" id="no_emp" placeholder="950001" value="950001">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label" for="punto_id">Punto ID</label>
-                                    <input class="form-control" id="punto_id" placeholder="PUNTO-01" value="PUNTO-01">
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="supervisor_id">Evaluador (Supervisor ID)</label>
-                                    <input class="form-control" id="supervisor_id" placeholder="SUP-001" value="SUP-001">
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="observaciones">Observaciones</label>
-                                    <textarea class="form-control" id="observaciones" rows="2"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <h2 class="h5 fw-semibold mb-3">Evidencia Fotográfica</h2>
-                            
-                            <div class="mb-3">
-                                <label for="fotoInput" class="form-label">Tomar / Seleccionar Foto</label>
-                                <input class="form-control" type="file" id="fotoInput" accept="image/*" capture="camera" required>
-                                <div class="form-text">La imagen será usada como evidencia de la condición física.</div>
-                            </div>
-                            
-                            <div class="border rounded p-2 text-center bg-light">
-                                <img id="fotoPreview" src="./assets/img/placeholder-foto.png" alt="Previsualización de Foto" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr class="my-4">
-
-                    <h2 class="h5 fw-bold mb-3">Métrica de Evaluación (Puntaje de 0 a 10)</h2>
-                    <div class="row g-3">
-                        <div class="col-md-6 col-lg-3">
-                            <label class="form-label" for="item1">Uniforme (1-10)</label>
-                            <input class="form-control" id="item1" type="number" min="1" max="10" value="10">
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <label class="form-label" for="item2">Peinado / Rasurado (1-10)</label>
-                            <input class="form-control" id="item2" type="number" min="1" max="10" value="9">
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <label class="form-label" for="item3">Limpieza de Caseta/Punto (1-10)</label>
-                            <input class="form-control" id="item3" type="number" min="1" max="10" value="8">
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <label class="form-label" for="item4">Posición / Atención (1-10)</label>
-                            <input class="form-control" id="item4" type="number" min="1" max="10" value="10">
-                        </div>
-                    </div>
-
-                    <div class="mt-5 text-center">
-                        <button class="btn btn-primary btn-lg" id="guardar">
-                            <i class="fas fa-save me-2"></i> Guardar Captura
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-2">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario</span>
                         </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                            <li><a class="dropdown-item" href="#">Configuración</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionDropdown">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionDropdown"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <main class="flex-grow-1 p-3 p-md-4">
+                <h1 class="h5 fw-bold mb-4"><i class="material-icons-outlined me-2">insights</i> Evaluaciones físicas grupales</h1>
+
+                <ul class="nav nav-tabs" id="tabsCaptura" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-captura-btn" data-bs-toggle="tab" data-bs-target="#tab-captura" type="button" role="tab">Captura</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-historial-btn" data-bs-toggle="tab" data-bs-target="#tab-historial" type="button" role="tab">Historial</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-3">
+                    <div class="tab-pane fade show active" id="tab-captura" role="tabpanel">
+                        <section class="card p-4 shadow-sm mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h6 fw-semibold mb-0">1. Datos de la sesión</h2>
+                                <span class="badge bg-secondary estado-sesion-badge" id="estadoSesionBadge">Sin sesión</span>
+                            </div>
+                            <form id="formSesion" class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="sesion_fecha" class="form-label">Fecha</label>
+                                    <input type="date" class="form-control" id="sesion_fecha" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="sesion_trimestre" class="form-label">Trimestre</label>
+                                    <select class="form-select" id="sesion_trimestre" required>
+                                        <option value="1">I</option>
+                                        <option value="2">II</option>
+                                        <option value="3">III</option>
+                                        <option value="4">IV</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="sesion_evaluador" class="form-label">Evaluador (Supervisor / Jefe / Gerente)</label>
+                                    <select class="form-select" id="sesion_evaluador" required>
+                                        <option value="">Selecciona un evaluador…</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="sesion_observaciones" class="form-label">Observaciones generales (opcional)</label>
+                                    <input type="text" class="form-control" id="sesion_observaciones" placeholder="Ej. Grupo de entrenamiento matutino">
+                                </div>
+                                <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-play me-2"></i>Iniciar sesión
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" id="btnCerrarSesion" disabled>
+                                        <i class="fas fa-lock me-2"></i>Cerrar sesión
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="alert alert-light border mt-4 mb-0">
+                                <span class="fw-semibold">Sesión actual:</span>
+                                <span id="sesionActualTexto" class="ms-2">Sin sesión activa</span>
+                            </div>
+                        </section>
+
+                        <section class="card p-4 shadow-sm mb-4">
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-3 gap-3">
+                                <div>
+                                    <h2 class="h6 fw-semibold mb-1">2. Registro de participantes</h2>
+                                    <p class="text-muted small mb-0">Da de alta al grupo completo. Después podrás capturar las repeticiones por ejercicio para todos.</p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-secondary btn-sm" id="btnRefrescarSesion" disabled>
+                                        <i class="fas fa-sync me-1"></i>Recargar lista
+                                    </button>
+                                    <button class="btn btn-success btn-sm" id="btnGuardarTabla" disabled>
+                                        <i class="fas fa-save me-1"></i>Guardar tabla
+                                    </button>
+                                </div>
+                            </div>
+
+                            <form id="formParticipante" class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label for="part_no_emp" class="form-label">Colaborador (No. Emp o nombre)</label>
+                                    <input type="text" class="form-control" id="part_no_emp" placeholder="950001 - Juan Pérez" list="lista_empleados_fisica" autocomplete="off" required>
+                                    <datalist id="lista_empleados_fisica"></datalist>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="part_edad" class="form-label">Edad</label>
+                                    <input type="number" class="form-control" id="part_edad" min="16" max="70" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="part_nombre" class="form-label">Nombre (auto)</label>
+                                    <input type="text" class="form-control" id="part_nombre" placeholder="Juan Pérez" readonly>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-user-plus me-2"></i>Agregar participante
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-3 gap-3">
+                                <div class="text-muted small">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Tip: selecciona el ejercicio en curso para resaltar su columna y captura todas las repeticiones del grupo.
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="focoEjercicio" class="mb-0 small fw-semibold">Enfocar ejercicio:</label>
+                                    <select class="form-select form-select-sm" id="focoEjercicio" disabled>
+                                        <option value="">Todos</option>
+                                        <option value="v_12min_m">12 min (metros)</option>
+                                        <option value="v_100m_s">100 m (segundos)</option>
+                                        <option value="v_abdom">Abdominales</option>
+                                        <option value="v_lagart">Lagartijas</option>
+                                        <option value="v_barras">Barras</option>
+                                        <option value="v_burpees">Burpees</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover tabla-captura">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>No. Emp</th>
+                                            <th>Nombre</th>
+                                            <th>Edad</th>
+                                            <th data-col="v_12min_m">12 min (m)</th>
+                                            <th data-col="v_100m_s">100 m (s)</th>
+                                            <th data-col="v_abdom">Abdominales</th>
+                                            <th data-col="v_lagart">Lagartijas</th>
+                                            <th data-col="v_barras">Barras</th>
+                                            <th data-col="v_burpees">Burpees</th>
+                                            <th class="calificacion-cell">Promedio (0-10)</th>
+                                            <th>Clasificación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaCapturaBody">
+                                        <tr>
+                                            <td colspan="12" class="text-center text-muted">Crea una sesión e integra participantes para comenzar la captura.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
                     </div>
 
-                </section>
+                    <div class="tab-pane fade" id="tab-historial" role="tabpanel">
+                        <section class="card p-4 shadow-sm">
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-3 gap-3">
+                                <div>
+                                    <h2 class="h6 fw-semibold mb-1">Historial de evaluaciones</h2>
+                                    <p class="text-muted small mb-0">Últimas sesiones registradas con los resultados por ejercicio y la calificación final.</p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-secondary btn-sm" id="btnHistorialRecargar">
+                                        <i class="fas fa-sync me-1"></i>Actualizar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Sesión</th>
+                                            <th>No. Emp</th>
+                                            <th>Nombre</th>
+                                            <th>Edad</th>
+                                            <th>12 min (m)</th>
+                                            <th>100 m (s)</th>
+                                            <th>Abd.</th>
+                                            <th>Lag.</th>
+                                            <th>Barras</th>
+                                            <th>Burpees</th>
+                                            <th>Promedio (0-10)</th>
+                                            <th>Clasificación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="historialBody">
+                                        <tr><td colspan="13" class="text-center text-muted">Cargando historial…</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
             </main>
         </div>
-
-        <footer class="footer text-center p-3 border-top">© VADUM · Automatización de Incentivos</footer>
     </div>
-    
+    <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
+        <div class="offcanvas-header bg-warning">
+            <div class="header-logo">
+                <img src="./assets/img/VADUM-negro.png" alt="Logotipo VADUM" class="sidebar-logo">
+                <h5 class="offcanvas-title text-dark fw-bold" id="menuOffcanvasLabel">Menú VADUM</h5>
+            </div>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="d-flex flex-column p-3">
+                <a class="menu-link" id="nav-inicio-movil" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">
+                    <i class="fas fa-home"></i> <span>Inicio</span>
+                </a>
+                <a class="menu-link" id="nav-empleados-movil" href="./empleados.html" data-roles="admin,supervisor">
+                    <i class="fas fa-user-tie"></i> <span>Empleados</span>
+                </a>
+                <a class="menu-link activo" id="nav-fisica-movil" href="./captura_fisica.html" data-roles="admin,supervisor">
+                    <i class="fas fa-chart-line"></i> <span>Física</span>
+                </a>
+                <a class="menu-link" id="nav-supervisores-movil" href="./evaluacion_mensual.html" data-roles="admin,supervisor">
+                    <i class="fas fa-users-cog"></i> <span>Evaluación</span>
+                </a>
+                <a class="menu-link" id="nav-clientes-movil" href="encuesta.html" data-roles="admin,supervisor,cliente">
+                    <i class="fas fa-handshake"></i> <span>Encuesta</span>
+                </a>
+                <a class="menu-link" id="nav-cursos-movil" href="#" data-roles="admin,supervisor">
+                    <i class="fas fa-book-open"></i> <span>Cursos</span>
+                </a>
+                <a class="menu-link" id="nav-faltas-movil" href="#" data-roles="admin,supervisor">
+                    <i class="fas fa-calendar-times"></i> <span>Faltas</span>
+                </a>
+                <a class="menu-link" id="nav-reportes-movil" href="#" data-roles="admin,supervisor">
+                    <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                </a>
+                <a class="menu-link" id="nav-incentivo-movil" href="./incentivo.html" data-roles="admin,supervisor,vigilante">
+                    <i class="fas fa-dollar-sign"></i> <span>Incentivo</span>
+                </a>
+                <a class="menu-link" id="nav-actas-movil" href="#" data-roles="admin,supervisor">
+                    <i class="fas fa-file-alt"></i> <span>Actas</span>
+                </a>
+                <a class="menu-link" id="nav-autorizaciones-movil" href="#" data-roles="admin,supervisor">
+                    <i class="fas fa-user-check"></i> <span>Autorizaciones</span>
+                </a>
+                <a class="menu-link" id="nav-catalogos-movil" href="./catalogos.html" data-roles="admin,supervisor">
+                    <i class="fas fa-cogs"></i> <span>Catalogos</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/ui.js"></script>
     <script src="./assets/js/auth.js"></script>
     <script>
-    const mostrarToast = window.VADUM_UI?.mostrarToast || console.log;
+    const mostrarToast = window.VADUM_UI?.mostrarToast || ((msg) => alert(msg));
 
-    // Función auxiliar para enviar datos por POST (misma que en evaluación_mensual.html)
-    async function postData(url, data){
-        const r = await fetch(url, { 
-            method:'POST', 
-            headers:{'Content-Type':'application/json'}, 
-            credentials:'include',
-            body: JSON.stringify(data) 
-        });
-        if (!r.ok) throw new Error(`Error ${r.status} al postear datos: ${r.statusText}`);
-        return r.json();
+    const formSesion = document.getElementById("formSesion");
+    const sesionFecha = document.getElementById("sesion_fecha");
+    const sesionTrimestre = document.getElementById("sesion_trimestre");
+    const sesionEvaluador = document.getElementById("sesion_evaluador");
+    const sesionObservaciones = document.getElementById("sesion_observaciones");
+    const btnCerrarSesion = document.getElementById("btnCerrarSesion");
+    const btnRefrescarSesion = document.getElementById("btnRefrescarSesion");
+    const btnGuardarTabla = document.getElementById("btnGuardarTabla");
+    const btnHistorialRecargar = document.getElementById("btnHistorialRecargar");
+    const sesionActualTexto = document.getElementById("sesionActualTexto");
+    const estadoSesionBadge = document.getElementById("estadoSesionBadge");
+    const focoEjercicio = document.getElementById("focoEjercicio");
+
+    const formParticipante = document.getElementById("formParticipante");
+    const inputNoEmp = document.getElementById("part_no_emp");
+    const inputEdad = document.getElementById("part_edad");
+    const inputNombre = document.getElementById("part_nombre");
+    const datalistEmpleados = document.getElementById("lista_empleados_fisica");
+    let selectNoEmp = null;
+
+    const tablaCapturaBody = document.getElementById("tablaCapturaBody");
+    const historialBody = document.getElementById("historialBody");
+
+    let sesionActual = null;
+    let registros = [];
+    let historial = [];
+    let sugerenciaTimer = null;
+
+    function cargarNombreUsuario() {
+        const nombre = localStorage.getItem("userName") || "Administrador";
+        const el = document.getElementById("nombreUsuario");
+        if (el) el.textContent = nombre;
     }
-    
-    // --- Lógica de Previsualización de Foto ---
-    document.getElementById('fotoInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('fotoPreview').src = e.target.result;
+
+    function configurarCerrarSesion() {
+        const handler = (e) => {
+            e.preventDefault();
+            window.location.href = "login.html";
+        };
+        document.getElementById("btnCerrarSesionTop")?.addEventListener("click", handler);
+        document.getElementById("btnCerrarSesionDropdown")?.addEventListener("click", handler);
+    }
+    async function apiPost(ruta, payload) {
+        const resp = await fetch(`../api/index.php?ruta=${ruta}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload)
+        });
+        let data = null;
+        try { data = await resp.json(); } catch (e) {}
+        if (!resp.ok || (data && data.ok === false)) {
+            const mensaje = (data && data.error) || resp.statusText || "Error desconocido";
+            throw new Error(mensaje);
+        }
+        return data || { ok: true };
+    }
+
+    async function apiGet(ruta) {
+        const resp = await fetch(`../api/index.php?ruta=${ruta}`, { credentials: "include" });
+        if (!resp.ok) throw new Error(`Error ${resp.status}`);
+        return resp.json();
+    }
+
+    // Carga y prepara el selector de "Enfocar ejercicio".
+    // Intenta obtener los ejercicios desde la API y mapearlos a las columnas
+    // existentes de captura. Si falla, deja las opciones por defecto del HTML.
+    async function cargarEjerciciosMeta() {
+        try {
+            const data = await apiGet("fisicas/ejercicios");
+            const ejercicios = Array.isArray(data.ejercicios) ? data.ejercicios : [];
+
+            // Mapa de claves -> columna de la tabla de captura
+            const mapa = {
+                "corrida": "v_12min_m",
+                "12min": "v_12min_m",
+                "12_min": "v_12min_m",
+                "100m": "v_100m_s",
+                "100m_planos": "v_100m_s",
+                "abdominales": "v_abdom",
+                "lagartijas": "v_lagart",
+                "dominadas": "v_barras",
+                "barras": "v_barras",
+                "burpees": "v_burpees"
             };
-            reader.readAsDataURL(file);
+
+            // Construye opciones dinámicas sólo para ejercicios que mapean a columnas visibles
+            const opciones = [];
+            const yaAgregados = new Set();
+            for (const ej of ejercicios) {
+                const clave = (ej.clave || "").toLowerCase();
+                const col = mapa[clave];
+                if (!col || yaAgregados.has(col)) continue;
+                yaAgregados.add(col);
+                let etiqueta = ej.nombre || clave;
+                // Etiquetas amigables según la columna
+                if (col === "v_12min_m") etiqueta = "12 min (metros)";
+                else if (col === "v_100m_s") etiqueta = "100 m (segundos)";
+                else if (col === "v_abdom") etiqueta = "Abdominales";
+                else if (col === "v_lagart") etiqueta = "Lagartijas";
+                else if (col === "v_barras") etiqueta = "Barras";
+                else if (col === "v_burpees") etiqueta = "Burpees";
+                opciones.push({ value: col, text: etiqueta });
+            }
+
+            // Si la API no devolvió nada utilizable, dejamos las opciones del HTML
+            if (opciones.length) {
+                const valorActual = focoEjercicio.value;
+                focoEjercicio.innerHTML = "";
+                const optTodos = document.createElement("option");
+                optTodos.value = ""; optTodos.textContent = "Todos";
+                focoEjercicio.appendChild(optTodos);
+                for (const op of opciones) {
+                    const o = document.createElement("option");
+                    o.value = op.value; o.textContent = op.text;
+                    focoEjercicio.appendChild(o);
+                }
+                // Restaura selección previa si es posible
+                if ([...focoEjercicio.options].some(o => o.value === valorActual)) {
+                    focoEjercicio.value = valorActual;
+                }
+            }
+        } catch (err) {
+            // Silencioso: dejaremos las opciones estáticas ya presentes en el HTML
+            console.warn("cargarEjerciciosMeta(): usando opciones por defecto", err);
+        }
+        // Aplica enfoque a la columna actual
+        aplicarFocoColumna(focoEjercicio.value);
+    }
+
+    function actualizarEstadoSesionUI() {
+        if (sesionActual) {
+            const estado = sesionActual.estado || "BORRADOR";
+            sesionActualTexto.textContent = `ID ${sesionActual.id} · ${sesionActual.fecha} · Trimestre ${sesionActual.trimestre} · ${sesionActual.evaluador || "-"}`;
+            estadoSesionBadge.textContent = estado;
+            estadoSesionBadge.className = "badge estado-sesion-badge " + (estado === "CERRADA" ? "bg-danger" : "bg-success");
+        } else {
+            sesionActualTexto.textContent = "Sin sesión activa";
+            estadoSesionBadge.textContent = "Sin sesión";
+            estadoSesionBadge.className = "badge estado-sesion-badge bg-secondary";
+        }
+        const habilitada = Boolean(sesionActual) && sesionActual.estado !== "CERRADA";
+        btnCerrarSesion.disabled = !sesionActual || sesionActual.estado === "CERRADA";
+        btnRefrescarSesion.disabled = !sesionActual;
+        btnGuardarTabla.disabled = !habilitada;
+        focoEjercicio.disabled = !habilitada; if(habilitada){ cargarEjerciciosMeta(); ensureSelectVigilantes(); cargarVigilantes(); }
+        formParticipante.querySelectorAll("input,button").forEach(el => {
+            if (el.id === "part_nombre") return;
+            el.disabled = !habilitada;
+        });
+    }
+
+    function limpiarFormularioParticipante() {
+        inputNoEmp.value = "";
+        inputEdad.value = "";
+        inputNombre.value = "";
+    }
+
+    function mapRegistro(row) {
+        const det = row.detalles || { componentes:{}, promedio_0_10:0, promedio_0_100:0 };
+        return {
+            id: Number(row.id),
+            sesion_id: Number(row.sesion_id),
+            no_emp: row.no_emp,
+            nombre: row.nombre_empleado || row.nombre || "",
+            edad: Number(row.edad) || 0,
+            v_12min_m: Number(row.v_12min_m) || 0,
+            v_100m_s: Number(row.v_100m_s) || 0,
+            v_abdom: Number(row.v_abdom) || 0,
+            v_lagart: Number(row.v_lagart) || 0,
+            v_barras: Number(row.v_barras) || 0,
+            v_burpees: Number(row.v_burpees) || 0,
+            cal_fisica: Number(row.cal_fisica) || 0,
+            detalles: det,
+            clasificacion: row.clasificacion || null
+        };
+    }
+
+    function renderTablaCaptura() {
+        if (!registros.length) {
+            tablaCapturaBody.innerHTML = '<tr><td colspan="12" class="text-center text-muted">Aún no hay participantes registrados en esta sesión.</td></tr>';
+            return;
+        }
+        const formatter = new Intl.NumberFormat("es-MX", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        tablaCapturaBody.innerHTML = "";
+        registros.forEach((reg, idx) => {
+            const prom10 = reg.detalles?.promedio_0_10 ?? (reg.cal_fisica / 10);
+            const clasif = reg.clasificacion?.etiqueta || "-";
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${idx + 1}</td>
+                <td>${reg.no_emp}</td>
+                <td>${reg.nombre || ""}</td>
+                <td><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="edad" min="16" max="70" value="${reg.edad || ""}"></td>
+                <td data-col="v_12min_m"><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="v_12min_m" min="0" step="1" value="${reg.v_12min_m}"></td>
+                <td data-col="v_100m_s"><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="v_100m_s" min="0" step="0.01" value="${reg.v_100m_s}"></td>
+                <td data-col="v_abdom"><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="v_abdom" min="0" step="1" value="${reg.v_abdom}"></td>
+                <td data-col="v_lagart"><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="v_lagart" min="0" step="1" value="${reg.v_lagart}"></td>
+                <td data-col="v_barras"><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="v_barras" min="0" step="1" value="${reg.v_barras}"></td>
+                <td data-col="v_burpees"><input type="number" class="form-control form-control-sm" data-index="${idx}" data-field="v_burpees" min="0" step="1" value="${reg.v_burpees}"></td>
+                <td class="calificacion-cell">
+                    <div class="fw-semibold">${formatter.format(prom10)}</div>
+                    <small class="text-muted">${formatter.format(reg.cal_fisica)} / 100</small>
+                </td>
+                <td>${clasif}</td>
+            `;
+            tablaCapturaBody.appendChild(row);
+        });
+        aplicarFocoColumna(focoEjercicio.value);
+    }
+
+    function aplicarFocoColumna(col) {
+        tablaCapturaBody.closest("table").querySelectorAll('[data-col]').forEach(th => {
+            th.classList.toggle("columna-activa", col && th.getAttribute("data-col") === col);
+        });
+    }
+    function renderHistorial() {
+        if (!historial.length) {
+            historialBody.innerHTML = '<tr><td colspan="13" class="text-center text-muted">No hay registros en el historial.</td></tr>';
+            return;
+        }
+        const formatter = new Intl.NumberFormat("es-MX", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        historialBody.innerHTML = "";
+        historial.forEach(reg => {
+            const prom = reg.detalles?.promedio_0_10 ?? (reg.cal_fisica / 10);
+            const clasif = reg.clasificacion?.etiqueta || "-";
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${reg.fecha}</td>
+                <td>#${reg.sesion_id}</td>
+                <td>${reg.no_emp}</td>
+                <td>${reg.nombre || ""}</td>
+                <td>${reg.edad}</td>
+                <td>${reg.v_12min_m}</td>
+                <td>${reg.v_100m_s}</td>
+                <td>${reg.v_abdom}</td>
+                <td>${reg.v_lagart}</td>
+                <td>${reg.v_barras}</td>
+                <td>${reg.v_burpees}</td>
+                <td>${formatter.format(prom)}</td>
+                <td>${clasif}</td>
+            `;
+            historialBody.appendChild(tr);
+        });
+    }
+
+    async function cargarEvaluadores() {
+        try {
+            const data = await apiGet("empleados/evaluadores");
+            sesionEvaluador.innerHTML = '<option value="">Selecciona un evaluador…</option>';
+            (data.evaluadores || []).forEach(ev => {
+                const option = document.createElement("option");
+                option.value = ev.no_emp;
+                option.textContent = `${ev.no_emp} - ${ev.nombre} (${ev.puesto || "N/A"})`;
+                sesionEvaluador.appendChild(option);
+            });
+        } catch (err) {
+            console.error(err);
+            mostrarToast("No se pudieron cargar los evaluadores","error");
+        }
+    }
+
+    async function cargarRegistrosSesion() {
+        if (!sesionActual) return;
+        try {
+            const data = await apiGet(`fisicas/sesion_registros&sesion_id=${sesionActual.id}`);
+            registros = (data.registros || []).map(mapRegistro);
+            renderTablaCaptura();
+            mostrarToast(`Participantes sincronizados (${registros.length}).`, "info");
+        } catch (err) {
+            console.error(err);
+            mostrarToast("No se pudo cargar la lista de participantes","error");
+        }
+    }
+
+    async function cargarHistorial() {
+        try {
+            const data = await apiGet("fisicas/historial&limite=200");
+            historial = (data.historial || []).map(row => {
+                row.detalles = row.detalles || {};
+                row.clasificacion = row.clasificacion || null;
+                row.nombre = row.nombre_empleado || "";
+                return row;
+            });
+            renderHistorial();
+        } catch (err) {
+            console.error(err);
+            historialBody.innerHTML = '<tr><td colspan="13" class="text-center text-muted">No se pudo cargar el historial.</td></tr>';
+        }
+    }
+
+    formSesion.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const evaluador = sesionEvaluador.value.trim();
+        if (!evaluador) {
+            mostrarToast("Selecciona un evaluador para la sesión.","error");
+            return;
+        }
+        const payload = {
+            fecha: sesionFecha.value || new Date().toISOString().slice(0,10),
+            trimestre: parseInt(sesionTrimestre.value, 10),
+            evaluador_id: evaluador,
+            sede: "SIN_SEDE",
+            observaciones: sesionObservaciones.value.trim()
+        };
+        try {
+            const res = await apiPost("fisicas/sesion", payload);
+            sesionActual = {
+                id: res.sesion_id,
+                fecha: payload.fecha,
+                trimestre: payload.trimestre,
+                evaluador: evaluador,
+                estado: "BORRADOR"
+            };
+            registros = [];
+            renderTablaCaptura();
+            actualizarEstadoSesionUI();
+            mostrarToast(`Sesión #${res.sesion_id} creada. Agrega a los participantes.`, "ok");
+        } catch (err) {
+            console.error(err);
+            mostrarToast(err.message || "No se pudo crear la sesión.","error");
         }
     });
 
-    // --- Lógica de Guardado (incluyendo la foto como Base64) ---
-    document.getElementById('guardar').onclick = async () => {
-        const fotoInput = document.getElementById('fotoInput');
-        const file = fotoInput.files[0];
-        
-        if (!file) {
-            mostrarToast('Debe tomar o seleccionar una foto de evidencia.','error');
-            return;
-        }
-
-        const datos = {
-            no_emp: document.getElementById('no_emp').value.trim(),
-            punto_id: document.getElementById('punto_id').value.trim(),
-            supervisor_id: document.getElementById('supervisor_id').value.trim(),
-            observaciones: document.getElementById('observaciones').value.trim(),
-            uniforme: +document.getElementById('item1').value,
-            peinado: +document.getElementById('item2').value,
-            limpieza: +document.getElementById('item3').value,
-            posicion: +document.getElementById('item4').value,
-            foto_base64: '' // Se llenará con la lectura del archivo
-        };
-
-        if (!datos.no_emp || !datos.punto_id || !datos.supervisor_id) {
-            mostrarToast('Rellena los campos obligatorios (No. Empleado, Punto ID, Evaluador ID).','error');
-            return;
-        }
-
-        // Función para leer el archivo como Base64
-        const readFileAsBase64 = (file) => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        };
-
+    btnCerrarSesion.addEventListener("click", async () => {
+        if (!sesionActual) return;
         try {
-            mostrarToast('Convirtiendo imagen y enviando datos...', 'info');
-            
-            // Convertir la imagen a Base64
-            datos.foto_base64 = await readFileAsBase64(file);
-            
-            // Enviar los datos
-            const r = await postData('../api/index.php?ruta=fisica/guardar', datos);
-            
-            mostrarToast(`Captura Guardada. Promedio: ${r.promedio_0_10} / 10`,'ok');
-            
-            // Opcional: Limpiar el formulario después de guardar
-            // document.getElementById('observaciones').value = '';
-            // document.getElementById('fotoInput').value = ''; 
-            // document.getElementById('fotoPreview').src = './assets/img/placeholder-foto.png';
-
-        } catch (e) {
-            console.error(e);
-            mostrarToast('Error al guardar la captura. Verifica la conexión con la API.','error');
+            const res = await apiPost("fisicas/cerrar", { sesion_id: sesionActual.id });
+            sesionActual.estado = res.estado || "CERRADA";
+            actualizarEstadoSesionUI();
+            mostrarToast(`Sesión #${sesionActual.id} cerrada.`, "ok");
+        } catch (err) {
+            console.error(err);
+            mostrarToast(err.message || "No se pudo cerrar la sesión.","error");
         }
-    };
+    });
+    formParticipante.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!sesionActual) {
+            mostrarToast("Inicia una sesión antes de registrar participantes.","error");
+            return;
+        }
+        // Obtiene el valor normalizado "no_emp - nombre" desde el select si existe
+        let raw = '';
+        const selVig = document.getElementById('part_no_emp');
+        if (selVig && selVig.tagName === 'SELECT') {
+            const opt = selVig.selectedOptions[0];
+            const nom = opt?.dataset?.nombre || (opt?.textContent?.split('-').slice(1).join('-').trim() || '');
+            raw = opt?.value ? `${opt.value} - ${nom}` : '';
+        } else {
+            raw = inputNoEmp.value.trim();
+        }
+        if (!raw) {
+            mostrarToast("Ingresa el número de empleado o selecciona una sugerencia.","error");
+            return;
+        }
+        const partes = raw.split("-");
+        const no_emp = partes[0].trim();
+        const nombre = partes.slice(1).join("-").trim();
+        const edad = parseInt(inputEdad.value, 10) || 0;
+        if (!no_emp || edad <= 0) {
+            mostrarToast("Verifica el número de empleado y la edad.","error");
+            return;
+        }
+        const payload = {
+            sesion_id: sesionActual.id,
+            no_emp,
+            edad,
+            v_12min_m: 0,
+            v_100m_s: 0,
+            v_abdom: 0,
+            v_lagart: 0,
+            v_barras: 0,
+            v_burpees: 0
+        };
+        try {
+            await apiPost("fisicas/registro", payload);
+            mostrarToast(`Participante ${no_emp} agregado.`, "ok");
+            inputNombre.value = nombre;
+            await cargarRegistrosSesion();
+            limpiarFormularioParticipante();
+            const selF = document.getElementById('part_no_emp');
+            if (selF && selF.tagName === 'SELECT') selF.focus(); else inputNoEmp.focus();
+        } catch (err) {
+            console.error(err);
+            mostrarToast(err.message || "No se pudo agregar el participante.","error");
+        }
+    });
+
+    btnRefrescarSesion.addEventListener("click", () => {
+        cargarRegistrosSesion();
+    });
+
+    focoEjercicio.addEventListener("change", (e) => {
+        aplicarFocoColumna(e.target.value);
+    });
+
+    tablaCapturaBody.addEventListener("input", (e) => {
+        const target = e.target;
+        if (!(target instanceof HTMLInputElement)) return;
+        const index = Number(target.dataset.index);
+        const field = target.dataset.field;
+        if (Number.isNaN(index) || !field || !registros[index]) return;
+        const value = target.value;
+        registros[index][field] = field === "v_100m_s" ? parseFloat(value) || 0 : parseInt(value, 10) || 0;
+    });
+
+    btnGuardarTabla.addEventListener("click", async () => {
+        if (!sesionActual) {
+            mostrarToast("No hay sesión activa.","error");
+            return;
+        }
+        if (!registros.length) {
+            mostrarToast("Agrega participantes antes de guardar.","error");
+            return;
+        }
+        try {
+            for (const reg of registros) {
+                const payload = {
+                    sesion_id: sesionActual.id,
+                    no_emp: reg.no_emp,
+                    edad: reg.edad || 0,
+                    v_12min_m: reg.v_12min_m || 0,
+                    v_100m_s: reg.v_100m_s || 0,
+                    v_abdom: reg.v_abdom || 0,
+                    v_lagart: reg.v_lagart || 0,
+                    v_barras: reg.v_barras || 0,
+                    v_burpees: reg.v_burpees || 0
+                };
+                const res = await apiPost("fisicas/registro", payload);
+                reg.cal_fisica = res.cal_fisica;
+                reg.detalles = res.detalles;
+                reg.clasificacion = res.clasificacion;
+            }
+            renderTablaCaptura();
+            mostrarToast("Resultados guardados correctamente.","ok");
+        } catch (err) {
+            console.error(err);
+            mostrarToast(err.message || "Error al guardar la tabla.","error");
+        }
+    });
+
+    btnHistorialRecargar.addEventListener("click", () => {
+        historialBody.innerHTML = '<tr><td colspan="13" class="text-center text-muted">Cargando…</td></tr>';
+        cargarHistorial();
+    });
+
+    inputNoEmp.addEventListener("input", (e) => {
+        const valor = e.target.value.trim();
+        clearTimeout(sugerenciaTimer);
+        if (valor.length < 3) {
+            datalistEmpleados.innerHTML = "";
+            inputNombre.value = "";
+            return;
+        }
+        sugerenciaTimer = setTimeout(() => buscarSugerencias(valor), 300);
+    });
+
+    async function buscarSugerencias(texto) {
+        try {
+            // Solo vigilantes; opcionalmente podríamos incluir un punto_id si aplica al flujo
+            const url = `../api/index.php?ruta=empleados/vigilantes&estado=ACTIVO&buscar=${encodeURIComponent(texto)}`;
+            const resp = await fetch(url, { credentials: "include" });
+            const data = await resp.json();
+            datalistEmpleados.innerHTML = "";
+            (data.empleados || []).slice(0, 25).forEach(emp => {
+                const option = document.createElement("option");
+                option.value = `${emp.no_emp} - ${emp.nombre}`;
+                datalistEmpleados.appendChild(option);
+            });
+        } catch (err) {
+            console.error("No se pudieron cargar sugerencias", err);
+        }
+    }
+
+    // Crea y/o asegura el select de vigilantes en lugar del input de texto
+    function ensureSelectVigilantes() {
+        if (selectNoEmp && document.getElementById('part_no_emp') === selectNoEmp) return selectNoEmp;
+        const input = document.getElementById('part_no_emp');
+        if (!input) return null;
+        // Ya es un select
+        if (input.tagName === 'SELECT') { selectNoEmp = input; return selectNoEmp; }
+        const parent = input.parentElement;
+        if (!parent) return null;
+        const sel = document.createElement('select');
+        sel.className = 'form-select';
+        sel.id = 'part_no_emp';
+        sel.required = true;
+        sel.innerHTML = '<option value="">Seleccione vigilante…</option>';
+        parent.insertBefore(sel, input);
+        // Evita id duplicado
+        input.id = 'part_no_emp_input';
+        // Oculta el input y su datalist y quita 'required'
+        input.style.display = 'none';
+        input.required = false;
+        const dl = document.getElementById('lista_empleados_fisica');
+        if (dl) dl.style.display = 'none';
+        selectNoEmp = sel;
+        // Mantén el valor del input oculto conforme se selecciona el vigilante
+        selectNoEmp.addEventListener('change', () => {
+            const opt = selectNoEmp.selectedOptions[0];
+            const nombre = opt?.dataset?.nombre || (opt?.textContent?.split('-').slice(1).join('-').trim() || '');
+            document.getElementById('part_nombre').value = nombre;
+            // el submit original parsea "no_emp - nombre", así que sincronizamos
+            if (input) input.value = opt?.value ? `${opt.value} - ${nombre}` : '';
+        });
+        return selectNoEmp;
+    }
+
+    async function cargarVigilantes() {
+        ensureSelectVigilantes();
+        if (!selectNoEmp) return;
+        try {
+            const resp = await fetch(`../api/index.php?ruta=empleados/vigilantes&estado=ACTIVO`, { credentials: "include" });
+            const data = await resp.json();
+            const lista = Array.isArray(data.empleados) ? data.empleados : [];
+            selectNoEmp.innerHTML = '<option value="">Seleccione vigilante…</option>';
+            lista.forEach(emp => {
+                const o = document.createElement('option');
+                o.value = emp.no_emp;
+                o.textContent = `${emp.no_emp} - ${emp.nombre}`;
+                o.dataset.nombre = emp.nombre || '';
+                selectNoEmp.appendChild(o);
+            });
+        } catch (err) {
+            console.error('No se pudieron cargar vigilantes', err);
+        }
+    }
+
+    inputNoEmp.addEventListener("change", () => {
+        const raw = inputNoEmp.value.trim();
+        const partes = raw.split("-");
+        inputNombre.value = partes.slice(1).join("-").trim();
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        sesionFecha.value = new Date().toISOString().slice(0,10);
+        cargarNombreUsuario();
+        configurarCerrarSesion();
+        actualizarEstadoSesionUI();
+        cargarEvaluadores();
+        cargarHistorial();
+        ensureSelectVigilantes();
+        cargarVigilantes();
+    });
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+

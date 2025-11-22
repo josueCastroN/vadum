@@ -1,31 +1,13 @@
-/**
- * auth.js
- * Lógica de Autenticación, Control de Acceso por Roles (ACL) y Login.
- */
+
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    // ===============================================
-    // 1. SIMULACIÓN DE DATOS DE USUARIO AUTENTICADO
-    //    (Usada en index.html)
-    // ===============================================
-    const usuarioSesion = {
-        nombre: 'Juan Pérez',
-        usuario: 'jperez',
-        rol: 'supervisor', // <-- CAMBIA ESTO PARA PROBAR OTROS ROLES
-        id_usuario: 101
-    };
-
-    // ===============================================
-    // 2. ELEMENTOS DEL DOM
-    // ===============================================
-    // Elementos Globales (Usados en index.html y login.html)
+    // Elementos comunes
     const sidebarMenu = document.getElementById('sidebarMenu');
     const offcanvasMenu = document.getElementById('menuOffcanvas');
     const nombreUsuarioSpan = document.getElementById('nombreUsuario');
-    const btnCerrarSesionTop = document.getElementById('btnCerrarSesionTop');
+    const btnCerrarSesionTop = document.getElementById('btnCerrarSesionTop'); const btnCerrarSesionDropdown = document.getElementById('btnCerrarSesionDropdown'); const btnSalirPerfil = document.getElementById('btnSalir');
 
-    // Elementos del Login (Solo existen en login.html)
+    // Elementos del login
     const formLogin = document.getElementById('formLogin');
     const campoUsuario = document.getElementById('campoUsuario');
     const campoContrasena = document.getElementById('campoContrasena');
@@ -33,135 +15,177 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnEntrar = document.getElementById('btnEntrar');
     const alertaMensaje = document.getElementById('alertaMensaje');
     const eyeIcon = document.getElementById('eyeIcon');
-    
-    // Función para mostrar mensajes de estado (Usada en login)
+
     const mostrarAlerta = (mensaje, tipo = 'danger') => {
         if (!alertaMensaje) return;
         alertaMensaje.textContent = mensaje;
         alertaMensaje.className = `alert alert-${tipo}`;
         alertaMensaje.classList.remove('d-none');
     };
-    
-    // ===============================================
-    // 3. LÓGICA DE CONTROL DE ACCESO (ACL - Usada en index.html)
-    // ===============================================
-    
-    function aplicarRestriccionesDeRol(rol, nombreUsuario) {
+
+    async function llamadaAuth(url, opciones = {}) {
+        const resp = await fetch(url, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(opciones.headers || {})
+            },
+            ...opciones
+        });
+
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok) {
+            throw new Error(data.error || 'Error de autenticación');
+        }
+        return data;
+    }
+
+    function aplicarRestriccionesDeRol(usuario) {
+        const rol = usuario?.rol || '';
+        const nombre = usuario?.nombre || usuario?.usuario || 'Usuario';
+
         if (nombreUsuarioSpan) {
-            nombreUsuarioSpan.textContent = nombreUsuario;
-            localStorage.setItem('userName', nombreUsuario); 
+            nombreUsuarioSpan.textContent = nombre;
+            localStorage.setItem('userName', nombre);
         }
 
-        const menus = [sidebarMenu, offcanvasMenu].filter(el => el != null);
-
+        const menus = [sidebarMenu, offcanvasMenu].filter(Boolean);
         menus.forEach(menu => {
-            const enlacesNav = menu.querySelectorAll('a[data-roles]');
+            menu.querySelectorAll('a[data-roles]').forEach(enlace => {
+                const listaRoles = (enlace.dataset.roles || '')
+                    .split(',')
+                    .map(r => r.trim())
+                    .filter(Boolean);
 
-            enlacesNav.forEach(enlace => {
-                const rolesPermitidos = enlace.getAttribute('data-roles');
-                
-                if (!rolesPermitidos) {
-                    enlace.style.display = 'none';
-                    return;
-                }
-                const listaRoles = rolesPermitidos.split(',').map(r => r.trim());
-                enlace.style.display = listaRoles.includes(rol) ? 'flex' : 'none';
+                enlace.style.display =
+                    listaRoles.length === 0 || listaRoles.includes(rol)
+                        ? 'flex'
+                        : 'none';
             });
         });
     }
 
-    function verificarSesion() {
-        if (!usuarioSesion.rol) {
-            // No autenticado: Si no estamos en login, redirigir
-            if (location.pathname.split('/').pop() !== 'login.html') {
-                 // location.href = './login.html'; 
-                 console.log('Usuario no autenticado. Redirigir a login.html (Simulación)');
+    async function verificarSesion() {
+        try {
+            const respuesta = await llamadaAuth('../api/index.php?ruta=auth/me');
+            if (!respuesta.logeado) {
+                const actual = location.pathname.split('/').pop();
+                if (actual !== 'login.html') {
+                    location.href =
+                        'login.html?redirect=' +
+                        encodeURIComponent(location.pathname);
+                }
+                return null;
             }
-        } else {
-            // Autenticado: Aplicar restricciones
-            aplicarRestriccionesDeRol(usuarioSesion.rol, usuarioSesion.nombre);
+            aplicarRestriccionesDeRol(respuesta.usuario);
+            return respuesta.usuario;
+        } catch (err) {
+            console.error(err);
+            const actual = location.pathname.split('/').pop();
+            if (actual !== 'login.html') {
+                location.href =
+                    'login.html?redirect=' +
+                    encodeURIComponent(location.pathname);
+            }
+            return null;
         }
     }
 
-    // ===============================================
-    // 4. LÓGICA DE LOGIN (Solo se ejecuta si existen los elementos)
-    // ===============================================
-
-    // 4a. Toggle Mostrar/Ocultar Contraseña
-    if (campoContrasena && btnTogglePass && eyeIcon) {
-        btnTogglePass.addEventListener('click', function (e) {
+    // Mostrar / ocultar contraseña
+    if (btnTogglePass && campoContrasena && eyeIcon) {
+        btnTogglePass.addEventListener('click', e => {
             e.preventDefault();
-            const currentType = campoContrasena.getAttribute('type');
-
-            if (currentType === 'password') {
-                campoContrasena.setAttribute('type', 'text');
-                eyeIcon.textContent = 'visibility'; 
-            } else {
-                campoContrasena.setAttribute('type', 'password');
-                eyeIcon.textContent = 'visibility_off';
-            }
+            const mostrar = campoContrasena.type === 'password';
+            campoContrasena.type = mostrar ? 'text' : 'password';
+            eyeIcon.textContent = mostrar ? 'visibility' : 'visibility_off';
         });
     }
 
-    // 4b. Manejo del Envío del Formulario
+    // Manejo del login
     if (formLogin) {
-        formLogin.addEventListener('submit', async function(e) {
-            e.preventDefault(); 
-            mostrarAlerta("", 'd-none'); // Ocultar alerta previa
+        formLogin.addEventListener('submit', async e => {
+            e.preventDefault();
+            mostrarAlerta('', 'd-none');
 
-            if (!campoUsuario.value.trim() || !campoContrasena.value.trim()) {
-                mostrarAlerta("Ingresa tu usuario y contraseña.");
+            const usuario = campoUsuario.value.trim();
+            const contrasena = campoContrasena.value.trim();
+
+            if (!usuario || !contrasena) {
+                mostrarAlerta('Ingresa tu usuario y contraseña.');
                 return;
             }
-            
-            // Simular carga y validación
-            btnEntrar.disabled = true;
-            btnEntrar.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Validando...';
 
-            const datosLogin = {
-                usuario: campoUsuario.value.trim(),
-                contrasena: campoContrasena.value.trim(), 
-                recordar: document.getElementById('checkRecordar').checked ? 1 : 0
-            };
+            btnEntrar.disabled = true;
+            btnEntrar.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Validando…';
 
             try {
-                // *** IMPLEMENTA TU LLAMADA REAL A LA API AQUÍ ***
-                // Simulación de éxito/fracaso
-                const exito = (datosLogin.usuario === 'jperez' && datosLogin.contrasena === '1234');
+                const respuesta = await llamadaAuth(
+                    '../api/index.php?ruta=auth/login',
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            usuario,
+                            contrasena,
+                            recordar: 0
+                        })
+                    }
+                );
+                aplicarRestriccionesDeRol(respuesta.usuario);
 
-                if (exito) {
-                    mostrarAlerta("Acceso exitoso. Redirigiendo...", 'success');
-                    setTimeout(() => {
-                        window.location.href = './index.html'; 
-                    }, 500);
-                } else {
-                    mostrarAlerta("Credenciales incorrectas.");
-                }
-
-            } catch (error) {
-                mostrarAlerta("Error de conexión con el servidor.");
-                console.error('Error en la solicitud de login:', error);
+                const redirect =
+                    new URLSearchParams(location.search).get('redirect') ||
+                    './index.html';
+                window.location.href = redirect;
+            } catch (err) {
+                console.error(err);
+                mostrarAlerta(err.message || 'Credenciales incorrectas.');
             } finally {
                 btnEntrar.disabled = false;
-                btnEntrar.innerHTML = '<i class="material-icons-outlined me-2">login</i> Entrar';
+                btnEntrar.innerHTML =
+                    '<i class="material-icons-outlined me-2">login</i> Entrar';
+            }
+        });
+    } else {
+        // Páginas protegidas
+        verificarSesion();
+    }
+
+    if (btnCerrarSesionTop) {
+        btnCerrarSesionTop.addEventListener('click', async e => {
+            e.preventDefault();
+            try {
+                await llamadaAuth('../api/index.php?ruta=auth/logout', {
+                    method: 'POST'
+                });
+            } catch (err) {
+                console.warn('Error cerrando sesión', err);
+            } finally {
+                localStorage.removeItem('userName');
+                window.location.href = 'login.html';
             }
         });
     }
+});
 
-    // ===============================================
-    // 5. EVENTOS GLOBALES
-    // ===============================================
-
-    // Evento de Cerrar Sesión
-    if (btnCerrarSesionTop) {
-        btnCerrarSesionTop.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Lógica real de cerrar sesión
-            // location.href = './login.html'; 
-            console.log('Sesión cerrada. Redirigir a login.html');
-        });
+// Unificaci�n de cabecera/men�s: listeners extra y sincronizaci�n de nombre
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const nombre = localStorage.getItem('userName');
+    if (nombre) {
+      const perfilNombre = document.getElementById('perfilNombre');
+      const usuarioActual = document.getElementById('usuarioActual');
+      if (perfilNombre) perfilNombre.textContent = nombre;
+      if (usuarioActual) usuarioActual.textContent = nombre;
     }
-
-    // 6. EJECUCIÓN INICIAL
-    verificarSesion();
+    const doLogout = async (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      try { await fetch('../api/index.php?ruta=auth/logout', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'} }); } catch(_) {}
+      finally { localStorage.removeItem('userName'); window.location.href = 'login.html'; }
+    };
+    const dd = document.getElementById('btnCerrarSesionDropdown');
+    if (dd) dd.addEventListener('click', doLogout);
+    const salir = document.getElementById('btnSalir');
+    if (salir) salir.addEventListener('click', doLogout);
+  } catch (e) { console.warn('Cabecera unificada: listeners extra no aplicados', e); }
 });

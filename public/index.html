@@ -1,240 +1,312 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>VADUM · Panel Principal</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" >
-    
-    <link rel="stylesheet" href="./assets/css/estilos.css"> 
-    
+  <meta charset="utf-8">
+  <title>VADUM - Panel Principal</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
 </head>
 <body>
-    
-    <div class="contenedor-app d-flex">
-        
-        <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
-            <div class="header-logo text-center mb-4">
-                <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
-            </div>
+  <div class="contenedor-app d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
+      <div class="header-logo text-center mb-4">
+        <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
+      </div>
 
-            <div class="d-flex flex-column nav-links-sidebar">
-                <a class="menu-link activo" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">
-                    <i class="material-icons-outlined">home</i> <span>Inicio</span>
-                </a>
-                <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">badge</i> <span>Empleados</span>
-                </a>
-                <a class="menu-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">insights</i> <span>Física</span>
-                </a>
-                <a class="menu-link" id="nav-supervisores" href="./evaluacion_mensual.html" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">rule</i> <span>Evaluación</span>
-                </a>
-                <a class="menu-link" id="nav-clientes" href="encuesta.html" data-roles="admin,supervisor,cliente">
-                    <i class="material-icons-outlined">question_answer</i> <span>Clientes</span>
-                </a>
-                <a class="menu-link" id="nav-cursos" href="#" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">auto_stories</i> <span>Cursos</span>
-                </a>
-                <a class="menu-link" id="nav-faltas" href="#" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">event_busy</i> <span>Faltas</span>
-                </a>
-                <a class="menu-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">
-                    <i class="material-icons-outlined">payments</i> <span>Incentivo</span>
-                </a>
-                <a class="menu-link" id="nav-actas" href="#" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">description</i> <span>Actas</span>
-                </a>
-                <a class="menu-link" id="nav-autorizaciones" href="#" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">verified_user</i> <span>Autorizaciones</span>
-                </a>
-                <a class="menu-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">
-                    <i class="material-icons-outlined">settings</i> <span>Catalogos</span>
-                </a>
-            </div>
-        </nav>
-        
-        <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
-            
-            <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-outline-secondary d-md-none me-2" type="button" 
-                            data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
-                    <span class="fw-bold fs-5 text-dark">Panel de Control VADUM</span>
-                </div>
-                
-                <div class="d-flex align-items-center">
-                    <div class="dropdown me-2">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario Nombre</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
-                            <li><a class="dropdown-item" href="#">Configuración</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#">Cerrar Sesión</a></li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionTop"><i class="fas fa-sign-out-alt"></i></button>
-                </div>
-            </div>
+      <div class="d-flex flex-column nav-links-sidebar">
+        <a class="menu-link activo" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">
+          <i class="material-icons-outlined">home</i> <span>Inicio</span>
+        </a>
+        <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">badge</i> <span>Empleados</span>
+        </a>
+        <a class="menu-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">insights</i> <span>Física</span>
+        </a>
+        <a class="menu-link" id="nav-supervisores" href="./evaluacion_mensual.html" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">rule</i> <span>Evaluación</span>
+        </a>
+        <a class="menu-link" id="nav-clientes" href="./encuesta.html" data-roles="admin,supervisor,cliente">
+          <i class="material-icons-outlined">question_answer</i> <span>Encuesta</span>
+        </a>
+        <a class="menu-link" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">auto_stories</i> <span>Cursos</span>
+        </a>
+        <a class="menu-link" id="nav-faltas" href="./faltas.html" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">event_busy</i> <span>Faltas</span>
+        </a>
+        <a class="menu-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">
+          <i class="material-icons-outlined">payments</i> <span>Incentivo</span>
+        </a>
+        <a class="menu-link" id="nav-actas" href="#" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">description</i> <span>Actas</span>
+        </a>
+        <a class="menu-link" id="nav-autorizaciones" href="#" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">verified_user</i> <span>Autorizaciones</span>
+        </a>
+        <a class="menu-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">
+          <i class="material-icons-outlined">settings</i> <span>Catálogos</span>
+        </a>
+      </div>
+    </nav>
 
-            <main class="flex-grow-1 p-3 p-md-4">
-                <h1 class="h5 fw-bold mb-4">Dashboard</h1>
-                
-                <div class="alert alert-light border-0 py-2 mb-4" role="alert">
-                    Bienvenido al Sistema Automatizado de Incentivos VADUM
-                </div>
-
-                <div class="row g-4 mb-4">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card card-metricas h-100 p-3 shadow-sm">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div><div class="text-uppercase text-muted small">Total Empleados</div><div class="h3 fw-bold mb-0">245</div><p class="text-muted small mt-1">Activos en Sistema</p></div>
-                                <i class="fas fa-users fs-4 text-secondary"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card card-metricas h-100 p-3 shadow-sm">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div><div class="text-uppercase text-muted small">Sesiones Físicas</div><div class="h3 fw-bold mb-0">8</div><p class="text-muted small mt-1">Este mes</p></div>
-                                <i class="fas fa-bolt fs-4 text-primary"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card card-metricas h-100 p-3 shadow-sm">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div><div class="text-uppercase text-muted small">Encuestas Clientes</div><div class="h3 fw-bold mb-0">24</div><p class="text-muted small mt-1">Este semestre</p></div>
-                                <i class="fas fa-comments fs-4 text-info"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card card-metricas h-100 p-3 shadow-sm">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div><div class="text-uppercase text-muted small">Faltas del Mes</div><div class="h3 fw-bold mb-0">12</div><p class="text-muted small mt-1">Requieren atención</p></div>
-                                <i class="fas fa-exclamation-triangle fs-4 text-danger"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <section class="card tarjeta p-4 mb-4 shadow-sm">
-                    <h2 class="h6 fw-bold mb-3">Accesos Rápidos</h2>
-                    <p class="text-muted small">Funciones frecuentes para su rol</p>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a class="btn btn-outline-primary btn-sm" href="#">Ver Reportes</a>
-                        <a class="btn btn-outline-success btn-sm" href="./evaluacon_mensual">Nueva Sesión Física</a>
-                        <a class="btn btn-outline-info btn-sm" href="./empleados.html">Gestionar Empleados</a>
-                    </div>
-                </section>
-
-                <section class="card tarjeta p-4 shadow-sm">
-                    <h2 class="h6 fw-bold mb-3">Actividad Reciente</h2>
-                    <ul class="list-unstyled mb-0">
-                        <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                            <div><span class="badge bg-success me-2"></span> Sesión física Q1 completada</div>
-                            <span class="text-muted small">Hace 2 horas</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                            <div><span class="badge bg-primary me-2"></span> Nueva encuesta de cliente recibida</div>
-                            <span class="text-muted small">Hace 1 día</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center py-2">
-                            <div><span class="badge bg-danger me-2"></span> Evaluación mensual pendiente</div>
-                            <span class="text-muted small">Hace 2 días</span>
-                        </li>
-                    </ul>
-                </section>
-                
-                <footer class="footer text-center p-3 border-top mt-5 bg-light text-muted small">© VADUM · Automatización de Incentivos</footer>
-            </main>
+    <!-- Main -->
+    <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
+      <!-- Topbar -->
+      <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas">
+            <i class="fas fa-bars"></i>
+          </button>
+          <span class="fw-bold fs-5 text-dark">Panel de Control VADUM</span>
         </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-3">
+            <div class="card card-metricas h-100 p-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="text-uppercase text-muted small">Encuestas del Mes</div>
+                  <div class="h3 fw-bold mb-0" id="metricEncuestasMes"></div>
+                  <p class="text-muted small mt-1"><a href="./encuesta.html">Ver encuestas</a></p>
+                </div>
+                <i class="fas fa-handshake fs-4 text-info"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card card-metricas h-100 p-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="text-uppercase text-muted small">Evaluaciones Mensuales</div>
+                  <div class="h3 fw-bold mb-0" id="metricMensualMes"></div>
+                  <p class="text-muted small mt-1"><a href="./evaluacion_mensual.html">Ver evaluaciones</a></p>
+                </div>
+                <i class="fas fa-clipboard-check fs-4 text-secondary"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+              <li><a class="dropdown-item" href="#">Configuración</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionDropdown">Cerrar Sesión</a></li>
+            </ul>
+          </div>
+          <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionDropdown"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <main class="flex-grow-1 p-3 p-md-4">
+        <!-- Métricas rápidas -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-3">
+            <div class="card card-metricas h-100 p-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="text-uppercase text-muted small">Empleados Activos</div>
+                  <div class="h3 fw-bold mb-0" id="metricEmpleadosActivos"></div>
+                  <p class="text-muted small mt-1">Actualizado hoy</p>
+                </div>
+                <i class="fas fa-users fs-4 text-primary"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card card-metricas h-100 p-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="text-uppercase text-muted small">Supervisores</div>
+                  <div class="h3 fw-bold mb-0" id="metricSupervisores"></div>
+                  <p class="text-muted small mt-1">Actualizado hoy</p>
+                </div>
+                <i class="fas fa-user-tie fs-4 text-success"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card card-metricas h-100 p-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="text-uppercase text-muted small">Faltas del Mes</div>
+                  <div class="h3 fw-bold mb-0" id="metricFaltasMes"></div>
+                  <p class="text-muted small mt-1">Actualizado hoy</p>
+                </div>
+                <i class="fas fa-exclamation-triangle fs-4 text-danger"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card card-metricas h-100 p-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="text-uppercase text-muted small">Actas del Mes</div>
+                  <div class="h3 fw-bold mb-0" id="metricActasMes"></div>
+                  <p class="text-muted small mt-1">Creadas este mes</p>
+                </div>
+                <i class="fas fa-file-alt fs-4 text-warning"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accesos rapidos -->
+        <section class="card tarjeta p-4 mb-4 shadow-sm">
+          <h2 class="h6 fw-bold mb-3">Accesos Rapidos</h2>
+          <p class="text-muted small">Funciones frecuentes para su rol</p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-outline-primary btn-sm" href="#">Ver Reportes</a>
+            <a class="btn btn-outline-success btn-sm" href="./captura_fisica.html">Nueva Sesión Física</a>
+            <a class="btn btn-outline-info btn-sm" href="./empleados.html">Gestionar Empleados</a>
+          </div>
+        </section>
+
+        <!-- Actividad reciente -->
+        <section class="card tarjeta p-4 shadow-sm">
+          <h2 class="h6 fw-bold mb-3">Actividad Reciente</h2>
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+              <div><span class="badge bg-success me-2"></span> Sesión Física Q1 completada</div>
+              <span class="text-muted small">Hace 2 horas</span>
+            </li>
+            <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+              <div><span class="badge bg-primary me-2"></span> Nueva encuesta de cliente recibida</div>
+              <span class="text-muted small">Hace 1 día</span>
+            </li>
+            <li class="d-flex justify-content-between align-items-center py-2">
+              <div><span class="badge bg-danger me-2"></span> Evaluación mensual pendiente</div>
+              <span class="text-muted small">Hace 2 días</span>
+            </li>
+          </ul>
+        </section>
+
+        <footer class="footer text-center p-3 border-top mt-5 bg-light text-muted small">VADUM - Automatización de Incentivos</footer>
+      </main>
     </div>
-    
-    <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
-        <div class="offcanvas-header bg-warning">
-            <div class="header-logo">
-                <img src="./assets/img/VADUM-negro.png" alt="Logotipo VADUM" class="sidebar-logo">
-                <h5 class="offcanvas-title text-dark fw-bold" id="menuOffcanvasLabel">Menú VADUM</h5>
-            </div>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <div class="d-flex flex-column p-3">
-                 <a class="menu-link activo" id="nav-inicio-movil" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">
-                    <i class="fas fa-home"></i> <span>Inicio</span>
-                </a>
-                <a class="menu-link" id="nav-empleados-movil" href="./empleados.html" data-roles="admin,supervisor">
-                    <i class="fas fa-user-tie"></i> <span>Empleados</span>
-                </a>
-                <a class="menu-link" id="nav-fisica-movil" href="./captura_fisica.html" data-roles="admin,supervisor">
-                    <i class="fas fa-chart-line"></i> <span>Física</span>
-                </a>
-                <a class="menu-link" id="nav-supervisores-movil" href="./evaluacion_mensual.html" data-roles="admin,supervisor">
-                    <i class="fas fa-users-cog"></i> <span>Evaluación</span>
-                </a>
-                <a class="menu-link" id="nav-clientes-movil" href="encuesta.html" data-roles="admin,supervisor,cliente">
-                    <i class="fas fa-handshake"></i> <span>Clientes</span>
-                </a>
-                <a class="menu-link" id="nav-cursos-movil" href="#" data-roles="admin,supervisor">
-                    <i class="fas fa-book-open"></i> <span>Cursos</span>
-                </a>
-                <a class="menu-link" id="nav-faltas-movil" href="#" data-roles="admin,supervisor">
-                    <i class="fas fa-calendar-times"></i> <span>Faltas</span>
-                </a>
-                <a class="menu-link" id="nav-reportes-movil" href="#" data-roles="admin,supervisor">
-                    <i class="fas fa-chart-bar"></i> <span>Reportes</span>
-                </a>
-                <a class="menu-link" id="nav-incentivo-movil" href="./incentivo.html" data-roles="admin,supervisor,vigilante">
-                    <i class="fas fa-dollar-sign"></i> <span>Incentivo</span>
-                </a>
-                <a class="menu-link" id="nav-actas-movil" href="#" data-roles="admin,supervisor">
-                    <i class="fas fa-file-alt"></i> <span>Actas</span>
-                </a>
-                <a class="menu-link" id="nav-autorizaciones-movil" href="#" data-roles="admin,supervisor">
-                    <i class="fas fa-user-check"></i> <span>Autorizaciones</span>
-                </a>
-                <a class="menu-link" id="nav-catalogos-movil" href="./catalogos.html" data-roles="admin,supervisor">
-                    <i class="fas fa-cogs"></i> <span>Catalogos</span>
-                </a>
-            </div>
-        </div>
+  </div>
+
+  <!-- Offcanvas movil -->
+  <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
+    <div class="offcanvas-header bg-warning">
+      <div class="header-logo">
+        <img src="./assets/img/VADUM-negro.png" alt="Logotipo VADUM" class="sidebar-logo">
+        <h5 class="offcanvas-title text-dark fw-bold" id="menuOffcanvasLabel">Menú VADUM</h5>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    <div class="offcanvas-body p-0">
+      <div class="d-flex flex-column p-3">
+        <a class="menu-link activo" id="nav-inicio-movil" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="fas fa-home"></i> <span>Inicio</span></a>
+        <a class="menu-link" id="nav-empleados-movil" href="./empleados.html" data-roles="admin,supervisor"><i class="fas fa-user-tie"></i> <span>Empleados</span></a>
+        <a class="menu-link" id="nav-fisica-movil" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="fas fa-chart-line"></i> <span>Física</span></a>
+        <a class="menu-link" id="nav-supervisores-movil" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="fas fa-users-cog"></i> <span>Evaluación</span></a>
+        <a class="menu-link" id="nav-clientes-movil" href="./encuesta.html" data-roles="admin,supervisor,cliente"><i class="fas fa-handshake"></i> <span>Encuesta</span></a>
+        <a class="menu-link" id="nav-cursos-movil" href="./cursos.html" data-roles="admin,supervisor"><i class="fas fa-book-open"></i> <span>Cursos</span></a>
+        <a class="menu-link" id="nav-faltas-movil" href="./faltas.html" data-roles="admin,supervisor"><i class="fas fa-calendar-times"></i> <span>Faltas</span></a>
+        <a class="menu-link" id="nav-reportes-movil" href="#" data-roles="admin,supervisor"><i class="fas fa-chart-bar"></i> <span>Reportes</span></a>
+        <a class="menu-link" id="nav-incentivo-movil" href="./incentivo.html" data-roles="admin,supervisor,vigilante"><i class="fas fa-dollar-sign"></i> <span>Incentivo</span></a>
+        <a class="menu-link" id="nav-actas-movil" href="#" data-roles="admin,supervisor"><i class="fas fa-file-alt"></i> <span>Actas</span></a>
+        <a class="menu-link" id="nav-autorizaciones-movil" href="#" data-roles="admin,supervisor"><i class="fas fa-user-check"></i> <span>Autorizaciones</span></a>
+        <a class="menu-link" id="nav-catalogos-movil" href="./catalogos.html" data-roles="admin,supervisor"><i class="fas fa-cogs"></i> <span>Catálogos</span></a>
+      </div>
+    </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./assets/js/ui.js"></script>
+  <script src="./assets/js/auth.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./assets/js/ui.js"></script>
-    <script src="./assets/js/auth.js"></script>
-    
-    <script>
-    // Función para mostrar el nombre del usuario (debes implementarla en auth.js)
-    function cargarNombreUsuario() {
-        // Ejemplo de nombre dinámico. Debes cargarlo desde tu sistema de autenticación.
-        const nombre = localStorage.getItem('userName') || 'Administrador'; 
+  <script>
+  function cargarNombreUsuario() {
+    const nombre = localStorage.getItem('userName') || 'Administrador';
+    const elementoNombre = document.getElementById('nombreUsuario');
+    if (elementoNombre) elementoNombre.textContent = nombre;
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('nav-inicio')?.classList.add('activo');
+    document.getElementById('nav-inicio-movil')?.classList.add('activo');
+    cargarNombreUsuario();
+    moverTarjetasExtraviadas();
+    cargarMetricasReales();
+  });
+  async function apiGet(ruta, params={}){
+    const qs = new URLSearchParams(params).toString();
+    const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}${qs?`&${qs}`:''}`, {credentials:'include'});
+    const t = await r.text();
+    const clean = (t||'').replace(/^\uFEFF|^\u200B|^\ufeff/, '');
+    const j = clean? JSON.parse(clean):{};
+    if (!r.ok || j.ok===false) throw new Error(j.error||`Error ${r.status}`);
+    return j;
+  }
+  async function cargarMetricasReales(){
+    const hoy = new Date();
+    const desde = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-01`;
+    const hastaDate = new Date(hoy.getFullYear(), hoy.getMonth()+1, 0);
+    const hasta = hastaDate.toISOString().slice(0,10);
+    const setNum = (id, val)=>{ const el=document.getElementById(id); if(el) el.textContent = (val!=null? val: '0'); };
+    try{
+      const [activos, faltas, actas, encuestas, mensuales] = await Promise.all([
+        apiGet('empleados/lista', { estado:'ACTIVO' }).catch(()=>({ empleados:[] })),
+        apiGet('faltas/historial', { desde, hasta }).catch(()=>({ faltas:[] })),
+        apiGet('actas/historial', { desde, hasta }).catch(()=>({ actas:[] })),
+        apiGet('encuesta/historial', { desde: desde.slice(0,7), hasta: hasta.slice(0,7) }).catch(()=>({ encuestas:[] })),
+        apiGet('mensual/historial', { desde: desde, hasta: hasta }).catch(()=>({ evaluaciones:[] }))
+      ]);
+      setNum('metricEmpleadosActivos', (activos.empleados||[]).length);
+      setNum('metricFaltasMes', (faltas.faltas||[]).length);
+      setNum('metricActasMes', (actas.actas||[]).length);
+      setNum('metricEncuestasMes', (encuestas.encuestas||encuestas.resultados||[]).length);
+      setNum('metricMensualMes', (mensuales.evaluaciones||mensuales.resultados||[]).length);
+    }catch(e){ console.warn('Dashboard: error cargando Métricas bÃ¡sicas', e); }
+    try{
+      // Solo admins ven usuarios/lista; si 403, ocultamos valor
+      const usuarios = await apiGet('usuarios/lista').catch(()=>null);
+      if (usuarios && Array.isArray(usuarios.usuarios)){
+        const countSup = usuarios.usuarios.filter(u=> (u.rol||'').toLowerCase()==='supervisor').length;
+        setNum('metricSupervisores', countSup);
+      } else {
+        setNum('metricSupervisores', 'â€”');
+      }
+    }catch(e){ setNum('metricSupervisores', 'â€”'); }
+  }
 
-        const elementoNombre = document.getElementById('nombreUsuario');
-        if (elementoNombre) {
-            elementoNombre.textContent = nombre;
+  // Mueve las tarjetas de Encuestas y Evaluaciones a la fila de Métricas en main si quedaron arriba en la topbar
+  function moverTarjetasExtraviadas(){
+    try{
+      const contMain = document.querySelector('main .row.g-3.mb-4');
+      if (!contMain) return;
+      const enc = document.getElementById('metricEncuestasMes');
+      const men = document.getElementById('metricMensualMes');
+      [enc, men].forEach(el => {
+        if (!el) return;
+        const col = el.closest('[class*="col-"]');
+        if (col && !contMain.contains(col)) {
+          const row = col.closest('.row.g-3.mb-4');
+          contMain.appendChild(col);
+          // Si la fila de origen quedÃ³ vacÃ­a, elimÃ­nala
+          if (row && row.querySelectorAll('[class*="col-"]').length === 0) {
+            row.remove();
+          }
         }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        // Marcar el enlace de inicio como activo al cargar la página
-        document.getElementById('nav-inicio')?.classList.add('activo');
-        document.getElementById('nav-inicio-movil')?.classList.add('activo');
-        
-        // Llamar a la función para cargar el nombre
-        cargarNombreUsuario();
-    });
-    </script>
+      });
+    }catch(e){ console.warn('No se pudo mover tarjetas de Métricas', e); }
+  }
+  </script>
 </body>
 </html>
+
+
+
+
+

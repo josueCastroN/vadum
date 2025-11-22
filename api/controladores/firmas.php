@@ -22,13 +22,31 @@ $url = URL_BASE . '/almacenamiento/firmas/' . $nombre;
 
 $ahora = date('Y-m-d H:i:s');
 
+// Asegurar columnas de firmas en evaluacion_mensual si no existen
+function asegurar_columnas_firmas(PDO $pdo): void {
+  try {
+    $st = $pdo->query("SHOW COLUMNS FROM evaluacion_mensual LIKE 'firma_empleado_url'");
+    if (!$st->fetch()) {
+      $pdo->exec("ALTER TABLE evaluacion_mensual
+        ADD COLUMN firma_empleado_url VARCHAR(255) NULL AFTER supervisor_id,
+        ADD COLUMN firma_empleado_fecha DATETIME NULL AFTER firma_empleado_url,
+        ADD COLUMN firma_evaluador_url VARCHAR(255) NULL AFTER firma_empleado_fecha,
+        ADD COLUMN firma_evaluador_fecha DATETIME NULL AFTER firma_evaluador_url");
+    }
+  } catch (Throwable $e) {
+    // Si la tabla no existe aún, ignoramos; será creada por el módulo mensual cuando guarden por primera vez
+  }
+}
+
 switch ($tipo) {
   case 'mensual_empleado':
+    asegurar_columnas_firmas($pdo);
     $pdo->prepare("UPDATE evaluacion_mensual SET firma_empleado_url=?, firma_empleado_fecha=? WHERE no_emp=? AND mes=?")
         ->execute([$url, $ahora, $e['no_emp'] ?? '', $e['mes'] ?? '']);
     break;
 
   case 'mensual_evaluador':
+    asegurar_columnas_firmas($pdo);
     $pdo->prepare("UPDATE evaluacion_mensual SET firma_evaluador_url=?, firma_evaluador_fecha=? WHERE no_emp=? AND mes=?")
         ->execute([$url, $ahora, $e['no_emp'] ?? '', $e['mes'] ?? '']);
     break;

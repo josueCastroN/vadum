@@ -1,307 +1,262 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>VADUM · Catálogos</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>VADUM - Catálogos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./assets/css/estilos.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-</head>
-<body>
-    <div class="app-shell">
-        <header class="app-header">
-            <nav class="nav-sup app-header__inner d-flex justify-content-between align-items-center p-2">
-                <a class="nav-sup__logo text-decoration-none d-flex align-items-center" href="./index.html">
-                    <img src="./assets/img/VADUM-negro.png" alt="VADUM" style="height:30px;" class="me-2">
-                    <span class="nav-sup__titulo h6 m-0 text-dark">Sistema Automatizado de Incentivos · VADUM</span>
-                </a>
-                
-                <div class="dropdown" id="perfilMenu">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center" 
-                            type="button" id="btnPerfil" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="usuarioActual">…</span>
-                        <span class="perfil__avatar">👤</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" id="perfilDropdown" aria-labelledby="btnPerfil">
-                        <li class="dropdown-item-text">
-                            <div class="perfil__info">
-                                <div class="perfil__nombre" id="perfilNombre">Usuario</div>
-                                <div class="perfil__rol" id="perfilRol">Rol</div>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" id="irPerfil">Mi perfil</a></li>
-                        <li><button class="dropdown-item text-danger" id="btnSalir">Cerrar sesión</button></li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
+    <link rel="stylesheet" href="./assets/css/estilos.css">
+  </head>
+  <body>
+    <div class="contenedor-app d-flex">
+      <!-- Sidebar -->
+      <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
+        <div class="header-logo text-center mb-4">
+          <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
+        </div>
+        <div class="d-flex flex-column nav-links-sidebar">
+          <a class="menu-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">
+            <i class="material-icons-outlined">home</i> <span>Inicio</span>
+          </a>
+          <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">
+            <i class="material-icons-outlined">badge</i> <span>Empleados</span>
+          </a>
+          <a class="menu-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">
+            <i class="material-icons-outlined">insights</i> <span>Física</span>
+          </a>
+          <a class="menu-link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">
+            <i class="material-icons-outlined">rule</i> <span>Evaluación</span>
+          </a>
+          <a class="menu-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,supervisor,cliente">
+            <i class="material-icons-outlined">question_answer</i> <span>Encuesta</span>
+          </a>
+          <a class="menu-link" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor">
+            <i class="material-icons-outlined">school</i> <span>Cursos</span>
+          </a>
+          <a class="menu-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">
+            <i class="material-icons-outlined">payments</i> <span>Incentivo</span>
+          </a>
+          <a class="menu-link activo" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">
+            <i class="material-icons-outlined">settings</i> <span>Catálogos</span>
+          </a>
+        </div>
+      </nav>
 
-        <div class="app-body">
-            <aside class="app-sidebar" aria-label="Menú principal">
-                <nav class="sidebar-nav">
-                    <a class="sidebar-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
-                    <a class="sidebar-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
-                    <a class="sidebar-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
-                    <a class="sidebar-link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
-                    <a class="sidebar-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
-                    <a class="sidebar-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
-                    <a class="sidebar-link sidebar-link--activo" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor">Catálogos</a>
-                </nav>
-            </aside>
-
-            <main class="app-content p-3 p-md-4">
-                <section class="card p-4">
-                    <h1 class="h4 fw-bold mb-4">Mantenimiento de Catálogos</h1>
-                    
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <label for="selectCatalogo" class="form-label">Seleccionar Catálogo</label>
-                            <select class="form-select" id="selectCatalogo">
-                                <option value="puntos">Puntos / Edificios</option>
-                                <option value="roles">Roles</option>
-                                <option value="horarios">Horarios</option>
-                                </select>
-                        </div>
-                        <div class="col-md-8 d-flex align-items-end justify-content-end">
-                            <button class="btn btn-success" id="btnNuevoRegistro">
-                                <i class="fas fa-plus-circle me-1"></i> Nuevo Registro
-                            </button>
-                        </div>
-                    </div>
-
-                    <h2 class="h5 mb-3" id="tituloTabla">Catálogo de Puntos / Edificios</h2>
-
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead class="table-dark" id="tablaEncabezado">
-                                <tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr>
-                            </thead>
-                            <tbody id="tablaCuerpo">
-                                <tr><td colspan="3" class="text-center text-muted">Seleccione un catálogo...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <nav aria-label="Navegación de registros" class="mt-3">
-                        <ul class="pagination justify-content-center" id="paginador">
-                            </ul>
-                    </nav>
-                    <small class="text-muted mt-2 d-block text-center" id="infoPaginacion">Mostrando 0 de 0 registros</small>
-
-                </section>
-            </main>
+      <!-- Main -->
+      <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
+        <!-- Topbar -->
+        <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
+          <div class="d-flex align-items-center">
+            <button class="btn btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas">
+              <i class="fas fa-bars"></i>
+            </button>
+            <span class="fw-bold fs-5 text-dark">Catálogos</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="dropdown me-2">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                <li><a class="dropdown-item" href="#">Configuración</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionDropdown">Cerrar Sesión</a></li>
+              </ul>
+            </div>
+            <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionDropdown"><i class="fas fa-sign-out-alt"></i></button>
+          </div>
         </div>
 
-        <footer class="footer text-center p-3 border-top">© VADUM · Automatización de Incentivos</footer>
+        <!-- Content -->
+        <main class="flex-grow-1 p-3 p-md-4">
+          <div class="card p-3 p-md-4 shadow-sm">
+            <ul class="nav nav-tabs" id="tabsCatalogos" role="tablist">
+              <li class="nav-item" role="presentation"><button class="nav-link active" id="tab-puestos" data-bs-toggle="tab" data-bs-target="#pane-puestos" type="button" role="tab">Puestos</button></li>
+              <li class="nav-item" role="presentation"><button class="nav-link" id="tab-regiones" data-bs-toggle="tab" data-bs-target="#pane-regiones" type="button" role="tab">Regiones</button></li>
+              <li class="nav-item" role="presentation"><button class="nav-link" id="tab-puntos" data-bs-toggle="tab" data-bs-target="#pane-puntos" type="button" role="tab">Puntos</button></li>
+              <li class="nav-item" role="presentation"><button class="nav-link" id="tab-fisica" data-bs-toggle="tab" data-bs-target="#pane-fisica" type="button" role="tab">Evaluación Física</button></li>
+              <li class="nav-item" role="presentation"><button class="nav-link" id="tab-usuarios" data-bs-toggle="tab" data-bs-target="#pane-usuarios" type="button" role="tab">Usuarios</button></li>
+            </ul>
+
+            <div class="tab-content mt-3" id="contenidoCatalogos">
+              <!-- Puestos -->
+              <div class="tab-pane fade show active" id="pane-puestos" role="tabpanel">
+                <div class="d-flex flex-column flex-md-row gap-2 justify-content-between mb-3">
+                  <div class="d-flex gap-2">
+                    <input id="buscarPuesto" type="search" class="form-control" placeholder="Buscar puesto...">
+                  </div>
+                  <button class="btn btn-success" id="btnNuevoPuesto"><i class="fas fa-plus-circle me-1"></i>Nuevo Puesto</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped align-middle mb-0" id="tablaPuestos">
+                    <thead>
+                      <tr>
+                        <th>Puesto</th>
+                        <th style="width:120px">Estado</th>
+                        <th style="width:140px">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Regiones -->
+              <div class="tab-pane fade" id="pane-regiones" role="tabpanel">
+                <div class="d-flex flex-column flex-md-row gap-2 justify-content-between mb-3">
+                  <input id="buscarRegion" type="search" class="form-control" placeholder="Buscar Región...">
+                  <button class="btn btn-success" id="btnNuevaRegion"><i class="fas fa-plus-circle me-1"></i>Nueva Región</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped align-middle mb-0" id="tablaRegiones">
+                    <thead>
+                      <tr>
+                        <th>Región</th>
+                        <th style="width:140px">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Puntos -->
+              <div class="tab-pane fade" id="pane-puntos" role="tabpanel">
+                <div class="row g-2 mb-3">
+                  <div class="col-md-4"><input id="buscarPunto" type="search" class="form-control" placeholder="Buscar punto..."></div>
+                  <div class="col-md-4"><select id="filtroRegionPunto" class="form-select"></select></div>
+                  <div class="col-md-4 text-md-end"><button class="btn btn-success" id="btnNuevoPunto"><i class="fas fa-plus-circle me-1"></i>Nuevo Punto</button></div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped align-middle mb-0" id="tablaPuntos">
+                    <thead>
+                      <tr>
+                        <th>Punto</th>
+                        <th>Región</th>
+                        <th style="width:140px">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Evaluación Física: listado de ejercicios (modal con Plantilla 0â€“10 via JS) -->
+              <div class="tab-pane fade" id="pane-fisica" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="m-0">Ejercicios</h6>
+                  <button class="btn btn-sm btn-success" id="btnNuevoEjercicio"><i class="fas fa-plus me-1"></i>Nuevo</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-sm table-striped align-middle" id="tablaEjercicios">
+                    <thead>
+                      <tr>
+                        <th>Clave</th>
+                        <th>Nombre</th>
+                        <th>Unidad</th>
+                        <th>Mejor es mayor</th>
+                        <th>Estado</th>
+                        <th style="width:150px">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Usuarios -->
+              <div class="tab-pane fade" id="pane-usuarios" role="tabpanel">
+                <div class="d-flex flex-column flex-md-row gap-2 justify-content-between mb-3">
+                  <input id="buscarUsuario" type="search" class="form-control" placeholder="Buscar usuario o empleado...">
+                  <button class="btn btn-success" id="btnNuevoUsuario"><i class="fas fa-user-plus me-1"></i>Nuevo Usuario</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped align-middle mb-0" id="tablaUsuarios">
+                    <thead>
+                      <tr>
+                        <th>Usuario</th>
+                        <th>Empleado</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th style="width:180px">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-    
+
+    <!-- Offcanvas mÃ³vil -->
+    <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
+      <div class="offcanvas-header bg-warning">
+        <div class="header-logo">
+          <img src="./assets/img/VADUM-negro.png" alt="Logotipo VADUM" class="sidebar-logo">
+          <h5 class="offcanvas-title text-dark fw-bold" id="menuOffcanvasLabel">Menú VADUM</h5>
+        </div>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-0">
+        <div class="d-flex flex-column p-3">
+          <a class="menu-link" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="fas fa-home"></i> <span>Inicio</span></a>
+          <a class="menu-link" href="./empleados.html" data-roles="admin,supervisor"><i class="fas fa-user-tie"></i> <span>Empleados</span></a>
+          <a class="menu-link" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="fas fa-chart-line"></i> <span>Física</span></a>
+          <a class="menu-link" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="fas fa-users-cog"></i> <span>Evaluación</span></a>
+          <a class="menu-link" href="./encuesta.html" data-roles="admin,supervisor,cliente"><i class="fas fa-handshake"></i> <span>Encuesta</span></a>
+          <a class="menu-link activo" href="./catalogos.html" data-roles="admin,supervisor"><i class="fas fa-cogs"></i> <span>Catálogos</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals bÃ¡sicos (Puesto, Región, Punto, Usuario). El modal de Ejercicio lo genera JS. -->
+    <div class="modal fade" id="modalPuesto" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="tituloModalPuesto">Nuevo Puesto</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+        <div class="modal-body"><input type="hidden" id="puestoId"><div class="mb-3"><label class="form-label" for="puestoNombre">Nombre del puesto</label><input type="text" class="form-control" id="puestoNombre" placeholder="Ej. Guardia de Seguridad"></div></div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" id="btnGuardarPuesto">Guardar</button></div>
+      </div></div>
+    </div>
+
+    <div class="modal fade" id="modalRegion" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="tituloModalRegion">Nueva Región</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+        <div class="modal-body"><input type="hidden" id="regionId"><div class="mb-3"><label class="form-label" for="regionNombre">Nombre de la Región</label><input type="text" class="form-control" id="regionNombre" placeholder="Ej. QuerÃ©taro"></div></div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" id="btnGuardarRegion">Guardar</button></div>
+      </div></div>
+    </div>
+
+    <div class="modal fade" id="modalPunto" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="tituloModalPunto">Nuevo Punto</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+        <div class="modal-body"><input type="hidden" id="puntoId"><div class="mb-3"><label class="form-label" for="puntoNombre">Nombre del punto</label><input type="text" class="form-control" id="puntoNombre" placeholder="Ej. Torre Centro"></div><div class="mb-3"><label class="form-label" for="puntoRegion">Región</label><select class="form-select" id="puntoRegion"></select></div></div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" id="btnGuardarPunto">Guardar</button></div>
+      </div></div>
+    </div>
+
+    <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="tituloModalUsuario">Nuevo Usuario</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+        <div class="modal-body"><input type="hidden" id="usuarioId"><div class="mb-3"><label class="form-label" for="usuarioNombre">Usuario</label><input type="text" class="form-control" id="usuarioNombre" placeholder="Ej. j.perez"></div><div class="mb-3"><label class="form-label" for="usuarioPass">ContraseÃ±a</label><input type="password" class="form-control" id="usuarioPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div><div class="mb-3"><label class="form-label" for="usuarioRol">Rol</label><select class="form-select" id="usuarioRol"><option value="vigilante">Vigilante</option><option value="supervisor">Supervisor</option><option value="admin">Admin</option><option value="cliente">Cliente</option></select></div><div class="mb-3"><label class="form-label" for="usuarioNoEmp">No. Empleado (opcional)</label><input type="text" class="form-control" id="usuarioNoEmp" placeholder="Ej. 1234"></div></div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" id="btnGuardarUsuario">Guardar</button></div>
+      </div></div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/ui.js"></script>
+    <script src="./assets/js/paginador_tablas.js"></script>
     <script src="./assets/js/auth.js"></script>
-    <script>
-    const mostrarToast = window.VADUM_UI?.mostrarToast || console.log;
-    
-    // --- Configuración de Paginación ---
-    const LIMITE_REGISTROS = 20;
-    let paginaActual = 1;
-    
-    // --- Mapa de Catálogos para Encabezados de Tabla ---
-    const catalogosConfig = {
-        'puntos': {
-            titulo: 'Puntos / Edificios',
-            encabezados: ['ID', 'Nombre del Punto', 'Dirección', 'Cliente ID', 'Acciones'],
-            apiEndpoint: 'puntos/lista',
-            keyId: 'punto_id'
-        },
-        'roles': {
-            titulo: 'Roles de Usuario',
-            encabezados: ['ID', 'Nombre del Rol', 'Descripción', 'Acciones'],
-            apiEndpoint: 'roles/lista',
-            keyId: 'rol_id'
-        },
-        'horarios': {
-            titulo: 'Horarios',
-            encabezados: ['ID', 'Descripción', 'Hora Inicio', 'Hora Fin', 'Acciones'],
-            apiEndpoint: 'horarios/lista',
-            keyId: 'horario_id'
-        }
-    };
-    let catalogoActual = 'puntos';
+    <script src="./assets/js/catalogos.js"></script>
+  </body>
+  </html>
 
-    // Función reutilizable para generar el paginador (Misma que en empleados.html)
-    function generarPaginador(totalPaginas, paginaActual) {
-        const paginador = document.getElementById('paginador');
-        paginador.innerHTML = ''; 
-        
-        const crearBoton = (texto, numero, activo, deshabilitado) => {
-            const li = document.createElement('li');
-            li.classList.add('page-item');
-            if (activo) li.classList.add('active');
-            if (deshabilitado) li.classList.add('disabled');
 
-            const a = document.createElement('a');
-            a.classList.add('page-link');
-            a.href = '#';
-            a.textContent = texto;
-            a.onclick = (e) => {
-                e.preventDefault();
-                if (!deshabilitado && numero !== paginaActual) {
-                    cargarDatos(numero);
-                }
-            };
-            li.appendChild(a);
-            return li;
-        };
 
-        paginador.appendChild(crearBoton('Anterior', paginaActual - 1, false, paginaActual === 1));
 
-        let inicio = Math.max(1, paginaActual - 2);
-        let fin = Math.min(totalPaginas, paginaActual + 2);
-        
-        // ... (lógica de botones numéricos igual que en empleados.html)
-        if (totalPaginas > 5) {
-            if (paginaActual <= 3) fin = 5;
-            else if (paginaActual >= totalPaginas - 2) inicio = totalPaginas - 4;
-            
-            if (inicio > 1) {
-                paginador.appendChild(crearBoton('1', 1, false, false));
-                if (inicio > 2) {
-                    const li = document.createElement('li');
-                    li.classList.add('page-item', 'disabled');
-                    li.innerHTML = '<span class="page-link">...</span>';
-                    paginador.appendChild(li);
-                }
-            }
-        }
-        
-        for (let i = inicio; i <= fin; i++) {
-            paginador.appendChild(crearBoton(i.toString(), i, i === paginaActual, false));
-        }
 
-        if (totalPaginas > 5 && fin < totalPaginas) {
-            if (fin < totalPaginas - 1) {
-                const li = document.createElement('li');
-                li.classList.add('page-item', 'disabled');
-                li.innerHTML = '<span class="page-link">...</span>';
-                paginador.appendChild(li);
-            }
-            if (fin < totalPaginas) {
-                 paginador.appendChild(crearBoton(totalPaginas.toString(), totalPaginas, false, false));
-            }
-        }
-        // ... fin de lógica de botones numéricos
-        
-        paginador.appendChild(crearBoton('Siguiente', paginaActual + 1, false, paginaActual === totalPaginas || totalPaginas === 0));
-    }
-    
-    // Función para dibujar los encabezados de la tabla
-    function dibujarEncabezados(config) {
-        const encabezado = document.getElementById('tablaEncabezado');
-        encabezado.innerHTML = '';
-        const tr = document.createElement('tr');
-        config.encabezados.forEach(header => {
-            const th = document.createElement('th');
-            th.textContent = header;
-            tr.appendChild(th);
-        });
-        encabezado.appendChild(tr);
-    }
-    
-    // Función para rellenar la tabla con los datos del catálogo
-    function rellenarTabla(registros, config) {
-        const cuerpo = document.getElementById('tablaCuerpo');
-        cuerpo.innerHTML = '';
-        const colSpan = config.encabezados.length;
-        
-        if (!registros || registros.length === 0) {
-            cuerpo.innerHTML = `<tr><td colspan="${colSpan}" class="text-center">No se encontraron registros en este catálogo.</td></tr>`;
-            return;
-        }
-
-        registros.forEach(reg => {
-            const tr = document.createElement('tr');
-            
-            // Lógica simple para mostrar las propiedades principales del objeto
-            // Esto deberá ser ajustado manualmente por cada catálogo.
-            const props = Object.keys(reg).filter(k => k !== 'actions');
-            
-            props.forEach(prop => {
-                const td = document.createElement('td');
-                td.textContent = reg[prop];
-                tr.appendChild(td);
-            });
-
-            // Columna de Acciones
-            const tdAcciones = document.createElement('td');
-            tdAcciones.innerHTML = `
-                <button class="btn btn-sm btn-warning me-2" title="Editar"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-            `;
-            tr.appendChild(tdAcciones);
-            
-            cuerpo.appendChild(tr);
-        });
-    }
-
-    // Función principal de carga de datos para cualquier catálogo
-    async function cargarDatos(pagina = 1) {
-        paginaActual = pagina;
-        const config = catalogosConfig[catalogoActual];
-        const cuerpo = document.getElementById('tablaCuerpo');
-        const info = document.getElementById('infoPaginacion');
-        const colSpan = config.encabezados.length;
-        cuerpo.innerHTML = `<tr><td colspan="${colSpan}" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Cargando...</td></tr>`;
-        
-        dibujarEncabezados(config);
-        document.getElementById('tituloTabla').textContent = `Catálogo de ${config.titulo}`;
-        
-        try {
-            const url = `../api/index.php?ruta=catalogos/${config.apiEndpoint}&limite=${LIMITE_REGISTROS}&pagina=${pagina}`;
-            
-            const r = await fetch(url, { credentials:'include' });
-            if (!r.ok) throw new Error(`Error API: ${r.statusText}`);
-            const data = await r.json();
-            
-            if (data.ok && data.registros) {
-                rellenarTabla(data.registros, config);
-                generarPaginador(data.total_paginas, data.pagina_actual);
-                
-                const inicioReg = (data.pagina_actual - 1) * LIMITE_REGISTROS + 1;
-                const finReg = Math.min(data.pagina_actual * LIMITE_REGISTROS, data.total_registros);
-                info.textContent = `Mostrando ${inicioReg}–${finReg} de ${data.total_registros} registros`;
-            } else {
-                rellenarTabla([], config);
-                generarPaginador(0, 1);
-                info.textContent = 'No se encontraron datos.';
-                mostrarToast(data.error || `Error al cargar ${config.titulo}`, 'error');
-            }
-        } catch (e) {
-            console.error(e);
-            rellenarTabla([], config);
-            generarPaginador(0, 1);
-            info.textContent = 'Error de conexión con el servidor.';
-            mostrarToast('Error al cargar el catálogo.','error');
-        }
-    }
-    
-    // --- Inicialización y Eventos ---
-    
-    document.getElementById('selectCatalogo').onchange = (e) => {
-        catalogoActual = e.target.value;
-        cargarDatos(1); // Siempre volvemos a la página 1 al cambiar de catálogo
-    };
-
-    // Carga inicial (Catálogo 'puntos')
-    cargarDatos(1);
-    
-    // Asumiendo que el botón "Nuevo" abre un modal o redirige
-    document.getElementById('btnNuevoRegistro').onclick = () => {
-        mostrarToast(`Acción: Abrir formulario para Nuevo ${catalogosConfig[catalogoActual].titulo}`,'info');
-        // Implementar lógica de modal o redirección aquí...
-    };
-    
-    </script>
-</body>
-</html>

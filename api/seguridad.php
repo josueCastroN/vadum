@@ -2,15 +2,20 @@
 // =============================================
 // Manejo de sesión y helpers de seguridad
 // =============================================
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
+
+// ¡LÍNEA ELIMINADA! Ahora session_start() solo ocurre en index.php.
 
 /**
  * Helper para enviar respuestas JSON y terminar la ejecución.
- * (Asumo que esta función existe en algún require o la coloco aquí)
  */
 if (!function_exists('enviar_json')) {
     function enviar_json(array $datos, int $codigo = 200): void {
-        header('Content-Type: application/json');
+        // Limpia cualquier salida previa (avisos/errores) para no romper el JSON
+        if (function_exists('ob_get_level')) {
+            while (ob_get_level() > 0) { @ob_end_clean(); }
+        }
+        @ini_set('default_charset','UTF-8');
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code($codigo);
         echo json_encode($datos);
         exit;
@@ -31,7 +36,6 @@ function usuario_actual(): ?array { return $_SESSION['usuario'] ?? null; }
 
 /**
  * Obtiene el rol del usuario actual.
- * Función requerida por la lógica de ACL en empleados.php.
  */
 function obtener_rol_usuario(): ?string {
     $u = usuario_actual();
@@ -49,18 +53,17 @@ function cerrar_sesion(): void {
 
 /**
  * Verifica si el usuario actual tiene alguno de los roles permitidos.
- * Si no está autenticado o no tiene el rol, termina la ejecución con un error JSON.
  */
 function requerir_roles(array $roles): void {
-  // Nota: require_once __DIR__ . '/02_bd.php'; no siempre es necesario aquí, 
-  // pero lo mantengo si se utiliza DB para algo en el futuro.
-  // Sin embargo, en tu lógica actual, requerir_roles solo necesita usuario_actual() y enviar_json().
   $u = usuario_actual();
-  if (!$u) { enviar_json(['ok'=>false,'error'=>'No autenticado'], 401); }
+  
+  // 🛑 Verificación de autenticación (responde 401 si no hay sesión válida)
+  if (!$u) { enviar_json(['ok'=>false,'error'=>'No autenticado'], 401); } 
   
   $rol_actual = strtolower($u['rol']);
   $roles_permitidos = array_map('strtolower', $roles);
   
+  // 🛑 Verificación de permiso (responde 403 si el rol no coincide)
   if (!in_array($rol_actual, $roles_permitidos, true)) {
     enviar_json(['ok'=>false,'error'=>'Sin permiso (rol)'], 403);
   }

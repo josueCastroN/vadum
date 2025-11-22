@@ -15,10 +15,17 @@ function obtener_conexion(): PDO {
     return new PDO($dsn, BD_USUARIO, BD_PASSWORD, $opciones);
 }
 
-/** Respuesta JSON estándar */
-function enviar_json(array $datos, int $codigo = 200): void {
-    http_response_code($codigo);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($datos, JSON_UNESCAPED_UNICODE);
-    exit;
+/** Respuesta JSON estándar (si no existe ya en seguridad.php) */
+if (!function_exists('enviar_json')) {
+    function enviar_json(array $datos, int $codigo = 200): void {
+        if (function_exists('ob_get_level')) {
+            while (ob_get_level() > 0) { @ob_end_clean(); }
+        }
+        @ini_set('default_charset','UTF-8');
+        http_response_code($codigo);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($datos, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 }
+

@@ -26,10 +26,23 @@ function obtener_metas_por_edad(PDO $pdo, int $edad): ?array {
 }
 
 /** Calcula 0–100 de la evaluación física a partir de metas y valores */
-function calcular_calificacion_fisica(PDO $pdo, int $edad, array $v): float {
+function calcular_componentes_fisica(PDO $pdo, int $edad, array $v): array {
     // $v = ['m'=>metros12, 's'=>seg100, 'ab'=>abd, 'lg'=>lagart, 'br'=>barras, 'bu'=>burpees]
     $m = obtener_metas_por_edad($pdo, $edad);
-    if (!$m) return 0.0;
+    if (!$m) {
+        return [
+            'componentes' => [
+                'carrera'    => ['porcentaje'=>0.0,'puntaje'=>0.0],
+                'velocidad'  => ['porcentaje'=>0.0,'puntaje'=>0.0],
+                'abdominales'=> ['porcentaje'=>0.0,'puntaje'=>0.0],
+                'lagartijas' => ['porcentaje'=>0.0,'puntaje'=>0.0],
+                'barras'     => ['porcentaje'=>0.0,'puntaje'=>0.0],
+                'burpees'    => ['porcentaje'=>0.0,'puntaje'=>0.0],
+            ],
+            'promedio_0_100' => 0.0,
+            'promedio_0_10'  => 0.0,
+        ];
+    }
 
     $p12  = min(100, ($v['m']  / max(1,$m['meta_12min_m']))   * 100);
     $p100 = min(100, (max(0.01,$m['meta_100m_s']) / max(0.01,$v['s'])) * 100);
@@ -39,10 +52,33 @@ function calcular_calificacion_fisica(PDO $pdo, int $edad, array $v): float {
     $pbur = min(100, ($v['bu'] / max(1,$m['meta_burpees']))   * 100);
 
     $prom = ($p12 + $p100 + $pabd + $plag + $pbar + $pbur) / 6.0;
-    return round($prom, 2);
+
+    return [
+        'componentes' => [
+            'carrera'    => ['porcentaje'=>$p12, 'puntaje'=>round($p12 / 10, 2)],
+            'velocidad'  => ['porcentaje'=>$p100,'puntaje'=>round($p100 / 10, 2)],
+            'abdominales'=> ['porcentaje'=>$pabd,'puntaje'=>round($pabd / 10, 2)],
+            'lagartijas' => ['porcentaje'=>$plag,'puntaje'=>round($plag / 10, 2)],
+            'barras'     => ['porcentaje'=>$pbar,'puntaje'=>round($pbar / 10, 2)],
+            'burpees'    => ['porcentaje'=>$pbur,'puntaje'=>round($pbur / 10, 2)],
+        ],
+        'promedio_0_100' => round($prom, 2),
+        'promedio_0_10'  => round($prom / 10, 2),
+    ];
 }
 
-/** Última calificación física <= fin de mes (por empleado) */
+function calcular_calificacion_fisica(PDO $pdo, int $edad, array $v): float {
+    $detalles = calcular_componentes_fisica($pdo, $edad, $v);
+    return $detalles['promedio_0_100'];
+}
+
+function clasificacion_fisica_por_nota(PDO $pdo, float $nota): ?array {
+    $sql = "SELECT nota_min, nota_max, etiqueta, compensacion\n            FROM clasificacion_fisica\n            WHERE :nota BETWEEN nota_min AND nota_max\n            LIMIT 1";
+    $st = $pdo->prepare($sql);
+    $st->execute([':nota'=>$nota]);
+    $r = $st->fetch();
+    return $r ?: null;
+}
 function ultima_cal_fisica_mes(PDO $pdo, string $no_emp, string $mesYmd): ?float {
     $sql = "SELECT fr.cal_fisica
             FROM fisicas_registro fr
@@ -139,4 +175,7 @@ function antiguedad_meses_al_mes(PDO $pdo, string $no_emp, string $mesYmd): int 
     $finMes = (new DateTime($mesYmd))->format('Y-m-t');
     return meses_entre($r['fecha_alta'], $finMes);
 }
+
+
+
 

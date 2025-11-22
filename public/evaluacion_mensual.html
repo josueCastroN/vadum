@@ -1,152 +1,609 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>VADUM · Evaluación Mensual</title>
+  <title>VADUM — Evaluación Mensual</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="./assets/css/estilos.css">
+  <style>
+    @media print {
+      #sidebarMenu, .top-navbar, #menuOffcanvas, .no-print { display: none !important; }
+      .main-content-wrapper { padding: 0 !important; }
+      .card { box-shadow: none !important; border: none !important; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      @page { size: A4 portrait; margin: 12mm; }
+    }
+  </style>
 </head>
 <body>
-    <!-- ====== Header Superior (logo, nombre, perfil/login) ====== -->
-    <header class="header-superior">
-      <nav class="nav-sup">
-        <a class="nav-sup__logo" href="./index.html">
-          <img src="./assets/img/VADUM-negro.png" alt="VADUM">
-          <span class="nav-sup__titulo">Sistema Automatizado de Incentivos · VADUM</span>
-        </a>
-        <div class="nav-sup__espaciador"></div>
+  <div class="contenedor-app d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
+      <div class="header-logo text-center mb-4">
+        <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
+      </div>
+      <div class="d-flex flex-column nav-links-sidebar">
+        <a class="menu-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="material-icons-outlined">home</i> <span>Inicio</span></a>
+        <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor"><i class="material-icons-outlined">badge</i> <span>Empleados</span></a>
+        <a class="menu-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="material-icons-outlined">insights</i> <span>Física</span></a>
+        <a class="menu-link activo" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="material-icons-outlined">rule</i> <span>Evaluacion</span></a>
+        <a class="menu-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,supervisor,cliente"><i class="material-icons-outlined">question_answer</i> <span>Clientes</span></a>
+        <a class="menu-link" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor"><i class="material-icons-outlined">school</i> <span>Cursos</span></a>
+        <a class="menu-link" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante"><i class="material-icons-outlined">payments</i> <span>Incentivo</span></a>
+        <a class="menu-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor"><i class="material-icons-outlined">settings</i> <span>Catálogos</span></a>
+      </div>
+    </nav>
 
-        <!-- Menú de perfil -->
-        <div class="perfil" id="perfilMenu">
-          <button class="perfil__btn" id="btnPerfil">
-            <span id="usuarioActual">…</span>
-            <span class="perfil__avatar">👤</span>
+    <!-- Main -->
+    <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
+      <!-- Topbar -->
+      <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas">
+            <i class="fas fa-bars"></i>
           </button>
-          <div class="perfil__dropdown" id="perfilDropdown">
-            <div class="perfil__info">
-              <div class="perfil__nombre" id="perfilNombre">Usuario</div>
-              <div class="perfil__rol" id="perfilRol">Rol</div>
+          <span class="fw-bold fs-5 text-dark">Evaluación Mensual</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+              <li><a class="dropdown-item" href="#">Configuración</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionTop">Cerrar Sesión</a></li>
+            </ul>
+          </div>
+          <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionTop"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <main class="flex-grow-1 p-3 p-md-4">
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item"><button class="nav-link active" id="tab-captura" type="button">Captura</button></li>
+          <li class="nav-item"><button class="nav-link" id="tab-historial" type="button">Historial</button></li>
+        </ul>
+
+        <div id="seccionCaptura">
+        <div class="card p-3 p-md-4 shadow-sm">
+          <h6 class="mb-3">Captura de evaluación</h6>
+          <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+              <label class="form-label" for="selEmpleado">Empleado</label>
+              <select class="form-select" id="selEmpleado"></select>
+              <input type="hidden" id="no_emp">
             </div>
-            <a class="perfil__item" href="#" id="irPerfil">Mi perfil</a>
-            <button class="perfil__item perfil__salir" id="btnSalir">Cerrar sesión</button>
+            <div class="col-md-3">
+              <label class="form-label" for="puestoSel">Puesto</label>
+              <input class="form-control" id="puestoSel" type="text" disabled>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="mesEval">Mes</label>
+              <input class="form-control" id="mesEval" type="month">
+            </div>
+            <div class="col-md-2 text-md-end">
+              <button class="btn btn-outline-primary" id="btnCargar"><i class="fas fa-download me-1"></i> Cargar</button>
+              <button class="btn btn-success ms-2" id="btnGuardar"><i class="fas fa-save me-1"></i> Guardar</button>
+            </div>
+          </div>
+
+          <div class="row g-3 align-items-end mt-2">
+            <div class="col-md-6">
+              <label class="form-label" for="selEvaluador">Evaluador (Supervisor/Gerente)</label>
+              <select class="form-select" id="selEvaluador"></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="puestoEvaluador">Puesto evaluador</label>
+              <input class="form-control" id="puestoEvaluador" type="text" disabled>
+            </div>
+            <div class="col-md-3 text-md-end"></div>
+          </div>
+
+          <hr>
+          <div class="row g-3">
+            <div class="col-md-3">
+              <div class="card p-3 h-100">
+                <div class="fw-bold mb-2">Aseo</div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="aseo" id="aseo1" value="1"><label class="form-check-label" for="aseo1">1</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="aseo" id="aseo3" value="3" checked><label class="form-check-label" for="aseo3">3</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card p-3 h-100">
+                <div class="fw-bold mb-2">Asistencia</div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="asistencia" id="asis1" value="1"><label class="form-check-label" for="asis1">1</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="asistencia" id="asis3" value="3" checked><label class="form-check-label" for="asis3">3</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card p-3 h-100">
+                <div class="fw-bold mb-2">Comportamiento</div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="comport" id="comp1" value="1"><label class="form-check-label" for="comp1">1</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="comport" id="comp3" value="3" checked><label class="form-check-label" for="comp3">3</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card p-3 h-100">
+                <div class="fw-bold mb-2">Actividades</div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="activ" id="act1" value="1"><label class="form-check-label" for="act1">1</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="activ" id="act3" value="3" checked><label class="form-check-label" for="act3">3</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3" id="resultadoEval">Porcentaje: 100%</div>
+        </div>
+
+        <!-- Firmas -->
+        <div class="card p-3 p-md-4 shadow-sm mt-3">
+          <h6 class="mb-3">Firmas</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="mb-2">Firma Empleado</div>
+              <canvas id="sigEmp" width="480" height="160" class="border border-2 bg-white rounded w-100"></canvas>
+              <div class="mt-2 d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" id="btnLimpiarEmp"><i class="fas fa-eraser me-1"></i> Limpiar</button>
+              </div>
+              <img id="firmaEmpImg" class="mt-2 img-fluid d-none" alt="Firma empleado guardada">
+            </div>
+            <div class="col-md-6">
+              <div class="mb-2">Firma Evaluador</div>
+              <canvas id="sigEval" width="480" height="160" class="border border-2 bg-white rounded w-100"></canvas>
+              <div class="mt-2 d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" id="btnLimpiarEval"><i class="fas fa-eraser me-1"></i> Limpiar</button>
+              </div>
+              <img id="firmaEvalImg" class="mt-2 img-fluid d-none" alt="Firma evaluador guardada">
+            </div>
           </div>
         </div>
-      </nav>
-    </header>
+        </div><!-- /seccionCaptura -->
 
-    <!-- ====== Header Inferior (botones de navegación) ====== -->
-    <div class="header-inferior" id="barraNavegacion">
-      <nav class="nav-inf">
-        <!-- Muestra/oculta por rol con data-roles -->
-        <a class="nav-btn" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente">Inicio</a>
-        <a class="nav-btn" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor">Empleados</a>
-        <a class="nav-btn" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor">Física</a>
-        <a class="nav-btn" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor">Mensual</a>
-        <a class="nav-btn" id="nav-encuesta" href="./encuesta.html" data-roles="admin,cliente,supervisor">Encuesta</a>
-        <a class="nav-btn" id="nav-incentivo" href="./incentivo.html" data-roles="admin,supervisor,vigilante">Incentivo</a>
-      </nav>
+        <!-- Historial -->
+        <div id="seccionHistorial" class="d-none">
+          <div class="card p-3 p-md-4 shadow-sm">
+            <h6 class="mb-3">Historial de evaluaciones</h6>
+            <div class="row g-3 align-items-end">
+              <div class="col-md-4">
+                <label class="form-label" for="selHistEmpleado">Empleado</label>
+                <select class="form-select" id="selHistEmpleado"></select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label" for="selHistEvaluador">Evaluador</label>
+                <select class="form-select" id="selHistEvaluador"></select>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label" for="histDesde">Desde</label>
+                <input type="month" class="form-control" id="histDesde">
+              </div>
+              <div class="col-md-2">
+                <label class="form-label" for="histHasta">Hasta</label>
+                <input type="month" class="form-control" id="histHasta">
+              </div>
+              <div class="col-12 text-end">
+                <button class="btn btn-outline-primary no-print" id="btnBuscarHist"><i class="fas fa-search me-1"></i> Buscar</button>
+              </div>
+            </div>
+            <div class="table-responsive mt-3">
+              <table class="table table-sm table-striped align-middle" id="tablaHistorial">
+                <thead>
+                  <tr>
+                    <th>Mes</th>
+                    <th>No.Emp</th>
+                    <th>Nombre</th>
+                    <th>Puesto</th>
+                    <th>Aseo</th>
+                    <th>Asistencia</th>
+                    <th>Comport.</th>
+                    <th>Activ.</th>
+                    <th>Prom 1-3</th>
+                    <th>Cal 0-100</th>
+                    <th>Evaluador</th>
+                    <th>PDF</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
+  </div>
 
-    <script>
-    // Marca activo según archivo
-    const mapaActivos = {
-      'index.html':'nav-inicio',
-      'empleados.html':'nav-empleados',
-      'captura_fisica.html':'nav-fisica',
-      'evaluacion_mensual.html':'nav-mensual',
-      'encuesta.html':'nav-encuesta',
-      'incentivo.html':'nav-incentivo'
-    };
-    const actual = location.pathname.split('/').pop();
-    const idAct = mapaActivos[actual];
-    if (idAct) document.getElementById(idAct)?.classList.add('nav-btn--activo');
-    </script>
-
-
-
-  <main class="contenedor">
-    <section class="tarjeta">
-      <h1 class="titulo">Evaluación Mensual</h1>
-      <div class="fila fila--3">
-        <div><label class="label">No.Emp</label><input class="input" id="no_emp" value="950001"></div>
-        <div><label class="label">Mes (día 1)</label><input class="input" id="mes" type="date" value="2025-09-01"></div>
-        <div><label class="label">Supervisor ID</label><input class="input" id="sup" value="sup-001"></div>
+  <!-- Offcanvas móvil -->
+  <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
+    <div class="offcanvas-header bg-warning">
+      <div class="header-logo">
+        <img src="./assets/img/VADUM-negro.png" alt="Logotipo VADUM" class="sidebar-logo">
+        <h5 class="offcanvas-title text-dark fw-bold" id="menuOffcanvasLabel">Menú VADUM</h5>
       </div>
-      <div class="fila fila--4" style="margin-top:12px; grid-template-columns: repeat(4,1fr);">
-        <div><label class="label">Puntualidad (1-5)</label><input class="input" id="p" type="number" min="1" max="5" value="5"></div>
-        <div><label class="label">Disciplina (1-5)</label><input class="input" id="d" type="number" min="1" max="5" value="4"></div>
-        <div><label class="label">Imagen (1-5)</label><input class="input" id="i" type="number" min="1" max="5" value="4"></div>
-        <div><label class="label">Desempeño (1-5)</label><input class="input" id="x" type="number" min="1" max="5" value="5"></div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="d-flex flex-column p-3">
+        <a class="menu-link" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="fas fa-home"></i> <span>Inicio</span></a>
+        <a class="menu-link" href="./empleados.html" data-roles="admin,supervisor"><i class="fas fa-user-tie"></i> <span>Empleados</span></a>
+        <a class="menu-link" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="fas fa-chart-line"></i> <span>Física</span></a>
+        <a class="menu-link activo" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="fas fa-users-cog"></i> <span>Mensual</span></a>
+        <a class="menu-link" href="./encuesta.html" data-roles="admin,supervisor,cliente"><i class="fas fa-handshake"></i> <span>Encuesta</span></a>
+        <a class="menu-link" href="./cursos.html" data-roles="admin,supervisor"><i class="fas fa-graduation-cap"></i> <span>Cursos</span></a>
+        <a class="menu-link" href="./catalogos.html" data-roles="admin,supervisor"><i class="fas fa-cogs"></i> <span>Catálogos</span></a>
       </div>
-      <div style="margin-top:12px;"><button class="btn" id="guardar">Guardar evaluación</button></div>
-    </section>
+    </div>
+  </div>
 
-    <section class="tarjeta" style="margin-top:16px;">
-      <h2 class="subtitulo">Firmas</h2>
-      <div class="fila fila--2">
-        <div>
-          <p class="label">Firma empleado</p>
-          <canvas id="firmaEmp" width="320" height="120" style="background:#fff; border:1px dashed #777; border-radius:8px;"></canvas><br>
-          <button class="btn" id="guardarEmp">Guardar firma empleado</button>
-        </div>
-        <div>
-          <p class="label">Firma evaluador</p>
-          <canvas id="firmaEval" width="320" height="120" style="background:#fff; border:1px dashed #777; border-radius:8px;"></canvas><br>
-          <button class="btn" id="guardarEval">Guardar firma evaluador</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">© VADUM · Automatización de Incentivos ·</footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./assets/js/ui.js"></script>
   <script src="./assets/js/auth.js"></script>
   <script>
-    async function post(url, data){
-      const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
-      return r.json();
+    // Helpers API
+    async function apiGet(ruta, params={}){
+      const qs = new URLSearchParams(params).toString();
+      const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}${qs?`&${qs}`:''}`, {credentials:'include'});
+      const t = await r.text(); const clean = t.replace(/^\uFEFF|^\u200B|^\ufeff/, '');
+      const j = clean? JSON.parse(clean):{}; if(!r.ok||j.ok===false) throw new Error(j.error||`Error ${r.status}`); return j;
     }
-    const dibujar = (canvas)=>{
-      const ctx = canvas.getContext('2d'); let pintando=false;
-      canvas.addEventListener('mousedown',()=>pintando=true);
-      canvas.addEventListener('mouseup',()=>pintando=false);
-      canvas.addEventListener('mousemove',(e)=>{
-        if(!pintando) return; const r=canvas.getBoundingClientRect();
-        ctx.fillStyle='#000'; ctx.beginPath();
-        ctx.arc(e.clientX-r.left,e.clientY-r.top,1.2,0,Math.PI*2); ctx.fill();
+    async function apiPost(ruta, body={}){
+      const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}`, {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const t = await r.text(); const clean = t.replace(/^\uFEFF|^\u200B|^\ufeff/, '');
+      const j = clean? JSON.parse(clean):{}; if(!r.ok||j.ok===false) throw new Error(j.error||`Error ${r.status}`); return j;
+    }
+
+    const toast = (m)=> (window.VADUM_UI?.mostrarToast? VADUM_UI.mostrarToast(m): alert(m));
+
+    // Cargar empleados activos y poblar select
+    async function cargarEmpleadosActivos() {
+      try {
+        const { empleados } = await apiGet('empleados/lista', { estado:'ACTIVO' });
+        const sel = document.getElementById('selEmpleado');
+        sel.innerHTML = '<option value="">Seleccione empleado...</option>' +
+          empleados.map(e => {
+            const text = `${e.no_emp} - ${e.nombre}${e.puesto ? ' ('+e.puesto+')' : ''}`;
+            return `<option value="${e.no_emp}" data-puesto="${e.puesto||''}">${text}</option>`;
+          }).join('');
+      } catch (err) {
+        console.error(err); toast('No se pudieron cargar empleados');
+      }
+    }
+
+    // Cargar evaluadores (Supervisor/Gerente)
+    async function cargarEvaluadores() {
+      try {
+        const { evaluadores } = await apiGet('empleados/evaluadores');
+        const list = (evaluadores||[]).filter(e => {
+          const p = (e.puesto||'').toLowerCase();
+          return p.includes('supervisor') || p.includes('gerente');
+        });
+        const sel = document.getElementById('selEvaluador');
+        sel.innerHTML = '<option value="">Seleccione evaluador...</option>' +
+          list.map(e => `<option value="${e.no_emp}" data-puesto="${e.puesto||''}">${e.nombre} (${e.puesto||''})</option>`).join('');
+      } catch (err) {
+        console.error(err); toast('No se pudieron cargar evaluadores');
+      }
+    }
+
+    function mesToYmdFirst(value){
+      // value tipo "YYYY-MM" => "YYYY-MM-01"
+      if(!value) return '';
+      const [y,m] = value.split('-');
+      return `${y}-${m}-01`;
+    }
+    function calcPorcentaje(){
+      const v = (name)=> Number(document.querySelector(`input[name="${name}"]:checked`)?.value || 0);
+      const prom = (v('aseo')+v('asistencia')+v('comport')+v('activ'))/4;
+      const pct = Math.round(((prom-1)/2)*100);
+      document.getElementById('resultadoEval').textContent = `Porcentaje: ${isFinite(pct)?pct:0}%`;
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // Por defecto llenar mes actual
+      const hoy = new Date();
+      const ym = hoy.toISOString().slice(0,7);
+      document.getElementById('mesEval').value = ym;
+      // Cargar empleados y evaluadores al iniciar
+      cargarEmpleadosActivos();
+      cargarEvaluadores();
+      // Combos historial
+      (async ()=>{
+        try{
+          const { empleados } = await apiGet('empleados/lista', { estado:'ACTIVO' });
+          const selE = document.getElementById('selHistEmpleado');
+          selE.innerHTML = '<option value="">Todos</option>' + empleados.map(e=>`<option value="${e.no_emp}">${e.nombre}</option>`).join('');
+          const { evaluadores } = await apiGet('empleados/evaluadores');
+          const selV = document.getElementById('selHistEvaluador');
+          selV.innerHTML = '<option value="">Todos</option>' + (evaluadores||[]).map(v=>`<option value="${v.no_emp}">${v.nombre}</option>`).join('');
+          // Rango por defecto: últimos 3 meses
+          const hoy = new Date(); const m3 = new Date(hoy.getFullYear(), hoy.getMonth()-2, 1);
+          document.getElementById('histDesde').value = m3.toISOString().slice(0,7);
+          document.getElementById('histHasta').value = hoy.toISOString().slice(0,7);
+          cargarHistorial();
+        }catch(err){ console.warn(err); }
+      })();
+      // Cambios en select de empleado -> set hidden y puesto
+      document.getElementById('selEmpleado').addEventListener('change', (e)=>{
+        const opt = e.target.selectedOptions[0];
+        document.getElementById('no_emp').value = opt?.value || '';
+        document.getElementById('puestoSel').value = opt?.dataset?.puesto || '';
       });
-    };
-    dibujar(document.getElementById('firmaEmp'));
-    dibujar(document.getElementById('firmaEval'));
+      // Cambios en evaluador
+      document.getElementById('selEvaluador').addEventListener('change', (e)=>{
+        const opt = e.target.selectedOptions[0];
+        document.getElementById('puestoEvaluador').value = opt?.dataset?.puesto || '';
+      });
+      // Radios => preview
+      document.querySelectorAll('input[type=radio]').forEach(r=> r.addEventListener('change', calcPorcentaje));
+      calcPorcentaje();
 
-    document.getElementById('guardar').onclick = async ()=>{
-      const datos = {
-        no_emp: document.getElementById('no_emp').value.trim(),
-        mes:    document.getElementById('mes').value,
-        puntualidad:+document.getElementById('p').value,
-        disciplina:+document.getElementById('d').value,
-        imagen:+document.getElementById('i').value,
-        desempeno:+document.getElementById('x').value,
-        supervisor_id: document.getElementById('sup').value.trim()
-      };
-      const r = await post('../api/index.php?ruta=mensual/guardar', datos);
-      mostrarToast(`Guardado • Promedio ${r.prom_1_5} → ${r.cal_0_100}`);
-    };
+      // (Se eliminó el autocomplete; ahora se usa el select con todos los activos)
 
-    document.getElementById('guardarEmp').onclick = async ()=>{
-      const no_emp = document.getElementById('no_emp').value.trim();
-      const mes    = document.getElementById('mes').value;
-      const dataURL = document.getElementById('firmaEmp').toDataURL('image/png');
-      const r = await post('../api/index.php?ruta=firmas/guardar', { tipo:'mensual_empleado', no_emp, mes, firma_base64: dataURL });
-      mostrarToast('Firma empleado guardada');
-    };
-    document.getElementById('guardarEval').onclick = async ()=>{
-      const no_emp = document.getElementById('no_emp').value.trim();
-      const mes    = document.getElementById('mes').value;
-      const dataURL = document.getElementById('firmaEval').toDataURL('image/png');
-      const r = await post('../api/index.php?ruta=firmas/guardar', { tipo:'mensual_evaluador', no_emp, mes, firma_base64: dataURL });
-      mostrarToast('Firma evaluador guardada');
-    };
+      // Cargar
+      document.getElementById('btnCargar').addEventListener('click', async ()=>{
+        const no_emp = document.getElementById('no_emp').value.trim();
+        const mes = mesToYmdFirst(document.getElementById('mesEval').value);
+        if(!no_emp || !mes){ toast('Selecciona empleado y mes'); return; }
+        try{
+          const { evaluacion } = await apiGet('mensual/leer', { no_emp, mes });
+          // Mapear a radios (1/3). Si vienen otros valores, se redondea a 1 o 3.
+          const map = (n)=> Number(n)>=2 ? 3 : 1;
+          document.getElementById('aseo'+map(evaluacion.imagen))?.click(); // aseo ← imagen
+          document.getElementById('asis'+map(evaluacion.puntualidad))?.click(); // asistencia ← puntualidad
+          document.getElementById('comp'+map(evaluacion.disciplina))?.click(); // comportamiento ← disciplina
+          document.getElementById('act'+map(evaluacion.desempeno))?.click(); // actividades ← desempeño
+          calcPorcentaje();
+          toast('Evaluación cargada');
+          // Mostrar firmas guardadas (si existen)
+          if (evaluacion.firma_empleado_url) {
+            const img = document.getElementById('firmaEmpImg'); img.src = evaluacion.firma_empleado_url; img.classList.remove('d-none');
+          }
+          if (evaluacion.firma_evaluador_url) {
+            const img = document.getElementById('firmaEvalImg'); img.src = evaluacion.firma_evaluador_url; img.classList.remove('d-none');
+          }
+        }catch(err){ toast(err.message||'No encontrada'); }
+      });
+
+      // Guardar (y generar PDF con firmas)
+      document.getElementById('btnGuardar').addEventListener('click', async ()=>{
+        const no_emp = document.getElementById('no_emp').value.trim();
+        const mes = mesToYmdFirst(document.getElementById('mesEval').value);
+        const v = (name)=> Number(document.querySelector(`input[name="${name}"]:checked`)?.value || 0);
+        if(!no_emp || !mes){ toast('Selecciona empleado y mes'); return; }
+        const body = {
+          no_emp,
+          mes,
+          puntualidad: v('asistencia'),
+          disciplina:  v('comport'),
+          imagen:      v('aseo'),
+          desempeno:   v('activ'),
+          supervisor_id: document.getElementById('selEvaluador').value || undefined
+        };
+        try{
+          const r = await apiPost('mensual/guardar', body);
+          // Intentar generar PDF con firmas desde los canvas
+          let firmaEmpB64 = '';
+          let firmaEvalB64 = '';
+          try { firmaEmpB64 = cvEmp.toDataURL('image/png').split(',')[1] || ''; } catch(_){}
+          try { firmaEvalB64 = cvEval.toDataURL('image/png').split(',')[1] || ''; } catch(_){}
+          try{
+            await apiPost('mensual/pdf_generar', { no_emp, mes, firma_empleado_base64: firmaEmpB64 || undefined, firma_evaluador_base64: firmaEvalB64 || undefined });
+            toast(`Guardado y PDF generado. ${r.cal_0_100}%`);
+          }catch(e){ toast(`Guardado. (No se pudo generar PDF)`); }
+        }catch(err){ toast(err.message||'Error al guardar'); }
+      });
+
+      // Firma: dibujar en canvas (mouse y touch)
+      function setupFirma(canvasId, clearBtnId){
+        const cv = document.getElementById(canvasId); const ctx = cv.getContext('2d');
+        let pintando = false;
+        const pos = (e)=>{
+          const r = cv.getBoundingClientRect();
+          if (e.touches && e.touches[0]) return {x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top};
+          return {x: e.clientX - r.left, y: e.clientY - r.top};
+        };
+        const draw = (e)=>{ if(!pintando) return; const p = pos(e); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(p.x,p.y,1.4,0,Math.PI*2); ctx.fill(); };
+        cv.addEventListener('mousedown', ()=> pintando=true);
+        cv.addEventListener('mouseup', ()=> pintando=false);
+        cv.addEventListener('mouseleave', ()=> pintando=false);
+        cv.addEventListener('mousemove', draw);
+        cv.addEventListener('touchstart', (e)=>{ pintando=true; e.preventDefault(); });
+        cv.addEventListener('touchend', ()=> pintando=false);
+        cv.addEventListener('touchcancel', ()=> pintando=false);
+        cv.addEventListener('touchmove', (e)=>{ draw(e); e.preventDefault(); });
+        document.getElementById(clearBtnId).addEventListener('click', ()=>{ ctx.clearRect(0,0,cv.width,cv.height); });
+        return cv;
+      }
+      let cvEmp = setupFirma('sigEmp','btnLimpiarEmp');
+      let cvEval = setupFirma('sigEval','btnLimpiarEval');
+
+      // Guardar firmas
+      const _btnGfEmp = document.getElementById('btnGuardarFirmaEmp');
+      if (_btnGfEmp) _btnGfEmp.addEventListener('click', async ()=>{
+        const no_emp = document.getElementById('no_emp').value.trim();
+        const mes = mesToYmdFirst(document.getElementById('mesEval').value);
+        if(!no_emp||!mes){ toast('Selecciona empleado y mes'); return; }
+        try{
+          const r = await apiPost('firmas/guardar', { tipo:'mensual_empleado', no_emp, mes, firma_base64: cvEmp.toDataURL('image/png') });
+          const img = document.getElementById('firmaEmpImg'); img.src = r.url; img.classList.remove('d-none');
+          toast('Firma empleado guardada');
+        }catch(err){ toast(err.message||'No se pudo guardar la firma'); }
+      });
+      const _btnGfEval = document.getElementById('btnGuardarFirmaEval');
+      if (_btnGfEval) _btnGfEval.addEventListener('click', async ()=>{
+        const no_emp = document.getElementById('no_emp').value.trim();
+        const mes = mesToYmdFirst(document.getElementById('mesEval').value);
+        if(!no_emp||!mes){ toast('Selecciona empleado y mes'); return; }
+        try{
+          const r = await apiPost('firmas/guardar', { tipo:'mensual_evaluador', no_emp, mes, firma_base64: cvEval.toDataURL('image/png') });
+          const img = document.getElementById('firmaEvalImg'); img.src = r.url; img.classList.remove('d-none');
+          toast('Firma evaluador guardada');
+        }catch(err){ toast(err.message||'No se pudo guardar la firma'); }
+      });
+
+      // Imprimir/PDF con formato completo (A4) en ventana dedicada
+      const _btnImp = document.getElementById('btnImprimir');
+      if (_btnImp) _btnImp.addEventListener('click', ()=> {
+        try { printEvaluacion(); } catch(e) { console.error(e); window.print(); }
+      });
+
+      function radioVal(name){ return Number(document.querySelector(`input[name="${name}"]:checked`)?.value || 0); }
+      function calcPromCal(){
+        const prom = (radioVal('aseo') + radioVal('asistencia') + radioVal('comport') + radioVal('activ')) / 4;
+        const cal = ((prom - 1) / 2) * 100; // 1->0%, 3->100%
+        return { prom: Number(prom.toFixed(2)), cal: Math.max(0, Math.min(100, Number(cal.toFixed(2)))) };
+      }
+      function preferFirma(imgId, canvas){
+        const img = document.getElementById(imgId);
+        if (img && !img.classList.contains('d-none') && img.src) return img.src;
+        try { return canvas.toDataURL('image/png'); } catch(e) { return ''; }
+      }
+      function printEvaluacion(){
+        const optEmp = document.getElementById('selEmpleado').selectedOptions[0];
+        const empText = optEmp ? optEmp.textContent : '';
+        const noEmp = document.getElementById('no_emp').value || '';
+        const puestoEmp = document.getElementById('puestoSel').value || '';
+        const optEval = document.getElementById('selEvaluador').selectedOptions[0];
+        const evalText = optEval ? optEval.textContent : '';
+        const puestoEval = document.getElementById('puestoEvaluador').value || '';
+        const mes = (document.getElementById('mesEval').value || '').slice(0,7);
+        const aseo = radioVal('aseo');
+        const asis = radioVal('asistencia');
+        const comp = radioVal('comport');
+        const acti = radioVal('activ');
+        const { prom, cal } = calcPromCal();
+        const fEmp = preferFirma('firmaEmpImg', cvEmp);
+        const fEval = preferFirma('firmaEvalImg', cvEval);
+
+        const html = `<!doctype html><html lang="es"><head><meta charset="utf-8">
+          <title>Evaluación Mensual</title>
+          <style>
+            @page { size: A4 portrait; margin: 12mm; }
+            body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; color:#111; }
+            .encabezado{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+            .encabezado img{ height:36px; }
+            h1{ font-size:18px; margin:6px 0 12px; }
+            .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+            .campo{ font-size:12px; }
+            .campo b{ display:inline-block; width:120px; }
+            table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; }
+            th,td{ border:1px solid #ccc; padding:6px; text-align:center; }
+            th{ background:#f3f3f3; }
+            .firmas{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:16px; }
+            .firmaBox{ text-align:center; }
+            .firmaBox img{ max-width:100%; height:120px; object-fit:contain; border:1px dashed #777; padding:4px; }
+            .nota{ margin-top:12px; font-size:12px; color:#555; }
+          </style></head><body>
+            <div class="encabezado">
+              <img src="./assets/img/VADUM-negro.png" alt="VADUM">
+              <div><h1>Evaluación Mensual</h1></div>
+            </div>
+            <div class="grid">
+              <div class="campo"><b>Mes:</b> ${mes || '-'}</div>
+              <div class="campo"><b>No. Empleado:</b> ${noEmp || '-'}</div>
+              <div class="campo"><b>Empleado:</b> ${empText || '-'}</div>
+              <div class="campo"><b>Puesto:</b> ${puestoEmp || '-'}</div>
+              <div class="campo"><b>Evaluador:</b> ${evalText || '-'}</div>
+              <div class="campo"><b>Puesto Evaluador:</b> ${puestoEval || '-'}</div>
+            </div>
+            <table>
+              <thead><tr><th>Criterio</th><th>Valor (1/3)</th></tr></thead>
+              <tbody>
+                <tr><td>Aseo</td><td>${aseo || '-'}</td></tr>
+                <tr><td>Asistencia</td><td>${asis || '-'}</td></tr>
+                <tr><td>Comportamiento</td><td>${comp || '-'}</td></tr>
+                <tr><td>Actividades</td><td>${acti || '-'}</td></tr>
+                <tr><th>Promedio 1–3</th><th>${prom}</th></tr>
+                <tr><th>Calificación 0–100</th><th>${cal}%</th></tr>
+              </tbody>
+            </table>
+            <div class="firmas">
+              <div class="firmaBox">
+                <div><b>Firma Empleado</b></div>
+                ${fEmp ? `<img src="${fEmp}">` : '<div style="height:120px;border:1px dashed #777"></div>'}
+              </div>
+              <div class="firmaBox">
+                <div><b>Firma Evaluador</b></div>
+                ${fEval ? `<img src="${fEval}">` : '<div style="height:120px;border:1px dashed #777"></div>'}
+              </div>
+            </div>
+            <div class="nota">Generado por VADUM — ${new Date().toLocaleString()}</div>
+        </body></html>`;
+
+        const w = window.open('', '_blank');
+        w.document.open(); w.document.write(html); w.document.close();
+        w.focus(); setTimeout(()=>{ w.print(); }, 300);
+      }
+
+      // Tabs (Captura | Historial)
+      const btnCap = document.getElementById('tab-captura');
+      const btnHis = document.getElementById('tab-historial');
+      const secCap = document.getElementById('seccionCaptura');
+      const secHis = document.getElementById('seccionHistorial');
+      btnCap.addEventListener('click', ()=>{ btnCap.classList.add('active'); btnHis.classList.remove('active'); secCap.classList.remove('d-none'); secHis.classList.add('d-none'); });
+      btnHis.addEventListener('click', ()=>{ btnHis.classList.add('active'); btnCap.classList.remove('active'); secHis.classList.remove('d-none'); secCap.classList.add('d-none'); });
+
+      // Buscar historial
+      document.getElementById('btnBuscarHist').addEventListener('click', cargarHistorial);
+    });
+
+    function ymdRangeFromMonths(){
+      const d = document.getElementById('histDesde').value; const h = document.getElementById('histHasta').value;
+      const desde = d ? `${d}-01` : '';
+      const hasta = h ? (new Date(h+'-01')).toISOString().slice(0,7)+'-01' : '';
+      return {desde:d, hasta:h};
+    }
+    async function cargarHistorial(){
+      const no_emp = document.getElementById('selHistEmpleado').value;
+      const evalId = document.getElementById('selHistEvaluador').value;
+      const desde = document.getElementById('histDesde').value;
+      const hasta = document.getElementById('histHasta').value;
+      try{
+        const { historial } = await apiGet('mensual/historial', { no_emp, supervisor_id: evalId, desde, hasta });
+        const tbody = document.querySelector('#tablaHistorial tbody');
+        tbody.innerHTML = (historial||[]).map(r=>{
+          const ym = r.mes?.slice(0,7) || '';
+          const prom = Number(r.prom_1_5||0).toFixed(2);
+          const cal = Number(r.cal_desemp_0_100||0).toFixed(2);
+          return `<tr>
+            <td>${ym}</td>
+            <td>${r.no_emp||''}</td>
+            <td>${r.nombre||''}</td>
+            <td>${r.puesto||''}</td>
+            <td>${r.imagen ?? ''}</td>
+            <td>${r.puntualidad ?? ''}</td>
+            <td>${r.disciplina ?? ''}</td>
+            <td>${r.desempeno ?? ''}</td>
+            <td>${prom}</td>
+            <td>${cal}</td>
+            <td>${r.supervisor_id||''}</td>
+            <td><a href="../api/index.php?ruta=mensual/pdf&no_emp=${encodeURIComponent(r.no_emp||'')}&mes=${encodeURIComponent(r.mes||'')}" target="_blank">PDF</a></td>
+          </tr>`;
+        }).join('');
+      }catch(err){ console.error(err); }
+    }
   </script>
 </body>
 </html>
+</body>
+</html>
+

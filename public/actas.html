@@ -1,0 +1,236 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>VADUM · Actas Administrativas</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="./assets/css/estilos.css">
+</head>
+<body>
+  <div class="contenedor-app d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar p-3 d-none d-md-flex flex-column bg-dark" id="sidebarMenu">
+      <div class="header-logo text-center mb-4">
+        <img src="./assets/img/VADUM-blanco.png" alt="Logotipo VADUM" class="sidebar-logo">
+      </div>
+      <div class="d-flex flex-column nav-links-sidebar" id="menuLateral">
+        <a class="menu-link" id="nav-inicio" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="material-icons-outlined">home</i> <span>Inicio</span></a>
+        <a class="menu-link" id="nav-empleados" href="./empleados.html" data-roles="admin,supervisor"><i class="material-icons-outlined">badge</i> <span>Empleados</span></a>
+        <a class="menu-link" id="nav-fisica" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="material-icons-outlined">insights</i> <span>Física</span></a>
+        <a class="menu-link" id="nav-mensual" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="material-icons-outlined">rule</i> <span>Evaluación</span></a>
+        <a class="menu-link" id="nav-encuesta" href="./encuesta.html" data-roles="admin,supervisor,cliente"><i class="material-icons-outlined">question_answer</i> <span>Encuesta</span></a>
+        <a class="menu-link" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor"><i class="material-icons-outlined">school</i> <span>Cursos</span></a>
+        <a class="menu-link" id="nav-faltas" href="./faltas.html" data-roles="admin,supervisor"><i class="material-icons-outlined">event_busy</i> <span>Faltas</span></a>
+        <a class="menu-link activo" id="nav-actas" href="./actas.html" data-roles="admin,supervisor"><i class="material-icons-outlined">description</i> <span>Actas</span></a>
+        <a class="menu-link" id="nav-catalogos" href="./catalogos.html" data-roles="admin,supervisor"><i class="material-icons-outlined">settings</i> <span>Catálogos</span></a>
+      </div>
+    </nav>
+
+    <div class="main-content-wrapper flex-grow-1 d-flex flex-column">
+      <div class="top-navbar sticky-top d-flex justify-content-between align-items-center p-2 bg-white border-bottom shadow-sm">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas"><i class="fas fa-bars"></i></button>
+          <span class="fw-bold fs-5 text-dark">Actas Administrativas</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i> <span id="nombreUsuario">Usuario</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+              <li><a class="dropdown-item" href="#">Configuración</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionTop">Cerrar Sesión</a></li>
+            </ul>
+          </div>
+          <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionTop"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+
+      <main class="flex-grow-1 p-3 p-md-4">
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item"><button class="nav-link active" id="tabBtnCaptura" type="button">Captura</button></li>
+          <li class="nav-item"><button class="nav-link" id="tabBtnHist" type="button">Historial</button></li>
+        </ul>
+
+        <div id="tabCaptura">
+          <div class="card p-3 p-md-4 shadow-sm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Empleado</label>
+                <select class="form-select" id="selEmpleado"></select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Fecha</label>
+                <input class="form-control" id="fecha" type="date">
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Motivo</label>
+                <input class="form-control" id="motivo" placeholder="Motivo del acta">
+              </div>
+            </div>
+            <div class="mt-3">
+              <button class="btn btn-primary" id="btnGuardar">Guardar acta</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="tabHistorial" style="display:none;">
+          <div class="card p-3 p-md-4 shadow-sm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Empleado</label>
+                <select class="form-select" id="selEmpleadoHist"></select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Desde</label>
+                <input class="form-control" id="desde" type="date">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Hasta</label>
+                <input class="form-control" id="hasta" type="date">
+              </div>
+            </div>
+            <div class="mt-3">
+              <button class="btn btn-secondary" id="btnBuscarHist">Buscar</button>
+            </div>
+            <div class="table-responsive mt-3">
+              <table class="table table-sm table-striped" id="tablaHist">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>No.Emp</th>
+                    <th>Nombre</th>
+                    <th>Puesto</th>
+                    <th>Motivo</th>
+                    <th>Punto</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
+        <div class="offcanvas-header bg-warning">
+          <img src="./assets/img/VADUM-negro.png" alt="VADUM" style="height:28px;">
+          <h5 class="offcanvas-title text-dark fw-bold" id="menuOffcanvasLabel">Menú VADUM</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+          <nav class="d-flex flex-column p-2">
+            <a class="menu-link" href="./index.html" data-roles="admin,supervisor,vigilante,cliente"><i class="fas fa-home"></i> <span>Inicio</span></a>
+            <a class="menu-link" href="./captura_fisica.html" data-roles="admin,supervisor"><i class="fas fa-chart-line"></i> <span>Física</span></a>
+            <a class="menu-link" href="./evaluacion_mensual.html" data-roles="admin,supervisor"><i class="fas fa-users-cog"></i> <span>Evaluación</span></a>
+            <a class="menu-link" href="./encuesta.html" data-roles="admin,supervisor,cliente"><i class="fas fa-handshake"></i> <span>Encuesta</span></a>
+            <a class="menu-link" href="./cursos.html" data-roles="admin,supervisor"><i class="fas fa-book-open"></i> <span>Cursos</span></a>
+            <a class="menu-link" href="./faltas.html" data-roles="admin,supervisor"><i class="fas fa-calendar-times"></i> <span>Faltas</span></a>
+            <a class="menu-link activo" href="./actas.html" data-roles="admin,supervisor"><i class="fas fa-file-alt"></i> <span>Actas</span></a>
+            <a class="menu-link" href="./catalogos.html" data-roles="admin,supervisor"><i class="fas fa-cogs"></i> <span>Catálogos</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./assets/js/ui.js"></script>
+  <script src="./assets/js/auth.js"></script>
+  <script>
+  (async ()=>{
+    const toast = (m)=> (window.VADUM_UI?.mostrarToast? VADUM_UI.mostrarToast(m): alert(m));
+    const clean = (t)=> (t||'').replace(/^\uFEFF|^\u200B|^\ufeff/, '');
+    async function apiGet(ruta, params={}){
+      const qs = new URLSearchParams(params).toString();
+      const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}${qs?`&${qs}`:''}`, {credentials:'include'});
+      const t = await r.text(); const j = t? JSON.parse(clean(t)) : {};
+      if (!r.ok || j.ok===false) throw new Error(j.error||`Error ${r.status}`);
+      return j;
+    }
+    async function apiPost(ruta, body={}){
+      const r = await fetch(`../api/index.php?ruta=${encodeURIComponent(ruta)}`, {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const t = await r.text(); const j = t? JSON.parse(clean(t)) : {};
+      if (!r.ok || j.ok===false) throw new Error(j.error||`Error ${r.status}`);
+      return j;
+    }
+
+    // Tabs
+    const btnCap = document.getElementById('tabBtnCaptura');
+    const btnHist = document.getElementById('tabBtnHist');
+    const tabCap = document.getElementById('tabCaptura');
+    const tabHist = document.getElementById('tabHistorial');
+    btnCap.addEventListener('click', ()=>{ btnCap.classList.add('active'); btnHist.classList.remove('active'); tabCap.style.display='block'; tabHist.style.display='none'; });
+    btnHist.addEventListener('click', ()=>{ btnHist.classList.add('active'); btnCap.classList.remove('active'); tabCap.style.display='none'; tabHist.style.display='block'; });
+
+    // Controles
+    const selEmpleado = document.getElementById('selEmpleado');
+    const selEmpleadoHist = document.getElementById('selEmpleadoHist');
+    const fechaInput = document.getElementById('fecha');
+    const motivoInput = document.getElementById('motivo');
+    const tbodyHist = document.querySelector('#tablaHist tbody');
+
+    // Defaults de fecha
+    fechaInput.valueAsDate = new Date();
+    const hoy = new Date();
+    const hace30 = new Date(hoy.getTime() - 30*24*60*60*1000);
+    document.getElementById('desde').value = hace30.toISOString().slice(0,10);
+    document.getElementById('hasta').value = hoy.toISOString().slice(0,10);
+
+    async function cargarEmpleados() {
+      try{
+        const { empleados } = await apiGet('empleados/lista', { estado:'ACTIVO' });
+        const opts = (empleados||[]).map(e=>`<option value="${e.no_emp}">${e.no_emp} - ${e.nombre} (${e.puesto||''})</option>`).join('');
+        selEmpleado.innerHTML = '<option value="">Seleccione empleado</option>' + opts;
+        selEmpleadoHist.innerHTML = '<option value="">Todos</option>' + opts;
+      }catch(err){ console.error(err); toast('No se pudo cargar la lista de empleados'); }
+    }
+
+    document.getElementById('btnGuardar').addEventListener('click', async ()=>{
+      const no_emp = selEmpleado.value||'';
+      const fecha = fechaInput.value||'';
+      const motivo = (motivoInput.value||'').trim();
+      if (!no_emp) return toast('Selecciona un empleado');
+      if (!fecha) return toast('Selecciona la fecha');
+      if (!motivo) return toast('Escribe el motivo');
+      try{
+        await apiPost('actas/guardar', { no_emp, fecha, motivo });
+        toast('Acta registrada');
+        motivoInput.value='';
+      }catch(err){ console.error(err); toast(err.message||'No se pudo guardar'); }
+    });
+
+    async function buscarHistorial(){
+      const no_emp = selEmpleadoHist.value||'';
+      const desde = document.getElementById('desde').value||'';
+      const hasta = document.getElementById('hasta').value||'';
+      try{
+        const r = await apiGet('actas/historial', { no_emp, desde, hasta });
+        const items = r.actas || r.resultados || [];
+        tbodyHist.innerHTML = items.map(x=>`<tr>
+          <td>${(x.fecha||'').slice(0,10)}</td>
+          <td>${x.no_emp||''}</td>
+          <td>${x.nombre||''}</td>
+          <td>${x.puesto||''}</td>
+          <td>${x.motivo||''}</td>
+          <td>${x.punto||''}</td>
+        </tr>`).join('');
+        if (!items.length) tbodyHist.innerHTML = '<tr><td colspan="6" class="text-center">Sin resultados</td></tr>';
+      }catch(err){ console.error(err); toast(err.message||'No se pudo cargar el historial'); }
+    }
+
+    document.getElementById('btnBuscarHist').addEventListener('click', buscarHistorial);
+
+    await cargarEmpleados();
+  })();
+  </script>
+</body>
+</html>
+
+
+

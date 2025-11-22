@@ -225,3 +225,49 @@ main {
     width: 1.25rem;
     margin-right: 10px;
 }
+/* ========================================= */
+/* Bootstrap-lite (fallback offline)         */
+/* Provee estilos básicos si el CDN no carga */
+/* ========================================= */
+
+/* Grid */
+.row { display: flex; flex-wrap: wrap; margin-left: -0.5rem; margin-right: -0.5rem; }
+.row > [class^="col-"], .row > [class*=" col-"] { padding-left: 0.5rem; padding-right: 0.5rem; box-sizing: border-box; }
+.col-12 { width: 100%; }
+@media (min-width: 768px) {
+  .col-md-2{ width:16.6666%; }
+  .col-md-3{ width:25%; }
+  .col-md-4{ width:33.3333%; }
+  .col-md-5{ width:41.6666%; }
+  .col-md-6{ width:50%; }
+  .col-md-7{ width:58.3333%; }
+  .col-md-8{ width:66.6666%; }
+  .col-md-9{ width:75%; }
+  .col-md-10{ width:83.3333%; }
+}
+
+/* Cards y sombras */
+.card { background:#fff; border:1px solid #e0e0e0; border-radius: .5rem; }
+.shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075); }
+
+/* Formularios */
+.form-control, .form-select, .input, .select { display:block; width:100%; padding:.375rem .75rem; font-size:1rem; line-height:1.5; color:#212529; background-color:#fff; background-clip:padding-box; border:1px solid #ced4da; border-radius:.375rem; }
+.form-label, .label { margin-bottom:.25rem; font-weight:500; }
+
+/* Botones */
+.btn { display:inline-block; font-weight:500; line-height:1.5; color:#fff; text-align:center; text-decoration:none; vertical-align:middle; cursor:pointer; user-select:none; background-color:#6c757d; border:1px solid #6c757d; padding:.375rem .75rem; font-size:1rem; border-radius:.375rem; }
+.btn:hover { filter:brightness(0.95); }
+.btn-primary { background-color:#0d6efd; border-color:#0d6efd; }
+.btn-success { background-color:#198754; border-color:#198754; }
+.btn-outline-primary { color:#0d6efd; background:transparent; border:1px solid #0d6efd; }
+
+/* Nav tabs */
+.nav-tabs { border-bottom:1px solid #dee2e6; list-style:none; padding-left:0; display:flex; gap:.25rem; }
+.nav-tabs .nav-link { border:1px solid transparent; border-top-left-radius:.375rem; border-top-right-radius:.375rem; background:#f8f9fa; padding:.5rem .75rem; }
+.nav-tabs .nav-link.active { background:#fff; border-color:#dee2e6 #dee2e6 #fff; }
+
+/* Tabla */
+.table { width:100%; border-collapse:collapse; }
+.table th, .table td { border:1px solid #dee2e6; padding:.5rem; }
+.table thead th { background:#f8f9fa; }
+.table-striped tbody tr:nth-child(odd) { background-color: #f8f9fa; }

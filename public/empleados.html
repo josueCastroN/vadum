@@ -1,8 +1,8 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>VADUM · Gestión de Empleados</title>
+    <title>VADUM Gestión de Empleados</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./assets/css/estilos.css"> 
     
     <style>
-        /* Estilos para asegurar que el datalist no se extienda más de lo necesario */
+        /* Estilos para asegurar que el datalist no se extienda mÃ¡s de lo necesario */
         #lista_empleados_activos {
             max-width: 100%;
         }
@@ -41,9 +41,9 @@
                     <i class="material-icons-outlined">rule</i> <span>Evaluación</span>
                 </a>
                 <a class="menu-link" id="nav-clientes" href="encuesta.html" data-roles="admin,supervisor,cliente">
-                    <i class="material-icons-outlined">question_answer</i> <span>Clientes</span>
+                    <i class="material-icons-outlined">question_answer</i> <span>Encuesta</span>
                 </a>
-                <a class="menu-link" id="nav-cursos" href="#" data-roles="admin,supervisor">
+                <a class="menu-link" id="nav-cursos" href="./cursos.html" data-roles="admin,supervisor">
                     <i class="material-icons-outlined">auto_stories</i> <span>Cursos</span>
                 </a>
                 <a class="menu-link" id="nav-faltas" href="#" data-roles="admin,supervisor">
@@ -87,7 +87,7 @@
                             <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionDropdown">Cerrar Sesión</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionTop"><i class="fas fa-sign-out-alt"></i></button>
+                    <button class="btn btn-sm btn-danger ms-2" id="btnCerrarSesionDropdown"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
             <main class="flex-grow-1 p-3 p-md-4">
@@ -107,7 +107,7 @@
                     
                     <div class="tab-pane fade show active" id="activos" role="tabpanel" aria-labelledby="activos-tab">
                         
-                        <h2 class="h6 fw-bold mt-3">Alta / Edición de Empleado</h2>
+                        <h2 class="h6 fw-bold mt-3">Alta / Edicion de Empleado</h2>
                         <div class="card p-3 mb-4 shadow-sm">
                             <div class="row g-3">
                                 
@@ -116,8 +116,10 @@
                                     <input type="text" class="form-control" id="a_no_emp" maxlength="15" required>
                                 </div>
                                 <div class="col-md-5">
-                                    <label for="a_puesto" class="form-label">Puesto</label>
-                                    <input type="text" class="form-control" id="a_puesto" value="Vigilante">
+                                    <label for="a_puesto" class="form-label">Puesto *</label>
+                                    <select class="form-select" id="a_puesto" required>
+                                        <option value="">Seleccione un puesto...</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4"></div> <div class="col-12"><hr class="my-0"></div>
                                 
@@ -142,8 +144,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="a_region" class="form-label">Región *</label>
-                                    <input type="text" class="form-control" id="a_region" list="lista_regiones" required>
-                                    <datalist id="lista_regiones"></datalist>
+                                    <select class="form-select" id="a_region" required>
+                                        <option value="">Seleccione una región...</option>
+                                    </select>
                                 </div>
                                 
                                 <div class="col-12"><hr class="my-0"></div>
@@ -171,12 +174,14 @@
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label for="a_buscar" class="form-label">Buscar por Nombre</label>
-                                    <input type="search" class="form-control" id="a_buscar" list="lista_empleados_activos" placeholder="Ej. Juan Pérez">
+                                    <input type="search" class="form-control" id="a_buscar" list="lista_empleados_activos" placeholder="Ej. Juan Perez">
                                     <datalist id="lista_empleados_activos"></datalist>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="a_region_f" class="form-label">Filtrar por Región</label>
-                                    <input type="text" class="form-control" id="a_region_f" list="lista_regiones" placeholder="Región">
+                                    <select class="form-select" id="a_region_f">
+                                        <option value="">Todas las regiones</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="a_punto_f" class="form-label">Filtrar por Punto Asignado</label>
@@ -204,7 +209,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr><td colspan="7" class="text-center">Use el botón "Consultar" para cargar datos.</td></tr>
+                                        <tr><td colspan="7" class="text-center">Use el botÃ³n "Consultar" para cargar datos.</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -246,14 +251,15 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label for="b_buscar" class="form-label">Buscar (No.Emp, Nombre)</label>
-                                    <input type="search" class="form-control" id="b_buscar" placeholder="Ej. 12345 o Juan Pérez">
+                                    <input type="search" class="form-control" id="b_buscar" placeholder="Ej. 12345 o Juan Perez">
                                 </div>
                             </div>
                             
                             <div class="mt-3">
                                 <button class="btn btn-secondary" id="b_btnBuscar" type="button"><i class="fas fa-search me-1"></i> Consultar Historial</button>
                                 <button class="btn btn-success ms-2" id="b_btnExportarCsv" type="button"><i class="fas fa-file-csv me-1"></i> Exportar CSV</button>
-                                <button class="btn btn-info ms-2" id="b_btnExportarHtml" type="button"><i class="fas fa-file-alt me-1"></i> Ver Reporte (HTML)</button>
+                                <button class="btn btn-info ms-2" id="b_btnExportarHtml" type="button"><i class="fas
+    fa-file-alt me-1"></i> Ver Reporte (HTML)</button>
                             </div>
 
                             <div class="table-responsive mt-3">
@@ -278,7 +284,7 @@
                     </div>
                 </div>
                 
-                <footer class="footer text-center p-3 border-top mt-5 bg-light text-muted small">© VADUM · Automatización de Incentivos</footer>
+                <footer class="footer text-center p-3 border-top mt-5 bg-light text-muted small">VADUM - Automatización de Incentivos</footer>
             </main>
         </div>
         </div>
@@ -305,13 +311,14 @@
                     <i class="fas fa-users-cog"></i> <span>Evaluación</span>
                 </a>
                 <a class="menu-link" id="nav-clientes-movil" href="encuesta.html" data-roles="admin,supervisor,cliente">
-                    <i class="fas fa-handshake"></i> <span>Clientes</span>
+                    <i class="fas fa-handshake"></i> <span>Encuesta</span>
                 </a>
                 <a class="menu-link" id="nav-cursos-movil" href="#" data-roles="admin,supervisor">
                     <i class="fas fa-book-open"></i> <span>Cursos</span>
                 </a>
                 <a class="menu-link" id="nav-faltas-movil" href="#" data-roles="admin,supervisor">
-                    <i class="fas fa-calendar-times"></i> <span>Faltas</span>
+                    <i class="fas
+    fa-calendar-times"></i> <span>Faltas</span>
                 </a>
                 <a class="menu-link" id="nav-reportes-movil" href="#" data-roles="admin,supervisor">
                     <i class="fas fa-chart-bar"></i> <span>Reportes</span>
@@ -360,11 +367,11 @@
             }
         }
         
-        // Lógica de Cerrar Sesión
+        // Logica de Cerrar Sesión
         function configurarCerrarSesion() {
             const logoutHandler = (e) => {
                 e.preventDefault();
-                // Aquí va la lógica real de cerrar sesión
+               
                 // localStorage.removeItem('userName');
                 // localStorage.removeItem('sesion_activa');
                 window.location.href = 'login.html'; // Redirigir al login
@@ -482,7 +489,7 @@
             });
         }
 
-        // 3. MODAL DE FORMULARIO GENÉRICO (mostrarFormulario)
+        // 3. MODAL DE FORMULARIO GENeRICO (mostrarFormulario)
         function mostrarFormulario({ titulo, descripcion, campos, textoAceptar = 'Guardar', claseAceptar = 'btn-primary' }) {
             return new Promise(resolve => {
                 let modalEl = document.getElementById('universalFormModal');
@@ -503,7 +510,7 @@
                                     <div class="modal-body">
                                         <p id="formModalDescription" class="text-muted small"></p>
                                         <div id="formModalInputs" class="d-grid gap-2">
-                                            </div>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -586,7 +593,7 @@
 
 
         /* ===========================================================
-        Empleados · Lógica de pantalla (Tu código JS original)
+        Empleados  Lógica de pantalla (Tu código JS original)
         =========================================================== */
 
         // ----- Helpers de red (Mantener la función getJSON y postJSON) -----
@@ -616,12 +623,20 @@
             }
         }
 
+        async function refrescarListados(){
+            await Promise.all([
+                cargarActivos(),
+                cargarEnBaja()
+            ]);
+            await cargarHistorial();
+        }
+
         // ===== Catálogos para selects (Puntos y Regiones) =====
         async function cargarSelectPuntos(selectId){
             try{
                 const r = await getJSON('../api/index.php?ruta=puntos/lista'); 
                 const s = document.getElementById(selectId);
-                s.innerHTML = '<option value="">Seleccione…</option>';
+                s.innerHTML = '<option value="">Seleccione</option>';
                 (r.puntos||[]).forEach(p=>{
                     const o = document.createElement('option'); o.value = p.id; 
                     o.textContent = `${p.nombre} (${p.region})`;
@@ -629,17 +644,56 @@
                 });
             }catch(e){ console.error(e); /* showToast('No se pudieron cargar los puntos','error'); */ }
         }
-        async function cargarDatalistRegiones(datalistId){
+        async function cargarListaPuestos(selectId){
             try{
-                const r = await getJSON('../api/index.php?ruta=regiones/lista'); 
-                const d = document.getElementById(datalistId);
-                d.innerHTML = '';
-                (r.regiones||[]).forEach(x=>{
-                    const o = document.createElement('option'); o.value = x.nombre; d.appendChild(o);
+                const r = await getJSON('../api/index.php?ruta=puestos/lista');
+                const s = document.getElementById(selectId);
+                if (!s) return;
+                const valorActual = s.value;
+                s.innerHTML = '<option value="">Seleccione un puesto...</option>';
+                (r.puestos||[]).forEach(p=>{
+                    const o = document.createElement('option');
+                    o.value = p.nombre;
+                    o.textContent = p.nombre;
+                    s.appendChild(o);
                 });
+                if (valorActual) {
+                    s.value = valorActual;
+                    if (s.value !== valorActual) {
+                        const extra = document.createElement('option');
+                        extra.value = valorActual;
+                        extra.textContent = valorActual;
+                        s.appendChild(extra);
+                        s.value = valorActual;
+                    }
+                }
             }catch(e){ console.error(e); }
         }
-
+        async function cargarSelectRegiones(selectId, incluirTodos = false){
+            try{
+                const r = await getJSON("../api/index.php?ruta=regiones/lista");
+                const s = document.getElementById(selectId);
+                if (!s) return;
+                const valorActual = s.value;
+                s.innerHTML = incluirTodos ? '<option value="">Todas las regiones</option>' : '<option value="">Seleccione una región...</option>';
+                (r.regiones||[]).forEach(reg=>{
+                    const o = document.createElement('option');
+                    o.value = reg.nombre;
+                    o.textContent = reg.nombre;
+                    s.appendChild(o);
+                });
+                if (valorActual) {
+                    s.value = valorActual;
+                    if (s.value !== valorActual) {
+                        const extra = document.createElement('option');
+                        extra.value = valorActual;
+                        extra.textContent = valorActual;
+                        s.appendChild(extra);
+                        s.value = valorActual;
+                    }
+                }
+            }catch(e){ console.error(e); }
+        }
         // ===== Alta / Edición (Ruta: empleados/alta) =====
         document.getElementById('a_btnGuardar').onclick = async ()=>{
             const payload = {
@@ -647,22 +701,22 @@
                 nombres:            document.getElementById('a_nombres').value.trim(),
                 apellidos:          document.getElementById('a_apellidos').value.trim(),
                 puesto:             document.getElementById('a_puesto').value.trim(),
-                region:             document.getElementById('a_region').value.trim(),
+                region:             document.getElementById('a_region').value,
                 punto_id:           +document.getElementById('a_punto_id').value,
                 foto_url:           document.getElementById('a_foto_url').value.trim() || null,
                 fecha_nacimiento:   document.getElementById('a_fecha_nacimiento').value || null,
                 fecha_alta:         document.getElementById('a_fecha_alta').value || null
             };
-            if (!payload.no_emp || !payload.nombres || !payload.apellidos || !payload.region || !payload.punto_id){
+            if (!payload.no_emp || !payload.nombres || !payload.apellidos || !payload.puesto || !payload.region || !payload.punto_id){
                 showToast('Completa campos obligatorios','error'); return;
             }
             
             const r = await postJSON('../api/index.php?ruta=empleados/alta', payload); 
             
             if (r && r.ok){ 
-                showToast('Guardado con éxito','ok');
+                showToast('Guardado con Éxito','ok');
                 limpiarForm(); 
-                cargarActivos(); 
+                await refrescarListados(); 
             }
             else { 
                 showToast((r && r.error) || 'Error al guardar','error'); 
@@ -671,31 +725,33 @@
 
         document.getElementById('a_btnLimpiar').onclick = limpiarForm;
         function limpiarForm(){
-            ['a_no_emp','a_nombres','a_apellidos','a_puesto','a_region','a_foto_url','a_fecha_nacimiento']
+            ['a_no_emp','a_nombres','a_apellidos','a_foto_url','a_fecha_nacimiento']
                 .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+            const selectPuesto = document.getElementById('a_puesto'); if (selectPuesto) selectPuesto.value = '';
+            const selectRegion = document.getElementById('a_region'); if (selectRegion) selectRegion.value = '';
             setFechaActual('a_fecha_alta');
             const sel = document.getElementById('a_punto_id'); if (sel) sel.selectedIndex = 0;
             document.getElementById('a_no_emp').disabled = false;
         }
 
-        // ===== Listado “Activos” (Ruta: empleados/lista?estado=ACTIVO) =====
+        // ===== Listado Activos (Ruta: empleados/lista?estado=ACTIVO) =====
         document.getElementById('a_btnBuscar').onclick = cargarActivos;
 
         async function cargarActivos(){
-            // Filtros de búsqueda y región/punto
+            // Filtros de busqueda y Región/punto
             const buscar = (document.getElementById('a_buscar')?.value || '').trim();
             const region = (document.getElementById('a_region_f')?.value || '').trim();
             const punto = (document.getElementById('a_punto_f')?.value || '').trim();
 
             let url = '../api/index.php?ruta=empleados/lista&estado=ACTIVO';
-            // Solo se envía el parámetro 'buscar' (nombre case-insensitive) si no está vacío
+            // Solo se envi­a el parámetro 'buscar' (nombre case-insensitive) si no está vací­o
             if (buscar) url += '&buscar=' + encodeURIComponent(buscar); 
             if (region) url += '&region=' + encodeURIComponent(region);
             if (punto) url += '&punto_id=' + encodeURIComponent(punto);
 
             const tb = document.querySelector('#a_tabla tbody');
             // El colspan ahora es 7
-            tb.innerHTML = `<tr><td colspan="7" class="text-center">Cargando…</td></tr>`;
+            tb.innerHTML = `<tr><td colspan="7" class="text-center">Cargando¦</td></tr>`;
 
             try{
                 const r = await getJSON(url);
@@ -812,8 +868,68 @@
             }
         }
 
-        // ===== Lógica de Exportación (Mantener) =====
-        
+        // ===== Logica de Exportación (Mantener) =====
+        async function cargarDetalleEmpleado(no_emp){
+            try{
+                const url = `../api/index.php?ruta=empleados/detalle&no_emp=${encodeURIComponent(no_emp)}`;
+                const r = await getJSON(url);
+                if (!r || r.ok === false) {
+                    showToast((r && r.error) || 'No se pudo obtener la información del empleado','error');
+                    return false;
+                }
+                const e = r.empleado || {};
+                const setValor = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ''; };
+
+                setValor('a_no_emp', e.no_emp || '');
+                document.getElementById('a_no_emp').disabled = true;
+                setValor('a_nombres', e.nombres || '');
+                setValor('a_apellidos', e.apellidos || '');
+
+                setValor('a_foto_url', e.foto_url || '');
+                setValor('a_fecha_nacimiento', e.fecha_nacimiento || '');
+                setValor('a_fecha_alta', e.fecha_alta || '');
+
+                const selectRegion = document.getElementById('a_region');
+                if (selectRegion) {
+                    if (e.region && !Array.from(selectRegion.options).some(opt => opt.value === e.region)) {
+                        const extraRegion = document.createElement('option');
+                        extraRegion.value = e.region;
+                        extraRegion.textContent = e.region;
+                        selectRegion.appendChild(extraRegion);
+                    }
+                    selectRegion.value = e.region || '';
+                }
+
+                const selectPuesto = document.getElementById('a_puesto');
+                if (selectPuesto) {
+                    if (e.puesto && !Array.from(selectPuesto.options).some(opt => opt.value === e.puesto)) {
+                        const extra = document.createElement('option');
+                        extra.value = e.puesto;
+                        extra.textContent = e.puesto;
+                        selectPuesto.appendChild(extra);
+                    }
+                    selectPuesto.value = e.puesto || '';
+                }
+
+                const selectPunto = document.getElementById('a_punto_id');
+                if (selectPunto) {
+                    selectPunto.value = e.punto_id || '';
+                    if (selectPunto.value === '' && e.punto_id) {
+                        const extra = document.createElement('option');
+                        extra.value = e.punto_id;
+                        extra.textContent = `Punto ${e.punto_id}`;
+                        selectPunto.appendChild(extra);
+                        selectPunto.value = e.punto_id;
+                    }
+                }
+                return true;
+            }catch(err){
+                console.error(err);
+                showToast('Error al cargar datos del empleado','error');
+                return false;
+            }
+        }
+
         function construirUrlFiltros(ruta, buscarId, regionId, puntoId){
             const buscar = (document.getElementById(buscarId)?.value || '').trim();
             const region = (document.getElementById(regionId)?.value || '').trim();
@@ -857,7 +973,7 @@
 
             window.open(url, '_blank');
         };
-        
+  
         // ===== Búsqueda en Vivo (Autocompletado) =====
         let debounceTimer;
 
@@ -895,26 +1011,26 @@
         }
 
 
-        // ===== INICIALIZACIÓN Y DELEGACIÓN DE EVENTOS (Corregido) =====
+        // ===== INICIALIZACIÃ“N Y DELEGACIÃ“N DE EVENTOS (Corregido) =====
         document.addEventListener('DOMContentLoaded', async ()=>{
-            // Cargar el nombre del usuario y configurar el botón de cerrar sesión
+            // Cargar el nombre del usuario y configurar el botÃ³n de cerrar Sesión
             cargarNombreUsuario();
             configurarCerrarSesion();
             
             // Establecer la fecha de alta por defecto (hoy)
             setFechaActual('a_fecha_alta');
 
-            // Carga inicial de catálogos
+            // Carga inicial de Catálogos
             await cargarSelectPuntos('a_punto_id');
             await cargarSelectPuntos('a_punto_f');
-            await cargarDatalistRegiones('lista_regiones');
+            await cargarListaPuestos('a_puesto');
+            await cargarSelectRegiones('a_region');
+            await cargarSelectRegiones('a_region_f', true);
 
             setFechasMes();
-            cargarActivos();
-            cargarEnBaja();
-            cargarHistorial();
+            await refrescarListados();
             
-            // 🟢 Listener para el Autocompletado (Debouncing)
+            // Listener para el Autocompletado (Debouncing)
             document.getElementById('a_buscar').addEventListener('input', (e) => {
                 const valor = e.target.value.trim();
                 
@@ -924,9 +1040,7 @@
                 }, 300);
             });
 
-            /* * 🟢 Delegación de Eventos para botones de la tabla de Activos
-             * (data-edit y data-baja)
-             */
+            /* Delegación de Eventos para la tabla de Activos */
             const tablaActivosBody = document.querySelector('#a_tabla tbody');
 
             if(tablaActivosBody) {
@@ -937,17 +1051,15 @@
                     const no_emp = targetBtn.getAttribute('data-edit') || targetBtn.getAttribute('data-baja');
 
                     if (targetBtn.hasAttribute('data-edit')) {
-                        // --- LÓGICA DE EDITAR (Rellenar formulario) ---
-                        
-                        document.getElementById('a_no_emp').value = no_emp;
-                        document.getElementById('a_no_emp').disabled = true;
+                        const ok = await cargarDetalleEmpleado(no_emp);
+                        if (ok) {
 
-                        showToast(`No.Emp ${no_emp} cargado. Complete la información para editar.`, 'info');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                            showToast('No.Emp ' + no_emp + ' cargado para edición.', 'info');
+                        }
                         
                     } else if (targetBtn.hasAttribute('data-baja')) {
-                        // --- LÓGICA DE BAJA (MODIFICADA CON SELECT) ---
-                        
+
+                        // Aplicar baja
                         const res = await mostrarFormulario({
                             titulo: 'Dar de baja empleado',
                             descripcion: `Se dará de baja al empleado No.Emp: <b>${no_emp}</b>.`,
@@ -980,17 +1092,14 @@
                         });
                         if (rr.ok){ 
                             showToast('Baja aplicada','ok');
-                            cargarActivos(); 
-                            cargarEnBaja(); 
-                            cargarHistorial(); 
+                            await refrescarListados(); 
                         }
                         else { showToast((rr.error||'No se pudo aplicar la baja'),'error'); }
                     }
                 });
             }
 
-            /* * 🟢 Delegación de Eventos para botones de Reactivar (tabla de Bajas)
-             */
+            /* DelegaciÃ³n de Eventos para Reactivar (tabla de Bajas) */
             const tablaBajaBody = document.querySelector('#b_tabla_baja tbody');
 
             if(tablaBajaBody) {
@@ -1000,10 +1109,10 @@
 
                     const no_emp = targetBtn.getAttribute('data-react');
                     
-                    // --- LÓGICA DE REACTIVAR ---
+                    // Reactivar
                     const ok = await mostrarConfirmar({ 
                         titulo:'Reactivar empleado', 
-                        mensaje:`¿Estás seguro de reactivar al empleado <b>${no_emp}</b>?`, 
+                        mensaje:`Estás seguro de reactivar al empleado <b>${no_emp}</b>?`, 
                         textoAceptar:'Reactivar',
                         claseAceptar: 'btn-success'
                     });
@@ -1011,9 +1120,8 @@
                     
                     const rr = await postJSON('../api/index.php?ruta=empleados/reactivar', { no_emp:no_emp });
                     if (rr.ok){ 
-                        showToast('Reactivado con éxito','ok');
-                        cargarActivos(); 
-                        cargarEnBaja(); 
+                        showToast('Reactivado con Éxito','ok');
+                        await refrescarListados(); 
                     }
                     else { showToast((rr.error||'No se pudo reactivar'),'error'); }
                 });
@@ -1023,3 +1131,33 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,8 +6,17 @@ require_once __DIR__ . '/../02_bd.php';
 require_once __DIR__ . '/../seguridad.php';
 $pdo = obtener_conexion();
 
+function asegurar_tabla_puntos(PDO $pdo): void {
+  $pdo->exec("CREATE TABLE IF NOT EXISTS puntos (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL UNIQUE,
+    region VARCHAR(120) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+}
+
 /* LISTA: GET /puntos/lista?buscar=&region= */
 if ($_GET['ruta'] === 'puntos/lista') {
+  asegurar_tabla_puntos($pdo);
   $buscar = trim($_GET['buscar'] ?? '');
   $region = trim($_GET['region'] ?? '');
   $sql = "SELECT id, nombre, region FROM puntos WHERE 1=1";
@@ -21,6 +30,7 @@ if ($_GET['ruta'] === 'puntos/lista') {
 
 /* CREAR: POST /puntos/crear {nombre, region} */
 if ($_GET['ruta'] === 'puntos/crear') {
+  asegurar_tabla_puntos($pdo);
   $j = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
   $nombre = trim($j['nombre'] ?? '');
   $region = trim($j['region'] ?? '');
@@ -37,6 +47,7 @@ if ($_GET['ruta'] === 'puntos/crear') {
 
 /* RENOMBRAR: POST /puntos/renombrar {id, nuevo_nombre, nueva_region?} */
 if ($_GET['ruta'] === 'puntos/renombrar') {
+  asegurar_tabla_puntos($pdo);
   $j = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
   $id = (int)($j['id'] ?? 0);
   $nuevo = trim($j['nuevo_nombre'] ?? '');
@@ -57,6 +68,7 @@ if ($_GET['ruta'] === 'puntos/renombrar') {
 
 /* ELIMINAR: POST /puntos/eliminar {id} */
 if ($_GET['ruta'] === 'puntos/eliminar') {
+  asegurar_tabla_puntos($pdo);
   $j = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
   $id = (int)($j['id'] ?? 0);
   if (!$id) enviar_json(['ok'=>false,'error'=>'Falta id'],400);
